@@ -1,1 +1,1 @@
-# Zags Abroad 
+# zags-abroad

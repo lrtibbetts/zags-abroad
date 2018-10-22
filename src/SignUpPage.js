@@ -12,7 +12,9 @@ class SignUpPage extends Component {
       firstName : '',
       lastName : '',
       email : '',
-      password : ''
+      password : '',
+      passwordError : false,
+      emailError : false
     }
   }
 
@@ -39,8 +41,9 @@ class SignUpPage extends Component {
             <TextField
               floatingLabelText = "Email"
               onChange = { (event, newValue) =>
-                this.setState({email : newValue})
+                this.checkEmail(newValue)
               }
+              errorText = {this.state.emailError ? "Enter a zagmail address" : ""}
             />
             <br/>
             <TextField
@@ -50,7 +53,17 @@ class SignUpPage extends Component {
               }
             />
             <br/>
+            <TextField
+              floatingLabelText = "Confirm Password"
+              onChange = { (event, newValue) =>
+                // Check that newValue matches the existing password
+                this.checkPassword(newValue)
+              }
+              errorText = {this.state.passwordError ? "Enter a matching password" : ""}
+            />
+            <br/>
             <RaisedButton label="Get started"
+              disabled = {!this.checkForm()}
               onClick = {(event) =>
                 this.makeAccount(event)
               }
@@ -61,8 +74,29 @@ class SignUpPage extends Component {
     )
   }
 
-  makeAccount(event) {
+  checkEmail(newValue) {
+    if(!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) {
+      this.setState({emailError : true})
+    } else {
+      this.setState({emailError : false})
+      this.setState({email : newValue})
+    }
+  }
 
+  checkPassword(newValue) {
+    if(this.state.password !== newValue) {
+      this.setState({passwordError : true})
+    } else {
+      this.setState({passwordError : false})
+    }
+  }
+
+  checkForm() {
+    // Check that no fields are empty and there are no errors (email or password)
+    return (this.firstName && this.lastName && this.email && !this.emailError && this.password && !this.passwordError)
+  }
+
+  makeAccount(event) {
   }
 
 }

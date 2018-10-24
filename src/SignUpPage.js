@@ -13,21 +13,28 @@ class SignUpPage extends Component {
       lastName : '',
       email : '',
       password : '',
-      confirmedPassword: '',
-      passwordError : false,
+      confirmedPassword : '',
+      passwordMatchingError : false,
+      passwordLengthError : false,
       emailError : false
     }
   }
 
   makeAccount(event) {
     // TODO: post request to backend API
-
   }
 
-  render() {
-    const {firstName, lastName, email, password, confirmedPassword, passwordError, emailError} = this.state
-    const formIsValid = firstName && lastName && email && !emailError && password && confirmedPassword && !passwordError
-    return (
+  formIsValid() {
+    // Check that no fields are empty and there are no errors (email or password)
+    return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
+      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError)
+  }
+
+  passwordsMatch() {
+    return (this.state.password === this.state.confirmedPassword)
+  }
+
+  render() {return (
       <div>
         <MuiThemeProvider>
           <div>
@@ -51,18 +58,21 @@ class SignUpPage extends Component {
             <br/>
             <TextField
               floatingLabelText = "Password"
-              onChange = { (event, newValue) =>
-                this.setState({password : newValue})}/>
+              onChange = { (event, newValue) => {
+                this.setState({password : newValue, passwordMatchingError : ((this.state.confirmedPassword &&
+                newValue !== this.state.confirmedPassword) ? true : false)})
+                this.setState({passwordLengthError : (newValue.length >= 8) ? false : true})}}
+              errorText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
             <br/>
             <TextField
               floatingLabelText = "Confirm Password"
               onChange = { (event, newValue) =>
-                this.setState((this.state.password !== newValue) ? {passwordError : true}
-                : {passwordError: false, confirmedPassword : newValue})}
-              errorText = {this.state.passwordError ? "Please enter a matching password" : ""}/>
+                this.setState({confirmedPassword : newValue, passwordMatchingError:
+                ((this.state.password !== newValue) ? true : false)})}
+              errorText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
             <br/>
             <RaisedButton label="Get started"
-              disabled = {!formIsValid}
+              disabled = {!this.formIsValid()}
               onClick = {(event) =>
                 this.makeAccount(event)}/>
           </div>
@@ -70,7 +80,7 @@ class SignUpPage extends Component {
       </div>
     )
   }
-  
+
 }
 
 export default SignUpPage

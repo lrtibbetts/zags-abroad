@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -22,6 +21,7 @@ class SignUpPage extends Component {
 
   makeAccount(event) {
     // TODO: post request to backend API
+
   }
 
   formIsValid() {
@@ -38,7 +38,7 @@ class SignUpPage extends Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <AppBar title = "Sign Up" />
+            <h1> Sign Up </h1>
             <TextField
               floatingLabelText = "First Name"
               onChange = { (event, newValue) =>

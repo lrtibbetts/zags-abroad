@@ -13,12 +13,20 @@ class SignUpPage extends Component {
       lastName : '',
       email : '',
       password : '',
+      confirmedPassword: '',
       passwordError : false,
       emailError : false
     }
   }
 
+  makeAccount(event) {
+    // TODO: post request to backend API
+
+  }
+
   render() {
+    const {firstName, lastName, email, password, confirmedPassword, passwordError, emailError} = this.state
+    const formIsValid = firstName && lastName && email && !emailError && password && confirmedPassword && !passwordError
     return (
       <div>
         <MuiThemeProvider>
@@ -27,78 +35,42 @@ class SignUpPage extends Component {
             <TextField
               floatingLabelText = "First Name"
               onChange = { (event, newValue) =>
-                this.setState({firstName : newValue})
-              }
-            />
+                this.setState({firstName : newValue})}/>
             <br/>
             <TextField
               floatingLabelText = "Last Name"
               onChange = { (event, newValue) =>
-                this.setState({lastName : newValue})
-              }
-            />
+                this.setState({lastName : newValue})}/>
             <br/>
             <TextField
               floatingLabelText = "Email"
               onChange = { (event, newValue) =>
-                this.checkEmail(newValue)
-              }
-              errorText = {this.state.emailError ? "Enter a zagmail address" : ""}
-            />
+                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) ? {emailError : true}
+                : {emailError : false, email : newValue})}
+              errorText = {this.state.emailError ? "Please enter a Zagmail address" : ""}/>
             <br/>
             <TextField
               floatingLabelText = "Password"
               onChange = { (event, newValue) =>
-                this.setState({password : newValue})
-              }
-            />
+                this.setState({password : newValue})}/>
             <br/>
             <TextField
               floatingLabelText = "Confirm Password"
               onChange = { (event, newValue) =>
-                // Check that newValue matches the existing password
-                this.checkPassword(newValue)
-              }
-              errorText = {this.state.passwordError ? "Enter a matching password" : ""}
-            />
+                this.setState((this.state.password !== newValue) ? {passwordError : true}
+                : {passwordError: false, confirmedPassword : newValue})}
+              errorText = {this.state.passwordError ? "Please enter a matching password" : ""}/>
             <br/>
             <RaisedButton label="Get started"
-              disabled = {!this.checkForm()}
+              disabled = {!formIsValid}
               onClick = {(event) =>
-                this.makeAccount(event)
-              }
-            />
+                this.makeAccount(event)}/>
           </div>
         </MuiThemeProvider>
       </div>
     )
   }
-
-  checkEmail(newValue) {
-    if(!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) {
-      this.setState({emailError : true})
-    } else {
-      this.setState({emailError : false})
-      this.setState({email : newValue})
-    }
-  }
-
-  checkPassword(newValue) {
-    if(this.state.password !== newValue) {
-      this.setState({passwordError : true})
-    } else {
-      this.setState({passwordError : false})
-    }
-  }
-
-  checkForm() {
-    // Check that no fields are empty and there are no errors (email or password)
-    return (this.firstName && this.lastName && this.email && !this.emailError && this.password && !this.passwordError)
-  }
-
-  makeAccount(event) {
-  }
-
+  
 }
 
 export default SignUpPage

@@ -11,6 +11,10 @@ class MainPage extends Component {
           <a href="signup">
             <RaisedButton label="Sign Up"/>
           </a>
+          <br/> <br/>
+          <a href="login">
+            <RaisedButton label="Log in"/>
+          </a>
         </MuiThemeProvider>
       </div>
     );

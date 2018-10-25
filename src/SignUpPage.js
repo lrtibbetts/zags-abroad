@@ -21,7 +21,6 @@ class SignUpPage extends Component {
 
   makeAccount(event) {
     // TODO: post request to backend API
-
   }
 
   formIsValid() {
@@ -30,11 +29,8 @@ class SignUpPage extends Component {
       this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError)
   }
 
-  passwordsMatch() {
-    return (this.state.password === this.state.confirmedPassword)
-  }
-
-  render() {return (
+  render() {
+    return (
       <div>
         <MuiThemeProvider>
           <div>
@@ -52,8 +48,8 @@ class SignUpPage extends Component {
             <TextField
               floatingLabelText = "Email"
               onChange = { (event, newValue) =>
-                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) ? {emailError : true}
-                : {emailError : false, email : newValue})}
+                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) ?
+                {emailError : true} : {emailError : false, email : newValue})}
               errorText = {this.state.emailError ? "Please enter a Zagmail address" : ""}/>
             <br/>
             <TextField

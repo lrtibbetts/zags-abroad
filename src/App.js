@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import SignUpPage from "./SignUpPage.js";
 import MainPage from "./MainPage.js";
+import LogInPage from "./LogInPage.js";
 import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends Component {
@@ -17,6 +18,11 @@ class App extends Component {
           <Route exact={true} path='/signup' render={() => (
             <div className="App">
               <SignUpPage />
+            </div>
+          )}/>
+          <Route exact={true} path='/login' render={() => (
+            <div className="App">
+              <LogInPage />
             </div>
           )}/>
         </div>

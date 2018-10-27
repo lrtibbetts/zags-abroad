@@ -25,7 +25,7 @@ class SignUpPage extends Component {
     var payload = {
       "email" : this.state.email,
       "first" : this.state.firstName,
-      "last" : this.state.last,
+      "last" : this.state.lastName,
       "password" : this.state.password
     }
     axios.post(apiURL + 'signup', payload).then(function (res) {

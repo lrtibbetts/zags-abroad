@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import axios from 'axios';
 
 class SignUpPage extends Component {
 
@@ -20,7 +21,17 @@ class SignUpPage extends Component {
   }
 
   makeAccount(event) {
-    // TODO: post request to backend API
+    var apiURL = "https://zagsabroad-backend.herokuapp.com/"
+    var payload = {
+      "email" : this.state.email,
+      "first" : this.state.firstName,
+      "last" : this.state.last,
+      "password" : this.state.password
+    }
+    axios.post(apiURL + 'signup', payload).then(function (res) {
+      console.log(res);
+    });
+
   }
 
   formIsValid() {

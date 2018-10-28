@@ -7,14 +7,16 @@ class MainPage extends Component {
     return (
       <div>
         <MuiThemeProvider>
-          <h1>Zags Abroad</h1>
-          <a href="signup">
-            <RaisedButton label="Sign Up"/>
-          </a>
-          <br/> <br/>
-          <a href="login">
-            <RaisedButton label="Log in"/>
-          </a>
+          <div>
+            <h1>Zags Abroad</h1>
+            <a href="signup">
+              <RaisedButton label="Sign Up"/>
+            </a>
+            <br/> <br/>
+            <a href="login">
+              <RaisedButton label="Log in"/>
+            </a>
+          </div>
         </MuiThemeProvider>
       </div>
     );

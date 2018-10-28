@@ -21,16 +21,18 @@ class SignUpPage extends Component {
   }
 
   makeAccount(event) {
-    var apiURL = "https://zagsabroad-backend.herokuapp.com/"
-    var payload = {
+    var accountInfo = {
       "email" : this.state.email,
       "first" : this.state.firstName,
       "last" : this.state.lastName,
       "password" : this.state.password
     }
-    axios.post(apiURL + 'signup', payload).then(function (res) {
+    axios.post("http://zagsabroad-backend.herokuapp.com/", accountInfo).then(function (res) {
       console.log(res);
-    });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });;
 
   }
 

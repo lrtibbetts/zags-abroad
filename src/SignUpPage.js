@@ -27,7 +27,7 @@ class SignUpPage extends Component {
       "last" : this.state.lastName,
       "password" : this.state.password
     }
-    axios.post("http://zagsabroad-backend.herokuapp.com/", accountInfo).then(function (res) {
+    axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then(function (res) {
       console.log(res);
     }).catch(function (error) {
       console.log(error);

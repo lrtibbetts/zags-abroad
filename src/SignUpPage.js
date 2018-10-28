@@ -29,10 +29,9 @@ class SignUpPage extends Component {
     }
     axios.post("http://zagsabroad-backend.herokuapp.com/", accountInfo).then(function (res) {
       console.log(res);
-    })
-    .catch(function (error) {
+    }).catch(function (error) {
       console.log(error);
-    });;
+    });
 
   }
 

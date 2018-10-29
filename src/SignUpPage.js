@@ -27,10 +27,10 @@ class SignUpPage extends Component {
       "last" : this.state.lastName,
       "password" : this.state.password
     }
+    // Change to http://localhost:3001/signup for local testing
     axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then(function (res) {
       console.log(res);
-    }).catch(function (error) {
-      console.log(error);
+
     });
 
   }

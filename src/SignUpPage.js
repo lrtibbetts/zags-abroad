@@ -3,6 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 class SignUpPage extends Component {
 
@@ -20,6 +21,7 @@ class SignUpPage extends Component {
     }
   }
 
+  // TODO: return success or not
   makeAccount(event) {
     var accountInfo = {
       "email" : this.state.email,
@@ -27,12 +29,11 @@ class SignUpPage extends Component {
       "last" : this.state.lastName,
       "password" : this.state.password
     }
-    // Change to http://localhost:3001/signup for local testing
+
+    // local testing: "http://localhost:3001/signup"
     axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then(function (res) {
-      console.log(res);
-
+      console.log(res.data);
     });
-
   }
 
   formIsValid() {
@@ -60,7 +61,8 @@ class SignUpPage extends Component {
             <TextField
               floatingLabelText = "Email"
               onChange = { (event, newValue) =>
-                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)) ?
+                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
+                && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
                 {emailError : true} : {emailError : false, email : newValue})}
               errorText = {this.state.emailError ? "Please enter a Zagmail address" : ""}/>
             <br/>

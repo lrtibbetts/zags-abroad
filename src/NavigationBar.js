@@ -3,8 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class NavigationBar extends Component {
-  
-  render(props) {
+  render() {
     const isLoggedIn = this.props.isLoggedIn;
     if(!isLoggedIn) {
       return (
@@ -24,6 +23,7 @@ class NavigationBar extends Component {
       );
     } else {
       return (
+        // TODO: display Log out and My account buttons
         <div>
           <h1> "Logged in" </h1>
         </div>

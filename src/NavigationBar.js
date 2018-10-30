@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import './NavigationBar.css';
+import { Link } from "react-router-dom";
 
 class NavigationBar extends Component {
   render() {
@@ -9,23 +11,28 @@ class NavigationBar extends Component {
       return (
         <div>
           <MuiThemeProvider>
-            <div>
-              <a href="signup">
+            <div class="NavigationBar">
+              <h2> Zags Abroad </h2>
+              <Link to="/signup">
                 <RaisedButton label="Sign Up"/>
-              </a>
-              <br/> <br/>
-              <a href="login">
+              </Link>
+              <Link to="/login">
                 <RaisedButton label="Log in"/>
-              </a>
+              </Link>
             </div>
           </MuiThemeProvider>
         </div>
       );
     } else {
       return (
-        // TODO: display Log out and My account buttons
         <div>
-          <h1> "Logged in" </h1>
+          <MuiThemeProvider>
+            <div class="NavigationBar">
+              <h2> Zags Abroad </h2>
+              <RaisedButton label = "My Account"/>
+              <RaisedButton label = "Log out"/>
+            </div>
+          </MuiThemeProvider>
         </div>
       );
     }

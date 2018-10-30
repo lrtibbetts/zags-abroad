@@ -21,21 +21,17 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <NavigationBar isLoggedIn = {this.state.isLoggedIn} />
-          <Route exact={true} path='/' render={() => (
-            <div className="App">
-              <MainPage />
-            </div>
-          )}/>
-          <Route exact={true} path='/signup' render={() => (
-            <div className="App">
-              <SignUpPage />
-            </div>
-          )}/>
-          <Route exact={true} path='/login' render={() => (
-            <div className="App">
-              <LogInPage />
-            </div>
-          )}/>
+          <div className="App">
+            <Route exact={true} path='/' render={() => (
+                <MainPage />
+            )}/>
+            <Route exact={true} path='/signup' render={() => (
+                <SignUpPage />
+            )}/>
+            <Route exact={true} path='/login' render={() => (
+                <LogInPage />
+            )}/>
+          </div>
         </div>
       </BrowserRouter>
     );

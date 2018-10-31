@@ -8,6 +8,7 @@ class MainPage extends Component {
       <div>
         <MuiThemeProvider>
           <div>
+            <h1> Welcome! </h1>
           </div>
         </MuiThemeProvider>
       </div>

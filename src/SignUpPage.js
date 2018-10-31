@@ -17,11 +17,12 @@ class SignUpPage extends Component {
       confirmedPassword : '',
       passwordMatchingError : false,
       passwordLengthError : false,
-      emailError : false
+      emailError : false,
+      accountCreated : false
     }
+    this.makeAccount = this.makeAccount.bind(this); // Bind 'this' context to makeAccount function
   }
 
-  // TODO: return success or not
   makeAccount(event) {
     var accountInfo = {
       "email" : this.state.email,
@@ -31,8 +32,13 @@ class SignUpPage extends Component {
     }
 
     // local testing: "http://localhost:3001/signup"
-    axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then(function (res) {
+    // Using an arrow function allows us to access 'this' within the API callback
+    axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
       console.log(res.data);
+      if(res.data !== "User already exists") {
+        // Account created successfully
+        this.setState({accountCreated : true});
+      }
     });
   }
 
@@ -85,6 +91,9 @@ class SignUpPage extends Component {
               disabled = {!this.formIsValid()}
               onClick = {(event) =>
                 this.makeAccount(event)}/>
+            {/* Redirect to home page if account is created successfully. TODO: pop-up if user already exists */}
+            {this.state.accountCreated === true ?
+              <Redirect to="/"/> : null}
           </div>
         </MuiThemeProvider>
       </div>

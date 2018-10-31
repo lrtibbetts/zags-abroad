@@ -11,7 +11,7 @@ class NavigationBar extends Component {
       return (
         <div>
           <MuiThemeProvider>
-            <div class="NavigationBar">
+            <div className="NavigationBar">
               <h2> Zags Abroad </h2>
               <Link to="/signup">
                 <RaisedButton label="Sign Up"/>
@@ -27,7 +27,7 @@ class NavigationBar extends Component {
       return (
         <div>
           <MuiThemeProvider>
-            <div class="NavigationBar">
+            <div className="NavigationBar">
               <h2> Zags Abroad </h2>
               <RaisedButton label = "My Account"/>
               <RaisedButton label = "Log out"/>

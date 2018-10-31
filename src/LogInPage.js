@@ -58,7 +58,7 @@ class LogInPage extends Component {
                 this.logIn(event)}/>
             {this.state.validUser === true ?
               (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
-              : null} {/* TODO: pop-up prompting user to make an accunt */}
+              : null} {/* TODO: pop-up prompting user to make an account */}
           </div>
         </MuiThemeProvider>
       </div>

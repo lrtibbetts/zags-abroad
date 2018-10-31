@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import axios from 'axios';
 
 class AdminPage extends Component {
+  //TODO: make sure only authenticated users can access this page
   constructor(props) {
     super(props);
     this.state = {
@@ -33,14 +34,14 @@ class AdminPage extends Component {
                   <TableCell> Host program </TableCell>
                   <TableCell> Host course number </TableCell>
                   <TableCell> Host course name </TableCell>
-                  <TableCell> Gonzaga course number </TableCell>
-                  <TableCell> Gonzaga course name </TableCell>
+                  <TableCell> GU course number </TableCell>
+                  <TableCell> GU course name </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {this.state.courses.map(course => {
                   return(
-                    <TableRow>
+                    <TableRow key={this.state.courses.indexOf(course)}>
                       <TableCell> {course.host_program} </TableCell>
                       <TableCell> {course.host_course_number} </TableCell>
                       <TableCell> {course.host_course_name} </TableCell>

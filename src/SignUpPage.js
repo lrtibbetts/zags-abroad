@@ -4,11 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
-import { InputAdornment, withStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
-
-
-const styles = theme => ({});
 
 class SignUpPage extends Component {
 
@@ -89,7 +84,6 @@ class SignUpPage extends Component {
             <br/>
             <TextField
               type ="password"
-              {...this.props}
               floatingLabelText = "Confirm Password"
               onChange = { (event, newValue) =>
                 this.setState({confirmedPassword : newValue, passwordMatchingError:

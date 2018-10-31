@@ -3,25 +3,36 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 class LogInPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email : '',
-      password: ''
+      password: '',
+      validUser: false,
+      isAdmin : false
     }
+    this.logIn = this.logIn.bind(this); // Bind 'this' context to logIn function
   }
 
-  // TODO: return success or not. If success, return is_admin
   logIn(event) {
     var accountInfo = {
       "email" : this.state.email,
       "password" : this.state.password
     }
     // for local testing: "http://localhost:3001/login"
-    axios.post("http://zagsabroad-backend.herokuapp.com/login", accountInfo).then(function (res) {
+    axios.post("http://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
       console.log(res.data);
+      if(res.data !== "No such user exists") {
+        // User exists in database
+        if(res.data[0].is_admin === 1) {
+          this.setState({validUser : true, isAdmin : true});
+        } else {
+          this.setState({validUser : true});
+        }
+      }
     });
   }
 
@@ -45,6 +56,9 @@ class LogInPage extends Component {
               disabled = {!(this.state.email && this.state.password)}
               onClick = {(event) =>
                 this.logIn(event)}/>
+            {this.state.validUser === true ?
+              (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
+              : null} {/* TODO: pop-up prompting user to make an accunt */}
           </div>
         </MuiThemeProvider>
       </div>

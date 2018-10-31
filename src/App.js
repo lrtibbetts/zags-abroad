@@ -4,6 +4,7 @@ import SignUpPage from "./SignUpPage.js";
 import MainPage from "./MainPage.js";
 import LogInPage from "./LogInPage.js";
 import NavigationBar from "./NavigationBar.js";
+import AdminPage from "./AdminPage.js";
 import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends Component {
@@ -30,6 +31,9 @@ class App extends Component {
             )}/>
             <Route exact={true} path='/login' render={() => (
                 <LogInPage />
+            )}/>
+            <Route exact={true} path='/admin' render={() => (
+                <AdminPage />
             )}/>
           </div>
         </div>

@@ -4,6 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import { InputAdornment, withStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
+
+const styles = theme => ({});
 
 class LogInPage extends Component {
   constructor(props) {
@@ -48,6 +52,8 @@ class LogInPage extends Component {
                 this.setState({email : newValue})}/>
             <br/>
             <TextField
+              type ="password"
+              {...this.props}
               floatingLabelText = "Password"
               onChange = { (event, newValue) =>
                 this.setState({password : newValue})}/>

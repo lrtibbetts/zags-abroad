@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class SignUpPage extends Component {
 
@@ -19,6 +21,7 @@ class SignUpPage extends Component {
       passwordLengthError : false,
       emailError : false,
       accountCreated : false,
+      showPrompt : false
     }
     this.makeAccount = this.makeAccount.bind(this); // Bind 'this' context to makeAccount function
   }
@@ -38,6 +41,8 @@ class SignUpPage extends Component {
       if(res.data !== "User already exists") {
         // Account created successfully
         this.setState({accountCreated : true});
+      } else {
+        this.setState({showPrompt : true});
       }
     });
   }
@@ -96,7 +101,18 @@ class SignUpPage extends Component {
                 this.makeAccount(event)}/>
             {/* Redirect to home page if account is created successfully. TODO: pop-up if user already exists */}
             {this.state.accountCreated === true ?
-              <Redirect to="/"/> : null}
+              <Redirect to="/"/> :
+              <Dialog open={this.state.showPrompt}>
+                <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
+                <div>
+                  <Link to="/login">
+                    <RaisedButton label="Log in"/>
+                  </Link>
+                  <RaisedButton label="Try again"
+                    onClick = {(event) =>
+                      this.setState({showPrompt : false})}/>
+                </div>
+              </Dialog>}
           </div>
         </MuiThemeProvider>
       </div>

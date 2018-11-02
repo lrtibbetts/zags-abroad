@@ -75,11 +75,10 @@ class SignUpPage extends Component {
                 this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
                 && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
                 {emailError : true} : {emailError : false, email : newValue})}
-              errorText = {this.state.emailError ? "Please enter a Zagmail address" : ""}/>
+              errorText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
             <br/>
             <TextField
-              type ="password"
-              {...this.props}
+              type = "password"
               floatingLabelText = "Password"
               onChange = { (event, newValue) => {
                 this.setState({password : newValue, passwordMatchingError : ((this.state.confirmedPassword &&
@@ -88,7 +87,7 @@ class SignUpPage extends Component {
               errorText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
             <br/>
             <TextField
-              type ="password"
+              type = "password"
               floatingLabelText = "Confirm Password"
               onChange = { (event, newValue) =>
                 this.setState({confirmedPassword : newValue, passwordMatchingError:
@@ -99,7 +98,6 @@ class SignUpPage extends Component {
               disabled = {!this.formIsValid()}
               onClick = {(event) =>
                 this.makeAccount(event)}/>
-            {/* Redirect to home page if account is created successfully. TODO: pop-up if user already exists */}
             {this.state.accountCreated === true ?
               <Redirect to="/"/> :
               <Dialog open={this.state.showPrompt}>

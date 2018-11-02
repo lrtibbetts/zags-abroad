@@ -56,7 +56,7 @@ class LogInPage extends Component {
                 this.setState({email : newValue})}/>
             <br/>
             <TextField
-              type ="password"
+              type = "password"
               floatingLabelText = "Password"
               onChange = { (event, newValue) =>
                 this.setState({password : newValue})}

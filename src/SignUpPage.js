@@ -105,4 +105,4 @@ class SignUpPage extends Component {
 
 }
 
-export default SignUpPage
+export default SignUpPage;

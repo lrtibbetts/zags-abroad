@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class LogInPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email : '',
-      password: '',
-      validUser: false,
-      isAdmin : false
+      password : '',
+      validUser : false,
+      isAdmin : false,
+      emailExists : false,
+      showPrompt : false
     }
     this.logIn = this.logIn.bind(this); // Bind 'this' context to logIn function
   }
@@ -24,10 +28,14 @@ class LogInPage extends Component {
     }
     // for local testing: "http://localhost:3001/login"
     axios.post("http://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
-      console.log(res.data);
-      if(res.data !== "No such user exists") {
-        // User exists in database
-        if(res.data[0].is_admin === 1) {
+      if(res.data === "Email not found") {
+        this.setState({showPrompt : true});
+      } else if(res.data === "Incorrect password") {
+        // Email found but password is wrong
+        this.setState({emailExists : true});
+      } else {
+        // Valid log in. Check if admin or not
+        if(res.data.is_admin === 1) {
           this.setState({validUser : true, isAdmin : true});
         } else {
           this.setState({validUser : true});
@@ -51,7 +59,8 @@ class LogInPage extends Component {
               type ="password"
               floatingLabelText = "Password"
               onChange = { (event, newValue) =>
-                this.setState({password : newValue})}/>
+                this.setState({password : newValue})}
+              errorText = {this.state.emailExists ? "Password is incorrect" : ""}/>
             <br/>
             <RaisedButton label="Log in"
               disabled = {!(this.state.email && this.state.password)}
@@ -59,7 +68,18 @@ class LogInPage extends Component {
                 this.logIn(event)}/>
             {this.state.validUser === true ?
               (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
-              : null} {/* TODO: pop-up prompting user to make an account */}
+              : (this.state.emailExists) ? null :
+              <Dialog open={this.state.showPrompt}>
+                <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>
+                <div>
+                  <Link to="/signup">
+                    <RaisedButton label="Sign Up"/>
+                  </Link>
+                  <RaisedButton label="Try again"
+                    onClick = {(event) =>
+                      this.setState({showPrompt : false})}/>
+                </div>
+              </Dialog>}
           </div>
         </MuiThemeProvider>
       </div>
@@ -68,4 +88,4 @@ class LogInPage extends Component {
 
 }
 
-export default LogInPage
+export default LogInPage;

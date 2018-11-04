@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 
 class NavigationBar extends Component {
   render() {
-    const isLoggedIn = this.props.isLoggedIn;
-    if(!isLoggedIn) {
+    const cookies = this.props.cookies;
+    const loggedIn = Boolean(cookies.get('email'));
+    if(!loggedIn) {
       return (
         <div>
           <MuiThemeProvider>
@@ -30,7 +31,10 @@ class NavigationBar extends Component {
             <div className="NavigationBar">
               <h2> Zags Abroad </h2>
               <RaisedButton label = "My Account"/>
-              <RaisedButton label = "Log out"/>
+              <RaisedButton label = "Log out"
+                onClick = {(event) => {
+                  cookies.remove('email');
+                  cookies.remove('role'); }}/>
             </div>
           </MuiThemeProvider>
         </div>

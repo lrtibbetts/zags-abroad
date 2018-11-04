@@ -6,34 +6,27 @@ import LogInPage from "./LogInPage.js";
 import NavigationBar from "./NavigationBar.js";
 import AdminPage from "./AdminPage.js";
 import { BrowserRouter, Route } from "react-router-dom";
+import { withCookies } from "react-cookie";
 
 class App extends Component {
-  // TODO: store state in cookies to persist data if a user refreshes the page
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn : false,
-      isAdmin : false
-    }
-  }
 
   render() {
     return (
       <BrowserRouter>
         <div>
-          <NavigationBar isLoggedIn = {this.state.isLoggedIn} />
+          <NavigationBar cookies = {this.props.cookies} />
           <div className="App">
             <Route exact={true} path='/' render={() => (
-                <MainPage />
+                <MainPage cookies = {this.props.cookies}/>
             )}/>
             <Route exact={true} path='/signup' render={() => (
-                <SignUpPage />
+                <SignUpPage cookies = {this.props.cookies}/>
             )}/>
             <Route exact={true} path='/login' render={() => (
-                <LogInPage />
+                <LogInPage cookies = {this.props.cookies}/>
             )}/>
             <Route exact={true} path='/admin' render={() => (
-                <AdminPage />
+                <AdminPage cookies = {this.props.cookies}/>
             )}/>
           </div>
         </div>
@@ -42,4 +35,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withCookies(App);

@@ -34,10 +34,14 @@ class LogInPage extends Component {
         // Email found but password is wrong
         this.setState({emailExists : true});
       } else {
-        // Valid log in. Check if admin or not
+        // Valid log in. Set cookies and check if admin or not
+        const cookies = this.props.cookies;
+        cookies.set('email', this.state.email); // Might be good to store user ID instead
         if(res.data.is_admin === 1) {
+          cookies.set('role', 'admin');
           this.setState({validUser : true, isAdmin : true});
         } else {
+          cookies.set('role', 'user');
           this.setState({validUser : true});
         }
       }

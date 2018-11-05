@@ -36,7 +36,7 @@ class SignUpPage extends Component {
 
     // local testing: "http://localhost:3001/signup"
     // Using an arrow function allows us to access 'this' within the API callback
-    axios.post("http://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
       console.log(res.data);
       if(res.data !== "User already exists") {
         // Account created successfully

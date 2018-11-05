@@ -27,7 +27,7 @@ class LogInPage extends Component {
       "password" : this.state.password
     }
     // for local testing: "http://localhost:3001/login"
-    axios.post("http://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
       if(res.data === "Email not found") {
         this.setState({showPrompt : true});
       } else if(res.data === "Incorrect password") {

@@ -13,7 +13,7 @@ class AdminPage extends Component {
     this.state = {
       courses: []
     }
-    axios.get("http://zagsabroad-backend.herokuapp.com/courses").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       this.setState({courses: res.data});
     });
   }

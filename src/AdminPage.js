@@ -7,9 +7,71 @@ class AdminPage extends Component {
     super(props);
     this.state = {
       courses: [],
-      columns: ['Host Program', 'Host Course Number', 'Host Course Name', 'GU Course Number',
-                'GU Course Name', 'Comments', 'Signature needed', 'Department', 'Approved By',
-                'Approval Date', 'Approved Until']
+      // Customize column properties
+      columns: [
+        {
+          name: "Host Program",
+        },
+        {
+          name: "Host Course Number",
+          options: {
+            filter: false
+          }
+        },
+        {
+          name: "Host Course Name",
+          options: {
+            filter: false
+          }
+        },
+        {
+          name: "GU Course Number"
+        },
+        {
+          name: "GU Course Name"
+        },
+        {
+          name: "Comments",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
+          name: "Signature needed",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
+          name: "Approved by",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
+          name: "Approval date",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
+          name: "Approved until",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
+          name: "Department",
+          options: {
+            display: false
+          }
+        }
+      ]
     }
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       // Convert array of objects to 2D array
@@ -25,12 +87,28 @@ class AdminPage extends Component {
     });
   }
 
+  deleteRows() {
+    // Call backend API
+    console.log("deleted");
+  }
+
+  displayEditingForm(currentRowsSelected, allRowsSelected) {
+    // Render editing form with a save button
+    // Call backend API after user presses save
+    console.log("editing");
+  }
+
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
-        filterType: "dropdown",
-        responseive: 'scroll'
+        // Customization of data table
+        filterType: "dropdown", // Apply filters via dropdown menus
+        print: false, // Remove print icon
+        downloadOptions: {filename: "Course Equivalencies.csv"},
+        onRowsDelete: this.deleteRows,
+        onRowClick: this.displayEditingForm,
+        responsive: "scroll" // Table will resize if more columns are added
       };
       return (
         <div>

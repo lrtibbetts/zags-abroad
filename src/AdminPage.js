@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables"; // https://github.com/gregnb/mui-datatables
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
+
+const addButtonStyle = {
+  margin: '10px'
+};
 
 class AdminPage extends Component {
   constructor(props) {
@@ -73,6 +79,7 @@ class AdminPage extends Component {
         }
       ]
     }
+
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       // Convert array of objects to 2D array
       const coursesToAdd = [];
@@ -92,10 +99,16 @@ class AdminPage extends Component {
     console.log("deleted");
   }
 
-  displayEditingForm(currentRowsSelected, allRowsSelected) {
+  displayEditingForm() {
     // Render editing form with a save button
     // Call backend API after user presses save
     console.log("editing");
+  }
+
+  addCourse() {
+    // Render editing form with a submit button
+    // Call backend API after user presses submit
+    console.log("add course");
   }
 
   render() {
@@ -112,11 +125,18 @@ class AdminPage extends Component {
       };
       return (
         <div>
-          <h1> Course Equivalencies </h1>
-          <MUIDataTable
-            columns = {this.state.columns}
-            data = {this.state.courses}
-            options = {options}/>
+          <MuiThemeProvider>
+            <div>
+              <h1> Course Equivalencies </h1>
+              <RaisedButton label="Add"
+                style={addButtonStyle}
+                onClick = {this.addCourse}/>
+              <MUIDataTable
+                columns = {this.state.columns}
+                data = {this.state.courses}
+                options = {options}/>
+            </div>
+          </MuiThemeProvider>
         </div>
       )
     } else {

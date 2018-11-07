@@ -1,55 +1,46 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
+import MUIDataTable from "mui-datatables"; // https://github.com/gregnb/mui-datatables
 import axios from 'axios';
 
 class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: []
+      courses: [["AIFS"]],
+      columns: ['Host Program', 'Host Course Number', 'Host Course Name', 'GU Course Number',
+                'GU Course Name', 'Comments', 'Signature needed', 'Department', 'Approved By',
+                'Approval Date', 'Approved Until']
     }
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
-      this.setState({courses: res.data});
+      // Convert array of objects to 2D array
+      for(let i = 0; i < 10; i++) {
+        let equivalency = []
+        for(var field in res.data[0]) {
+          equivalency.push(res.data[i][field]); // Access each field in the row object
+        }
+        this.state.courses.push(equivalency);
+      }
     });
   }
 
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
+      const options = {
+        filterType: 'checkbox',
+      };
+      console.log(this.state.courses);
+      const courses = this.state.courses;
       return (
         <div>
           <MuiThemeProvider>
             <div>
-              <h1> Course Equivalencies: </h1>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell> Host program </TableCell>
-                    <TableCell> Host course number </TableCell>
-                    <TableCell> Host course name </TableCell>
-                    <TableCell> GU course number </TableCell>
-                    <TableCell> GU course name </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.courses.map(course => {
-                    return(
-                      <TableRow key={this.state.courses.indexOf(course)}>
-                        <TableCell> {course.host_program} </TableCell>
-                        <TableCell> {course.host_course_number} </TableCell>
-                        <TableCell> {course.host_course_name} </TableCell>
-                        <TableCell> {course.gu_course_number} </TableCell>
-                        <TableCell> {course.gu_course_name} </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+              <MUIDataTable
+                title = "Course Equivalencies"
+                columns = {this.state.columns}
+                data = {courses}
+                options = {options}/>
             </div>
           </MuiThemeProvider>
         </div>

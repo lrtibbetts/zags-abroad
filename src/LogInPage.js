@@ -22,6 +22,7 @@ class LogInPage extends Component {
   }
 
   logIn(event) {
+    this.setState({emailExists: false, showPrompt: false}); // Reset state
     var accountInfo = {
       "email" : this.state.email,
       "password" : this.state.password

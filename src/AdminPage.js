@@ -86,7 +86,7 @@ class AdminPage extends Component {
       for(let i = 0; i < res.data.length; i++) {
         let equivalency = [];
         for(var field in res.data[0]) {
-          equivalency.push(res.data[i][field].toString()); // Access each field in the row object
+          equivalency.push(res.data[i][field]); // Access each field in the row object
         }
         coursesToAdd.push(equivalency);
       }

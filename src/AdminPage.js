@@ -92,11 +92,28 @@ class AdminPage extends Component {
       }
       this.setState({courses : coursesToAdd});
     });
+
+    // Bind 'this' context to helper functions
+    this.deleteRows = this.deleteRows.bind(this);
+    this.displayEditingForm = this.displayEditingForm.bind(this);
+    this.addCourse = this.addCourse.bind(this);
   }
 
-  deleteRows() {
-    // Call backend API
-    console.log("deleted");
+  deleteRows(rowsToDelete) {
+    for(let i = 0; i < rowsToDelete.data.length; i++) {
+      const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses table
+      const course = this.state.courses[index];
+      var courseInfo = {
+        host_program : course[0], // Host program is stored at index 0
+        host_course_name : course[2], // Course name is stored at index 2
+        gu_course_number : course[3], // Course number is stored at index 3
+        gu_course_name : course[4], // Course number is stored at index 4
+      }
+      // Call backend API
+      axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
+        console.log(res.data);
+      });
+    }
   }
 
   displayEditingForm() {
@@ -118,7 +135,7 @@ class AdminPage extends Component {
         // Customization of data table
         filterType: "dropdown", // Apply filters via dropdown menus
         print: false, // Remove print icon
-        downloadOptions: {filename: "Course Equivalencies.csv"},
+        downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
         onRowsDelete: this.deleteRows,
         onRowClick: this.displayEditingForm,
         responsive: "scroll" // Table will resize if more columns are added

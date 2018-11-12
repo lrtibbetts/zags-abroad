@@ -120,7 +120,7 @@ class AdminPage extends Component {
         id : id
       }
       // Call backend API
-      axios.post("http://localhost:3001/deletecourse", courseInfo).then((res) => {
+      axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
         console.log(res.data);
       });
     }

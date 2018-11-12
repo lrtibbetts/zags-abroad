@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import MUIDataTable from "mui-datatables"; // https://github.com/gregnb/mui-datatables
+import MUIDataTable from "mui-datatables";
+// library code: https://github.com/gregnb/mui-datatables
+// npm docs: https://www.npmjs.com/package/mui-datatables
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CourseDetailsForm from './CourseDetailsForm.js';
 import axios from 'axios';
 
 const addButtonStyle = {
@@ -12,7 +15,10 @@ class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAddForm: false,
+      showEditForm: false,
       courses: [],
+      ids: [], // Array to store ids internally
       // Customize column properties
       columns: [
         {
@@ -83,49 +89,59 @@ class AdminPage extends Component {
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       // Convert array of objects to 2D array
       const coursesToAdd = [];
+      const idsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let equivalency = [];
         for(var field in res.data[0]) {
-          equivalency.push(res.data[i][field]); // Access each field in the row object
+          if(field === "id") {
+            idsToAdd.push(res.data[i][field]);
+          } else {
+            equivalency.push(res.data[i][field]); // Access each field in the row object
+          }
         }
         coursesToAdd.push(equivalency);
       }
-      this.setState({courses : coursesToAdd});
+      this.setState({courses : coursesToAdd, ids: idsToAdd});
     });
 
     // Bind 'this' context to helper functions
     this.deleteRows = this.deleteRows.bind(this);
-    this.displayEditingForm = this.displayEditingForm.bind(this);
+    this.toggleEditForm = this.toggleEditForm.bind(this);
+    this.toggleAddForm = this.toggleAddForm.bind(this);
     this.addCourse = this.addCourse.bind(this);
+    this.updateCourse = this.updateCourse.bind(this);
   }
 
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
-      const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses table
-      const course = this.state.courses[index];
+      const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
+      const id = this.state.ids[index];
       var courseInfo = {
-        host_program : course[0], // Host program is stored at index 0
-        host_course_name : course[2], // Course name is stored at index 2
-        gu_course_number : course[3], // Course number is stored at index 3
-        gu_course_name : course[4], // Course number is stored at index 4
+        id : id
       }
       // Call backend API
-      axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
+      axios.post("http://localhost:3001/deletecourse", courseInfo).then((res) => {
         console.log(res.data);
       });
     }
   }
 
-  displayEditingForm() {
-    // Render editing form with a save button
-    // Call backend API after user presses save
-    console.log("editing");
+  toggleEditForm() {
+    this.setState({showEditForm : !this.state.showEditForm});
+  }
+
+  toggleAddForm() {
+    this.setState({showAddForm : !this.state.showAddForm});
   }
 
   addCourse() {
-    // Render editing form with a submit button
-    // Call backend API after user presses submit
-    console.log("add course");
+    // TODO: Call backend API
+    console.log("added");
+  }
+
+  updateCourse() {
+    // TODO: Call backend API
+    console.log("updated");
   }
 
   render() {
@@ -137,7 +153,7 @@ class AdminPage extends Component {
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
         onRowsDelete: this.deleteRows,
-        onRowClick: this.displayEditingForm,
+        onRowClick: this.toggleEditForm,
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
@@ -147,11 +163,20 @@ class AdminPage extends Component {
               <h1> Course Equivalencies </h1>
               <RaisedButton label="Add"
                 style={addButtonStyle}
-                onClick = {this.addCourse}/>
+                onClick={this.toggleAddForm}/>
               <MUIDataTable
                 columns = {this.state.columns}
                 data = {this.state.courses}
                 options = {options}/>
+              {this.state.showAddForm === true ? <CourseDetailsForm
+                onSave={this.addCourse}
+                onClose={this.toggleAddForm}
+                title="Add Course Equivalency"/> : null}
+              {this.state.showEditForm === true ? <CourseDetailsForm
+                // TODO: pass current course details as props
+                onSave={this.updateCourse}
+                onClose={this.toggleEditForm}
+                title="Edit Course Equivalency"/> : null}
             </div>
           </MuiThemeProvider>
         </div>

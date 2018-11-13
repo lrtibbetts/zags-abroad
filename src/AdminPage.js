@@ -149,11 +149,15 @@ class AdminPage extends Component {
     if(cookies.get('role') === 'admin') {
       const options = {
         // Customization of data table
-        filterType: "dropdown", // Apply filters via dropdown menus
+        filterType: "multiselect", // Apply filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
+        onRowsSelect: this.toggleEditForm, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
         onRowClick: this.toggleEditForm,
+        rowsPerPage: 10, // Default to 20 rows per page
+        rowsPerPageOptions: [10, 50, 100],
+        fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (

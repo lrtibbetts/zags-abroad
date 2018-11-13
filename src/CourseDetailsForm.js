@@ -27,7 +27,7 @@ class CourseDetailForm extends Component {
             <TextField floatingLabelText = "Department"/> <br/>
             <RaisedButton label="Save"
               onClick = {(event) => {
-                this.props.onSave();
+                // TODO: call backend API to update or save based on type of form
                 this.props.onClose();
               }}/>
             <RaisedButton label="Cancel"

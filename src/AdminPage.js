@@ -37,10 +37,16 @@ class AdminPage extends Component {
           }
         },
         {
-          name: "GU Course Number"
+          name: "GU Course Number",
+          options: {
+            filter: false
+          }
         },
         {
-          name: "GU Course Name"
+          name: "GU Course Name",
+          options: {
+            filter: false
+          }
         },
         {
           name: "Comments",
@@ -108,8 +114,6 @@ class AdminPage extends Component {
     this.deleteRows = this.deleteRows.bind(this);
     this.toggleEditForm = this.toggleEditForm.bind(this);
     this.toggleAddForm = this.toggleAddForm.bind(this);
-    this.addCourse = this.addCourse.bind(this);
-    this.updateCourse = this.updateCourse.bind(this);
   }
 
   deleteRows(rowsToDelete) {
@@ -132,16 +136,6 @@ class AdminPage extends Component {
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
-  }
-
-  addCourse() {
-    // TODO: Call backend API
-    console.log("added");
-  }
-
-  updateCourse() {
-    // TODO: Call backend API
-    console.log("updated");
   }
 
   render() {
@@ -173,12 +167,10 @@ class AdminPage extends Component {
                 data = {this.state.courses}
                 options = {options}/>
               {this.state.showAddForm === true ? <CourseDetailsForm
-                onSave={this.addCourse}
                 onClose={this.toggleAddForm}
                 title="Add Course Equivalency"/> : null}
               {this.state.showEditForm === true ? <CourseDetailsForm
                 // TODO: pass current course details as props
-                onSave={this.updateCourse}
                 onClose={this.toggleEditForm}
                 title="Edit Course Equivalency"/> : null}
             </div>

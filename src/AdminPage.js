@@ -114,6 +114,7 @@ class AdminPage extends Component {
     this.deleteRows = this.deleteRows.bind(this);
     this.toggleEditForm = this.toggleEditForm.bind(this);
     this.toggleAddForm = this.toggleAddForm.bind(this);
+    this.rowSelected = this.rowSelected.bind(this);
   }
 
   deleteRows(rowsToDelete) {
@@ -138,6 +139,10 @@ class AdminPage extends Component {
     this.setState({showAddForm : !this.state.showAddForm});
   }
 
+  rowSelected() {
+    this.setState({showEditForm : false});
+  }
+
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
@@ -146,7 +151,7 @@ class AdminPage extends Component {
         filterType: "multiselect", // Apply filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
-        onRowsSelect: this.toggleEditForm, // Prevent editing form from popping up when row is "selected" vs. "clicked"
+        onRowsSelect: this.rowSelected, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
         onRowClick: this.toggleEditForm,
         rowsPerPage: 10, // Default to 20 rows per page

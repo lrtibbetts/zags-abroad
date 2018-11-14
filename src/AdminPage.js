@@ -137,9 +137,7 @@ class AdminPage extends Component {
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
-    if(this.state.showAddForm) {
-      this.loadCourses(); // Load courses only when form is closed (showAddForm was true immediately before the form is closed)
-    }
+    this.loadCourses();
   }
 
   populateEditForm(rowData, rowMeta) {
@@ -157,7 +155,6 @@ class AdminPage extends Component {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
-        // Customization of data table
         filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name

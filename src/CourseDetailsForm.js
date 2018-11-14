@@ -6,6 +6,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 
+const largeTextFieldStyle = {
+  width: 300,
+  margin: '10px'
+};
+
+const smallTextFieldStyle = {
+  width: 150,
+  margin: '10px'
+}
+
 class CourseDetailForm extends Component {
   constructor(props) {
     super(props);
@@ -26,55 +36,56 @@ class CourseDetailForm extends Component {
 
   render() {
     // TODO: confirmation message when course is added or updated successfully
-    // TODO: autofilled dropdown menus for program, department
-    // TODO: disable save button for add form until required fields are filled
+    // TODO: autofilled dropdown menus for program, department, signature (YES/NO)
+    // tODO: autofill formatting for date fields
+    // TODO: disable save button until required fields are filled
     return (
       <div>
         <MuiThemeProvider>
           <Dialog open={true} onClose={this.props.onClose} scroll='body'>
             <DialogTitle  id="simple-dialog-title"> {this.props.title} </DialogTitle>
             <div>
-            <TextField floatingLabelText = "Host program"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "Host program"
               defaultValue = {this.state.host_program}
               onChange = { (event, newValue) =>
-                this.setState({host_program : newValue})}/>
-            <TextField floatingLabelText = "Host course number"
+                this.setState({host_program : newValue})}/><br/>
+            <TextField style={smallTextFieldStyle} floatingLabelText = "Host course number"
               defaultValue = {this.state.host_course_number}
               onChange = { (event, newValue) =>
                 this.setState({host_course_number : newValue})}/>
-            <TextField floatingLabelText = "Host course name"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "Host course name"
               defaultValue = {this.state.host_course_name}
               onChange = { (event, newValue) =>
                 this.setState({host_course_name : newValue})}/>
-            <TextField floatingLabelText = "GU course number"
+            <TextField style={smallTextFieldStyle} floatingLabelText = "GU course number"
               defaultValue = {this.state.gu_course_number}
               onChange = { (event, newValue) =>
                 this.setState({gu_course_number : newValue})}/>
-            <TextField floatingLabelText = "GU course name"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "GU course name"
               defaultValue = {this.state.gu_course_name}
               onChange = { (event, newValue) =>
                 this.setState({gu_course_name : newValue})}/>
-            <TextField floatingLabelText = "Comments"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "Comments"
               defaultValue = {this.state.comments}
               onChange = { (event, newValue) =>
                 this.setState({comments : newValue})}/>
-            <TextField floatingLabelText = "Signature needed"
+            <TextField style={smallTextFieldStyle} floatingLabelText = "Signature needed"
               defaultValue = {this.state.signature_needed}
               onChange = { (event, newValue) =>
                 this.setState({signature_needed : newValue})}/>
-            <TextField floatingLabelText = "Approved by"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "Approved by"
               defaultValue = {this.state.approved_by}
               onChange = { (event, newValue) =>
                 this.setState({approved_by : newValue})}/>
-            <TextField floatingLabelText = "Approval date"
+            <TextField style={smallTextFieldStyle} floatingLabelText = "Approval date"
               defaultValue = {this.state.approval_date}
               onChange = { (event, newValue) =>
                 this.setState({approval_date : newValue})}/>
-            <TextField floatingLabelText = "Approved until"
+            <TextField style={smallTextFieldStyle} floatingLabelText = "Approved until"
               defaultValue = {this.state.approved_until}
               onChange = { (event, newValue) =>
                 this.setState({approved_until : newValue})}/>
-            <TextField floatingLabelText = "Department"
+            <TextField style={largeTextFieldStyle} floatingLabelText = "Department"
               defaultValue = {this.state.department}
               onChange = { (event, newValue) =>
                 this.setState({department : newValue})}/>

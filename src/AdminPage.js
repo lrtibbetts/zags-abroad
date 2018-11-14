@@ -119,7 +119,6 @@ class AdminPage extends Component {
         coursesToAdd.push(equivalency);
       }
       this.setState({courses : coursesToAdd, ids: idsToAdd});
-      console.log('courses loaded');
     });
   }
 
@@ -138,6 +137,9 @@ class AdminPage extends Component {
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
+    if(this.state.showAddForm) {
+      this.loadCourses(); // Load courses only when form is closed (showAddForm was true immediately before the form is closed)
+    }
   }
 
   populateEditForm(rowData, rowMeta) {
@@ -147,12 +149,11 @@ class AdminPage extends Component {
   }
 
   hideEditForm() {
-    // Do not display editing form if a row is selected (vs. clicked)
     this.setState({showEditForm : false});
+    this.loadCourses();
   }
 
   render() {
-    // TODO: reload table after course is updated or added
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
@@ -161,7 +162,7 @@ class AdminPage extends Component {
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
-        onRowsSelect: this.hideEditForm, // Prevent editing form from popping up when row is "selected" vs. "clicked"
+        onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
         rowsPerPage: 10, // Default to 20 rows per page
         rowsPerPageOptions: [10, 50, 100],

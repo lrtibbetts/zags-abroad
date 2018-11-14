@@ -85,14 +85,15 @@ class CourseDetailForm extends Component {
                 if(this.props.title === "Add Course Equivalency") {
                   axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
                       console.log(res.data);
+                      this.props.onClose();
                   });
                 } else if(this.props.title === "Edit Course Equivalency") {
                   courseInfo.id = this.props.courseId; // Add course id to courseInfo object
                   axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
                       console.log(res.data);
+                      this.props.onClose();
                   });
                 }
-                this.props.onClose();
               }}/>
             <RaisedButton label="Cancel"
               onClick = {this.props.onClose}/>

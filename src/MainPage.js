@@ -16,24 +16,22 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Button from "@material-ui/core/Button";
 
-
-
 class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userInput : '',
-      dataSource : ['CPSC', 'BUSI', 'MUSC', 'PHIL', 'MATH','ETC'],
+      dataSource : ['CPSC', 'BUSN', 'MUSC', 'PHIL', 'MATH'],
       courses : [],
       filteredCourses :[],
       newArray : [],
       programList : [],
       filters : null,
       selectedIndex : 1,
-      options : ['Search options:','Course Deparment','Language','Location'],
+      options : ['Search options:','Department','Gonzaga course','Location'],
       listOfFilters : []
     }
-    //backend API
+    // Backend API
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       this.setState({courses: res.data});
     });
@@ -104,13 +102,11 @@ class MainPage extends Component {
     this.setState({listOfFilters : array})
 }
 
-
   render() {
     return (
       <div>
         <MuiThemeProvider>
           <div>
-            <h1> Welcome to the main program search page! </h1>
             <List component="nav">
               <ListItem
                 button
@@ -120,7 +116,7 @@ class MainPage extends Component {
                 onClick={this.handleClickOnList}
                 >
                 <ListItemText
-                  primary="Search By:"
+                  primary="Search by:"
                   secondary={this.state.options[this.state.selectedIndex]}
                 />
               </ListItem>
@@ -145,7 +141,7 @@ class MainPage extends Component {
 
 
             <AutoComplete
-              hintText = 'Enter a deparment here (uppercase)'
+              hintText = 'Enter a department here:'
               dataSource={this.state.dataSource}
               onMouseOut ={ (event, value) => this.setState({userInput : event.currentTarget.value},
                 () => this.setFilteredCourses(0, [], [])
@@ -155,7 +151,6 @@ class MainPage extends Component {
             <Button color="primary" onClick ={this.setFilters.bind(this)}>
               Add Filter
             </Button>
-
 
             <Paper>
               {this.state.listOfFilters.map(data => {
@@ -169,11 +164,11 @@ class MainPage extends Component {
               })}
             </Paper>
 
-            <h1> Search Results: </h1>
+            <h1> Available programs: </h1>
                 {this.state.programList.map((program, i) => {
                   return(
                     <li>
-                      The program {program} is offered with this criteria.
+                      {program}
                     </li>
                   )
                 })}

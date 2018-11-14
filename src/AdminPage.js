@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
-// library code: https://github.com/gregnb/mui-datatables
-// npm docs: https://www.npmjs.com/package/mui-datatables
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
@@ -20,6 +18,8 @@ class AdminPage extends Component {
       courses: [],
       ids: [], // Array to store ids internally
       // Customize column properties
+      editingCourseId: '', // Id of course being edited
+      editingCourse: [], // Array with details of course being edited
       columns: [
         {
           name: "Host Program",
@@ -92,6 +92,17 @@ class AdminPage extends Component {
       ]
     }
 
+    // Bind 'this' context to helper functions
+    this.loadCourses = this.loadCourses.bind(this);
+    this.deleteRows = this.deleteRows.bind(this);
+    this.toggleAddForm = this.toggleAddForm.bind(this);
+    this.populateEditForm = this.populateEditForm.bind(this);
+    this.hideEditForm = this.hideEditForm.bind(this);
+
+    this.loadCourses();
+  }
+
+  loadCourses() {
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       // Convert array of objects to 2D array
       const coursesToAdd = [];
@@ -108,13 +119,8 @@ class AdminPage extends Component {
         coursesToAdd.push(equivalency);
       }
       this.setState({courses : coursesToAdd, ids: idsToAdd});
+      console.log('courses loaded');
     });
-
-    // Bind 'this' context to helper functions
-    this.deleteRows = this.deleteRows.bind(this);
-    this.toggleEditForm = this.toggleEditForm.bind(this);
-    this.toggleAddForm = this.toggleAddForm.bind(this);
-    this.rowSelected = this.rowSelected.bind(this);
   }
 
   deleteRows(rowsToDelete) {
@@ -124,36 +130,39 @@ class AdminPage extends Component {
       var courseInfo = {
         id : id
       }
-      // Call backend API
       axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
         console.log(res.data);
       });
     }
   }
 
-  toggleEditForm() {
-    this.setState({showEditForm : !this.state.showEditForm});
-  }
-
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
   }
 
-  rowSelected() {
+  populateEditForm(rowData, rowMeta) {
+    // Get course details for row clicked
+    let id = this.state.ids[rowMeta.dataIndex]; // Get course id
+    this.setState({editingCourseId: id, editingCourse: rowData, showEditForm: true});
+  }
+
+  hideEditForm() {
+    // Do not display editing form if a row is selected (vs. clicked)
     this.setState({showEditForm : false});
   }
 
   render() {
+    // TODO: reload table after course is updated or added
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
         // Customization of data table
-        filterType: "multiselect", // Apply filters via dropdown menus
+        filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
-        onRowsSelect: this.rowSelected, // Prevent editing form from popping up when row is "selected" vs. "clicked"
+        onRowClick: this.populateEditForm,
+        onRowsSelect: this.hideEditForm, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
-        onRowClick: this.toggleEditForm,
         rowsPerPage: 10, // Default to 20 rows per page
         rowsPerPageOptions: [10, 50, 100],
         fixedHeader: false, // Headers will move if the user scrolls across the table
@@ -172,11 +181,13 @@ class AdminPage extends Component {
                 data = {this.state.courses}
                 options = {options}/>
               {this.state.showAddForm === true ? <CourseDetailsForm
+                course={[]} // Adding a new course, so pass an empty array
                 onClose={this.toggleAddForm}
                 title="Add Course Equivalency"/> : null}
               {this.state.showEditForm === true ? <CourseDetailsForm
-                // TODO: pass current course details as props
-                onClose={this.toggleEditForm}
+                courseId={this.state.editingCourseId}
+                course={this.state.editingCourse}
+                onClose={this.hideEditForm}
                 title="Edit Course Equivalency"/> : null}
             </div>
           </MuiThemeProvider>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AutoComplete from 'material-ui/AutoComplete';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+//import AutoComplete from '@material-ui/AutoComplete';
 import axios from 'axios';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -140,13 +140,13 @@ class MainPage extends Component {
             </Menu>
 
 
-            <AutoComplete
+            {/*<AutoComplete
               hintText = 'Enter a department here:'
               dataSource={this.state.dataSource}
               onMouseOut ={ (event, value) => this.setState({userInput : event.currentTarget.value},
                 () => this.setFilteredCourses(0, [], [])
               )}
-            />
+            />*/}
 
             <Button color="primary" onClick ={this.setFilters.bind(this)}>
               Add Filter

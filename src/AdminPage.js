@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
-import RaisedButton from 'material-ui/RaisedButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Button from '@material-ui/core/Button';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
 import axios from 'axios';
 
@@ -171,9 +171,11 @@ class AdminPage extends Component {
           <MuiThemeProvider>
             <div>
               <h1> Course Equivalencies </h1>
-              <RaisedButton label="Add"
+              <Button variant="contained"
                 style={addButtonStyle}
-                onClick={this.toggleAddForm}/>
+                onClick={this.toggleAddForm}>
+                Add
+              </Button>
               <MUIDataTable
                 columns = {this.state.columns}
                 data = {this.state.courses}

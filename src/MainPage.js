@@ -15,6 +15,7 @@ import Menu from '@material-ui/core/Menu';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Button from "@material-ui/core/Button";
+import Select from 'react-select';
 
 class MainPage extends Component {
   constructor(props) {

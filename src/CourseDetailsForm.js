@@ -32,12 +32,19 @@ class CourseDetailForm extends Component {
       approved_until: this.props.course[9],
       department: this.props.course[10]
     }
+    this.formIsValid = this.formIsValid.bind(this);
+  }
+
+  formIsValid() {
+    // Check that all required fields are filled
+    return (this.state.host_program && this.state.host_course_name && this.state.gu_course_number
+    && this.state.gu_course_name && this.state.signature_needed && this.state.approved_by
+    && this.state.approval_date && this.state.department);
   }
 
   render() {
     // TODO: confirmation message when course is added or updated successfully
     // TODO: autofilled dropdown menus for program, department, signature (YES/NO)
-    // tODO: autofill formatting for date fields
     // TODO: disable save button until required fields are filled
     return (
       <div>
@@ -45,7 +52,7 @@ class CourseDetailForm extends Component {
           <Dialog open={true} onClose={this.props.onClose} scroll='body'>
             <DialogTitle  id="simple-dialog-title"> {this.props.title} </DialogTitle>
             <div>
-              <TextField style={largeTextFieldStyle} label = "Host program"
+              <TextField required style={largeTextFieldStyle} label = "Host program"
                 defaultValue = {this.state.host_program}
                 onChange = { (event) =>
                   this.setState({host_program : event.target.value})}/><br/>
@@ -53,15 +60,15 @@ class CourseDetailForm extends Component {
                 defaultValue = {this.state.host_course_number}
                 onChange = { (event) =>
                   this.setState({host_course_number : event.target.value})}/>
-              <TextField style={largeTextFieldStyle} label = "Host course name"
+              <TextField required style={largeTextFieldStyle} label = "Host course name"
                 defaultValue = {this.state.host_course_name}
                 onChange = { (event) =>
                   this.setState({host_course_name : event.target.value})}/>
-              <TextField style={smallTextFieldStyle} label = "GU course number"
+              <TextField required style={smallTextFieldStyle} label = "GU course number"
                 defaultValue = {this.state.gu_course_number}
                 onChange = { (event) =>
                   this.setState({gu_course_number : event.target.value})}/>
-              <TextField style={largeTextFieldStyle} label = "GU course name"
+              <TextField required style={largeTextFieldStyle} label = "GU course name"
                 defaultValue = {this.state.gu_course_name}
                 onChange = { (event) =>
                   this.setState({gu_course_name : event.target.value})}/>
@@ -69,15 +76,15 @@ class CourseDetailForm extends Component {
                 defaultValue = {this.state.comments}
                 onChange = { (event) =>
                   this.setState({comments : event.target.value})}/>
-              <TextField style={smallTextFieldStyle} label = "Signature needed"
+              <TextField required style={smallTextFieldStyle} label = "Signature needed"
                 defaultValue = {this.state.signature_needed}
                 onChange = { (event) =>
                   this.setState({signature_needed : event.target.value})}/>
-              <TextField style={largeTextFieldStyle} label = "Approved by"
+              <TextField required style={largeTextFieldStyle} label = "Approved by"
                 defaultValue = {this.state.approved_by}
                 onChange = { (event) =>
                   this.setState({approved_by : event.target.value})}/>
-              <TextField style={smallTextFieldStyle} label = "Approval date"
+              <TextField required style={smallTextFieldStyle} label = "Approval date"
                 type = "date"
                 InputLabelProps={{
                   shrink: true,
@@ -93,12 +100,13 @@ class CourseDetailForm extends Component {
                 defaultValue = {this.state.approved_until}
                 onChange = { (event) =>
                   this.setState({approved_until : event.target.value})}/>
-              <TextField style={largeTextFieldStyle} label = "Department"
+              <TextField required style={largeTextFieldStyle} label = "Department"
                 defaultValue = {this.state.department}
                 onChange = { (event) =>
                   this.setState({department : event.target.value})}/>
               <br/>
               <Button variant="contained"
+                disabled = {!this.formIsValid()}
                 onClick = {(event) => {
                   let courseInfo = this.state;
                   if(this.props.title === "Add Course Equivalency") {

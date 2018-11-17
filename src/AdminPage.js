@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
-import RaisedButton from 'material-ui/RaisedButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Button from '@material-ui/core/Button';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
 import axios from 'axios';
 
@@ -137,9 +137,7 @@ class AdminPage extends Component {
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
-    if(this.state.showAddForm) {
-      this.loadCourses(); // Load courses only when form is closed (showAddForm was true immediately before the form is closed)
-    }
+    this.loadCourses();
   }
 
   populateEditForm(rowData, rowMeta) {
@@ -157,7 +155,6 @@ class AdminPage extends Component {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
-        // Customization of data table
         filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
@@ -174,9 +171,11 @@ class AdminPage extends Component {
           <MuiThemeProvider>
             <div>
               <h1> Course Equivalencies </h1>
-              <RaisedButton label="Add"
+              <Button variant="contained"
                 style={addButtonStyle}
-                onClick={this.toggleAddForm}/>
+                onClick={this.toggleAddForm}>
+                Add
+              </Button>
               <MUIDataTable
                 columns = {this.state.columns}
                 data = {this.state.courses}

@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
+
+const textFieldStyle = {
+  width: 250,
+  margin: '10px'
+};
 
 class SignUpPage extends Component {
 
@@ -62,56 +67,66 @@ class SignUpPage extends Component {
         <MuiThemeProvider>
           <div>
             <h1> Sign Up </h1>
-            <TextField
-              floatingLabelText = "First Name"
-              onChange = { (event, newValue) =>
-                this.setState({firstName : newValue})}/>
+            <TextField style = {textFieldStyle}
+              label = "First Name"
+              onChange = { (event) =>
+                this.setState({firstName : event.target.value})}/>
             <br/>
-            <TextField
-              floatingLabelText = "Last Name"
-              onChange = { (event, newValue) =>
-                this.setState({lastName : newValue})}/>
+            <TextField style = {textFieldStyle}
+              label = "Last Name"
+              onChange = { (event) =>
+                this.setState({lastName : event.target.value})}/>
             <br/>
-            <TextField
-              floatingLabelText = "Email"
-              onChange = { (event, newValue) =>
+            <TextField style = {textFieldStyle}
+              label = "Email"
+              onChange = { (event) => {
+                let newValue = event.target.value;
                 this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
                 && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
-                {emailError : true} : {emailError : false, email : newValue})}
-              errorText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
+                {emailError : true} : {emailError : false, email : newValue});
+              }}
+              helperText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
             <br/>
-            <TextField
+            <TextField style = {textFieldStyle}
               type = "password"
-              floatingLabelText = "Password"
-              onChange = { (event, newValue) => {
+              label = "Password"
+              onChange = { (event) => {
+                let newValue = event.target.value;
                 this.setState({password : newValue, passwordMatchingError : ((this.state.confirmedPassword &&
-                newValue !== this.state.confirmedPassword) ? true : false)})
-                this.setState({passwordLengthError : (newValue.length >= 8) ? false : true})}}
-              errorText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
+                newValue !== this.state.confirmedPassword) ? true : false)});
+                this.setState({passwordLengthError : (newValue.length >= 8) ? false : true});
+              }}
+              helperText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
             <br/>
-            <TextField
+            <TextField style = {textFieldStyle}
               type = "password"
-              floatingLabelText = "Confirm Password"
-              onChange = { (event, newValue) =>
+              label = "Confirm Password"
+              onChange = { (event) => {
+                let newValue = event.target.value;
                 this.setState({confirmedPassword : newValue, passwordMatchingError:
-                ((this.state.password !== newValue) ? true : false)})}
-              errorText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
-            <br/>
-            <RaisedButton label="Get started"
+                ((this.state.password !== newValue) ? true : false)});
+              }}
+              helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
+            <br/> <br/>
+            <Button
               disabled = {!this.formIsValid()}
               onClick = {(event) =>
-                this.makeAccount(event)}/>
+                this.makeAccount(event)}>
+              Get Started
+            </Button>
             {this.state.accountCreated === true ?
               <Redirect to="/"/> :
               <Dialog open={this.state.showPrompt}>
                 <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
                 <div>
-                  <Link to="/login">
-                    <RaisedButton label="Log in"/>
-                  </Link>
-                  <RaisedButton label="Try again"
+                  <Button variant="contained" component={Link} to="/login">
+                    Log In
+                  </Button>
+                  <Button variant="contained"
                     onClick = {(event) =>
-                      this.setState({showPrompt : false})}/>
+                      this.setState({showPrompt : false})}>
+                    Try again
+                  </Button>
                 </div>
               </Dialog>}
           </div>

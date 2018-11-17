@@ -39,7 +39,8 @@ class MainPage extends Component {
     });
   }
 
-  setFilteredCourses(counter, currentC, array) {
+  setFilteredCourses() {
+    var counter = 0
     var filteredArray = []
     var filteredPrograms = []
     while (counter < this.state.courses.length) {
@@ -148,7 +149,7 @@ class MainPage extends Component {
               hintText = 'Enter a deparment here (uppercase)'
               dataSource={this.state.dataSource}
               onMouseOut ={ (event, value) => this.setState({userInput : event.currentTarget.value},
-                () => this.setFilteredCourses(0, [], [])
+                () => this.setFilteredCourses()
               )}
             />
 

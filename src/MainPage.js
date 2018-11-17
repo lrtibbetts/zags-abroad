@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 //import AutoComplete from '@material-ui/AutoComplete';
 import axios from 'axios';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -22,7 +17,7 @@ class MainPage extends Component {
     super(props);
     this.state = {
       userInput : '',
-      dataSource : ['CPSC', 'BUSN', 'MUSC', 'PHIL', 'MATH'],
+      dataSource : [],
       courses : [],
       filteredCourses :[],
       newArray : [],
@@ -36,6 +31,24 @@ class MainPage extends Component {
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       this.setState({courses: res.data});
     });
+
+    axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
+      this.setState({dataSource: res.data});
+      this.setDataSource()
+    });
+  }
+
+  setDataSource() {
+    var array = this.state.dataSource
+    for(var i = 0; i < this.state.dataSource.length; i++) {
+      array[i].label = array[i].dept_name
+      delete array[i].dept_name
+    }
+    array = array.map(suggestion => ({
+      value: suggestion.label,
+      label: suggestion.label,
+    }))
+    this.setState({dataSource : array})
   }
 
   setFilteredCourses() {
@@ -142,13 +155,13 @@ class MainPage extends Component {
             </Menu>
 
 
-            {/*<AutoComplete
-              hintText = 'Enter a department here:'
-              dataSource={this.state.dataSource}
-              onMouseOut ={ (event, value) => this.setState({userInput : event.currentTarget.value},
-                () => this.setFilteredCourses()
+            <Select
+              placeholder = 'Enter a department here:'
+              options={this.state.dataSource}
+              onChange ={ (event, value) => this.setState({userInput : value},
+                () => this.setFilteredCourses(),
               )}
-            />*/}
+            />
 
             <Button color="primary" onClick ={this.setFilters.bind(this)}>
               Add Filter

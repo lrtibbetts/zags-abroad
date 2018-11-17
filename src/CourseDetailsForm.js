@@ -78,10 +78,18 @@ class CourseDetailForm extends Component {
                 onChange = { (event) =>
                   this.setState({approved_by : event.target.value})}/>
               <TextField style={smallTextFieldStyle} label = "Approval date"
+                type = "date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 defaultValue = {this.state.approval_date}
                 onChange = { (event) =>
                   this.setState({approval_date : event.target.value})}/>
               <TextField style={smallTextFieldStyle} label = "Approved until"
+                type = "date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 defaultValue = {this.state.approved_until}
                 onChange = { (event) =>
                   this.setState({approved_until : event.target.value})}/>

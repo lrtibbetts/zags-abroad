@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
-// library code: https://github.com/gregnb/mui-datatables
-// npm docs: https://www.npmjs.com/package/mui-datatables
-import RaisedButton from 'material-ui/RaisedButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Button from '@material-ui/core/Button';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
 import axios from 'axios';
 
@@ -20,6 +18,8 @@ class AdminPage extends Component {
       courses: [],
       ids: [], // Array to store ids internally
       // Customize column properties
+      editingCourseId: '', // Id of course being edited
+      editingCourse: [], // Array with details of course being edited
       columns: [
         {
           name: "Host Program",
@@ -37,10 +37,16 @@ class AdminPage extends Component {
           }
         },
         {
-          name: "GU Course Number"
+          name: "GU Course Number",
+          options: {
+            filter: false
+          }
         },
         {
-          name: "GU Course Name"
+          name: "GU Course Name",
+          options: {
+            filter: false
+          }
         },
         {
           name: "Comments",
@@ -86,6 +92,17 @@ class AdminPage extends Component {
       ]
     }
 
+    // Bind 'this' context to helper functions
+    this.loadCourses = this.loadCourses.bind(this);
+    this.deleteRows = this.deleteRows.bind(this);
+    this.toggleAddForm = this.toggleAddForm.bind(this);
+    this.populateEditForm = this.populateEditForm.bind(this);
+    this.hideEditForm = this.hideEditForm.bind(this);
+
+    this.loadCourses();
+  }
+
+  loadCourses() {
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       // Convert array of objects to 2D array
       const coursesToAdd = [];
@@ -103,13 +120,6 @@ class AdminPage extends Component {
       }
       this.setState({courses : coursesToAdd, ids: idsToAdd});
     });
-
-    // Bind 'this' context to helper functions
-    this.deleteRows = this.deleteRows.bind(this);
-    this.toggleEditForm = this.toggleEditForm.bind(this);
-    this.toggleAddForm = this.toggleAddForm.bind(this);
-    this.addCourse = this.addCourse.bind(this);
-    this.updateCourse = this.updateCourse.bind(this);
   }
 
   deleteRows(rowsToDelete) {
@@ -119,41 +129,41 @@ class AdminPage extends Component {
       var courseInfo = {
         id : id
       }
-      // Call backend API
       axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
         console.log(res.data);
       });
     }
   }
 
-  toggleEditForm() {
-    this.setState({showEditForm : !this.state.showEditForm});
-  }
-
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
+    this.loadCourses();
   }
 
-  addCourse() {
-    // TODO: Call backend API
-    console.log("added");
+  populateEditForm(rowData, rowMeta) {
+    // Get course details for row clicked
+    let id = this.state.ids[rowMeta.dataIndex]; // Get course id
+    this.setState({editingCourseId: id, editingCourse: rowData, showEditForm: true});
   }
 
-  updateCourse() {
-    // TODO: Call backend API
-    console.log("updated");
+  hideEditForm() {
+    this.setState({showEditForm : false});
+    this.loadCourses();
   }
 
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
-        // Customization of data table
-        filterType: "dropdown", // Apply filters via dropdown menus
+        filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
         downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
+        onRowClick: this.populateEditForm,
+        onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
-        onRowClick: this.toggleEditForm,
+        rowsPerPage: 10, // Default to 20 rows per page
+        rowsPerPageOptions: [10, 50, 100],
+        fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
@@ -161,21 +171,23 @@ class AdminPage extends Component {
           <MuiThemeProvider>
             <div>
               <h1> Course Equivalencies </h1>
-              <RaisedButton label="Add"
+              <Button variant="contained"
                 style={addButtonStyle}
-                onClick={this.toggleAddForm}/>
+                onClick={this.toggleAddForm}>
+                Add
+              </Button>
               <MUIDataTable
                 columns = {this.state.columns}
                 data = {this.state.courses}
                 options = {options}/>
               {this.state.showAddForm === true ? <CourseDetailsForm
-                onSave={this.addCourse}
+                course={[]} // Adding a new course, so pass an empty array
                 onClose={this.toggleAddForm}
                 title="Add Course Equivalency"/> : null}
               {this.state.showEditForm === true ? <CourseDetailsForm
-                // TODO: pass current course details as props
-                onSave={this.updateCourse}
-                onClose={this.toggleEditForm}
+                courseId={this.state.editingCourseId}
+                course={this.state.editingCourse}
+                onClose={this.hideEditForm}
                 title="Edit Course Equivalency"/> : null}
             </div>
           </MuiThemeProvider>

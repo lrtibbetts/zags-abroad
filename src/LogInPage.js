@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
+
+const textFieldStyle = {
+  width: 250,
+  margin: '10px'
+};
 
 class LogInPage extends Component {
   constructor(props) {
@@ -55,34 +60,33 @@ class LogInPage extends Component {
         <MuiThemeProvider>
           <div>
             <h1> Log In </h1>
-            <TextField
-              floatingLabelText = "Email"
-              onChange = { (event, newValue) =>
-                this.setState({email : newValue})}/>
+            <TextField label = "Email" style = {textFieldStyle}
+              onChange = { (event) =>
+                this.setState({email : event.target.value})}/>
             <br/>
-            <TextField
-              type = "password"
-              floatingLabelText = "Password"
-              onChange = { (event, newValue) =>
-                this.setState({password : newValue})}
-              errorText = {this.state.emailExists ? "Password is incorrect" : ""}/>
-            <br/>
-            <RaisedButton label="Log in"
+            <TextField type = "password" label = "Password" style = {textFieldStyle}
+              onChange = { (event) =>
+                this.setState({password : event.target.value})}
+              helperText = {this.state.emailExists ? "Password is incorrect" : ""}/>
+            <br/> <br/>
+            <Button label="Log in" variant="contained"
               disabled = {!(this.state.email && this.state.password)}
               onClick = {(event) =>
-                this.logIn(event)}/>
+                this.logIn(event)}> Log In </Button>
             {this.state.validUser === true ?
               (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
               : (this.state.emailExists) ? null :
               <Dialog open={this.state.showPrompt}>
                 <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>
                 <div>
-                  <Link to="/signup">
-                    <RaisedButton label="Sign Up"/>
-                  </Link>
-                  <RaisedButton label="Try again"
+                  <Button variant="contained" component={Link} to="/signup">
+                    Sign Up
+                  </Button>
+                  <Button variant="contained"
                     onClick = {(event) =>
-                      this.setState({showPrompt : false})}/>
+                      this.setState({showPrompt : false})}>
+                    Try again
+                  </Button>
                 </div>
               </Dialog>}
           </div>

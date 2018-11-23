@@ -4,6 +4,10 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import './NavigationBar.css';
 import { Link } from "react-router-dom";
 
+const buttonStyle = {
+  margin: '100px'
+}
+
 class NavigationBar extends Component {
   render() {
     const cookies = this.props.cookies;
@@ -14,10 +18,10 @@ class NavigationBar extends Component {
           <MuiThemeProvider>
             <div className="NavigationBar">
               <h2> Zags Abroad </h2>
-              <Button variant="contained" component={Link} to="/signup">
+              <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
                 Sign Up
               </Button>
-              <Button variant="contained" component={Link} to="/login">
+              <Button style={buttonStyle} variant="contained" component={Link} to="/login">
                 Log In
               </Button>
             </div>

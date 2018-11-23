@@ -4,6 +4,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
 
 const largeTextFieldStyle = {
@@ -14,6 +15,10 @@ const largeTextFieldStyle = {
 const smallTextFieldStyle = {
   width: 150,
   margin: '10px'
+}
+
+const buttonStyle = {
+  margin: '5px'
 }
 
 class CourseDetailForm extends Component {
@@ -45,12 +50,11 @@ class CourseDetailForm extends Component {
   render() {
     // TODO: confirmation message when course is added or updated successfully
     // TODO: autofilled dropdown menus for program, department, signature (YES/NO)
-    // TODO: disable save button until required fields are filled
     return (
       <div>
         <MuiThemeProvider>
           <Dialog open={true} onClose={this.props.onClose} scroll='body'>
-            <DialogTitle  id="simple-dialog-title"> {this.props.title} </DialogTitle>
+            <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
             <div>
               <TextField required style={largeTextFieldStyle} label = "Host program"
                 defaultValue = {this.state.host_program}
@@ -105,26 +109,30 @@ class CourseDetailForm extends Component {
                 onChange = { (event) =>
                   this.setState({department : event.target.value})}/>
               <br/>
-              <Button variant="contained"
-                disabled = {!this.formIsValid()}
-                onClick = {(event) => {
-                  let courseInfo = this.state;
-                  if(this.props.title === "Add Course Equivalency") {
-                    axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
-                        console.log(res.data);
-                        this.props.onClose();
-                    });
-                  } else if(this.props.title === "Edit Course Equivalency") {
-                    courseInfo.id = this.props.courseId; // Add course id to courseInfo object
-                    axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
-                        console.log(res.data);
-                        this.props.onClose();
-                    });
-                  }
-                }}>
-                Save
-              </Button>
-              <Button variant="contained"
+              <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
+                <span>
+                  <Button variant="contained" style={buttonStyle}
+                    disabled = {!this.formIsValid()}
+                    onClick = {(event) => {
+                      let courseInfo = this.state;
+                      if(this.props.title === "Add Course Equivalency") {
+                        axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
+                            console.log(res.data);
+                            this.props.onClose();
+                        });
+                      } else if(this.props.title === "Edit Course Equivalency") {
+                        courseInfo.id = this.props.courseId; // Add course id to courseInfo object
+                        axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
+                            console.log(res.data);
+                            this.props.onClose();
+                        });
+                      }
+                    }}>
+                    Save
+                  </Button>
+                </span>
+              </Tooltip>
+              <Button variant="contained" style={buttonStyle}
                 onClick = {this.props.onClose}>
                 Cancel
               </Button>

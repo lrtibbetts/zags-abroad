@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
+import Select from 'react-select';
 import axios from 'axios';
 
 const largeTextFieldStyle = {
@@ -19,6 +20,12 @@ const smallTextFieldStyle = {
 
 const buttonStyle = {
   margin: '5px'
+}
+
+const dropdownStyle = {
+  width: 200,
+  display: 'inline-block',
+  margin: '15px'
 }
 
 class CourseDetailForm extends Component {
@@ -48,8 +55,7 @@ class CourseDetailForm extends Component {
   }
 
   render() {
-    // TODO: confirmation message when course is added or updated successfully
-    // TODO: autofilled dropdown menus for program, department, signature (YES/NO)
+    // TODO: autofilled dropdown menus for program, department
     return (
       <div>
         <MuiThemeProvider>
@@ -80,10 +86,14 @@ class CourseDetailForm extends Component {
                 defaultValue = {this.state.comments}
                 onChange = { (event) =>
                   this.setState({comments : event.target.value})}/>
-              <TextField required style={smallTextFieldStyle} label = "Signature needed"
-                defaultValue = {this.state.signature_needed}
-                onChange = { (event) =>
-                  this.setState({signature_needed : event.target.value})}/>
+              <div style = {dropdownStyle}>
+                <Select
+                  placeholder="Signature needed"
+                  options={[{value: "YES", label: "YES"},
+                            {value: "NO", label: "NO"}]}
+                  onChange={ (selectedOption) =>
+                    this.setState({signature_needed : selectedOption.value})}/>
+              </div>
               <TextField required style={largeTextFieldStyle} label = "Approved by"
                 defaultValue = {this.state.approved_by}
                 onChange = { (event) =>

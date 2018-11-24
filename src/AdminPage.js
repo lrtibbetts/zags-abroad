@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -188,45 +187,41 @@ class AdminPage extends Component {
       };
       return (
         <div>
-          <MuiThemeProvider>
-            <div>
-              <h1> Course Equivalencies </h1>
-              <Button variant="contained"
-                style={addButtonStyle}
-                onClick={this.toggleAddForm}>
-                Add
-              </Button>
-              <MUIDataTable
-                columns = {this.state.columns}
-                data = {this.state.courses}
-                options = {options}/>
-              {this.state.showAddForm === true ? <CourseDetailsForm
-                course={[]} // Adding a new course, so pass an empty array
-                displayMessage={this.displayMessage}
-                onClose={this.toggleAddForm}
-                title="Add Course Equivalency"/> : null}
-              {this.state.showEditForm === true ? <CourseDetailsForm
-                courseId={this.state.editingCourseId}
-                course={this.state.editingCourse}
-                displayMessage={this.displayMessage}
-                onClose={this.hideEditForm}
-                title="Edit Course Equivalency"/> : null}
-              <Snackbar message={this.state.message}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={this.state.showMessage}
-                onClose={(event) =>
-                  this.setState({showMessage: false})}
-                autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
-                action={
-                <IconButton
-                  onClick={(event) =>
-                    this.setState({showMessage: false})}>
-                <CloseIcon/> </IconButton>}/>
-            </div>
-          </MuiThemeProvider>
+          <h1> Course Equivalencies </h1>
+          <Button variant="contained"
+            style={addButtonStyle}
+            onClick={this.toggleAddForm}>
+            Add
+          </Button>
+          <MUIDataTable
+            columns = {this.state.columns}
+            data = {this.state.courses}
+            options = {options}/>
+          {this.state.showAddForm === true ? <CourseDetailsForm
+            course={[]} // Adding a new course, so pass an empty array
+            displayMessage={this.displayMessage}
+            onClose={this.toggleAddForm}
+            title="Add Course Equivalency"/> : null}
+          {this.state.showEditForm === true ? <CourseDetailsForm
+            courseId={this.state.editingCourseId}
+            course={this.state.editingCourse}
+            displayMessage={this.displayMessage}
+            onClose={this.hideEditForm}
+            title="Edit Course Equivalency"/> : null}
+          <Snackbar message={this.state.message}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={this.state.showMessage}
+            onClose={(event) =>
+              this.setState({showMessage: false})}
+            autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
+            action={
+            <IconButton
+              onClick={(event) =>
+                this.setState({showMessage: false})}>
+            <CloseIcon/> </IconButton>}/>
         </div>
       )
     } else {

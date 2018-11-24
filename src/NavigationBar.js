@@ -14,34 +14,26 @@ class NavigationBar extends Component {
     const loggedIn = Boolean(cookies.get('email'));
     if(!loggedIn) {
       return (
-        <div>
-          <MuiThemeProvider>
-            <div className="NavigationBar">
-              <h2> Zags Abroad </h2>
-              <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
-                Sign Up
-              </Button>
-              <Button style={buttonStyle} variant="contained" component={Link} to="/login">
-                Log In
-              </Button>
-            </div>
-          </MuiThemeProvider>
+        <div className="NavigationBar">
+          <h2> Zags Abroad </h2>
+          <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
+            Sign Up
+          </Button>
+          <Button style={buttonStyle} variant="contained" component={Link} to="/login">
+            Log In
+          </Button>
         </div>
       );
     } else {
       return (
-        <div>
-          <MuiThemeProvider>
-            <div className="NavigationBar">
-              <h2> Zags Abroad </h2>
-              <Button variant="contained"> My Account </Button>
-              <Button variant="contained"
-                onClick = {(event) => {
-                  cookies.remove('email');
-                  cookies.remove('role'); }}>
-                  Log Out </Button>
-            </div>
-          </MuiThemeProvider>
+        <div className="NavigationBar">
+          <h2> Zags Abroad </h2>
+          <Button variant="contained"> My Account </Button>
+          <Button variant="contained"
+            onClick = {(event) => {
+              cookies.remove('email');
+              cookies.remove('role'); }}>
+              Log Out </Button>
         </div>
       );
     }

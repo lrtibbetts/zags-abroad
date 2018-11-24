@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-//import AutoComplete from '@material-ui/AutoComplete';
 import axios from 'axios';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -120,75 +118,71 @@ class MainPage extends Component {
   render() {
     return (
       <div>
-        <MuiThemeProvider>
-          <div>
-            <List component="nav">
-              <ListItem
-                button
-                aria-haspopup="true"
-                aria-controls="lock-menu"
-                aria-label="Search By:"
-                onClick={this.handleClickOnList}
-                >
-                <ListItemText
-                  primary="Search by:"
-                  secondary={this.state.options[this.state.selectedIndex]}
-                />
-              </ListItem>
-            </List>
-            <Menu
-              id="lock-menu"
-              filters={this.state.filters}
-              open={Boolean(this.state.filters)}
-              onClose={this.handleClose}
-              >
-              {this.state.options.map((option, index) => (
-                <MenuItem
-                  key={option}
-                  disabled={index === 0}
-                  selected={index === this.state.selectedIndex}
-                  onClick={event => this.handleClickOnMenu(event, index)}
-                  >
-                  {option}
-                  </MenuItem>
-              ))}
-            </Menu>
-
-
-            <Select
-              placeholder = 'Enter a department here:'
-              options={this.state.dataSource}
-              onChange ={ (event, value) => this.setState({userInput : value},
-                () => this.setFilteredCourses(),
-              )}
+        <List component="nav">
+          <ListItem
+            button
+            aria-haspopup="true"
+            aria-controls="lock-menu"
+            aria-label="Search By:"
+            onClick={this.handleClickOnList}
+            >
+            <ListItemText
+              primary="Search by:"
+              secondary={this.state.options[this.state.selectedIndex]}
             />
+          </ListItem>
+        </List>
+        <Menu
+          id="lock-menu"
+          filters={this.state.filters}
+          open={Boolean(this.state.filters)}
+          onClose={this.handleClose}
+          >
+          {this.state.options.map((option, index) => (
+            <MenuItem
+              key={option}
+              disabled={index === 0}
+              selected={index === this.state.selectedIndex}
+              onClick={event => this.handleClickOnMenu(event, index)}
+              >
+              {option}
+              </MenuItem>
+          ))}
+        </Menu>
 
-            <Button color="primary" onClick ={this.setFilters.bind(this)}>
-              Add Filter
-            </Button>
 
-            <Paper>
-              {this.state.listOfFilters.map(data => {
-                let icon = null;
-                return (
-                  <Chip
-                    icon={icon}
-                    label={data}
-                  />
-                );
-              })}
-            </Paper>
+        <Select
+          placeholder = 'Enter a department here:'
+          options={this.state.dataSource}
+          onChange ={ (event, value) => this.setState({userInput : value},
+            () => this.setFilteredCourses(),
+          )}
+        />
 
-            <h1> Available programs: </h1>
-                {this.state.programList.map((program, i) => {
-                  return(
-                    <li>
-                      {program}
-                    </li>
-                  )
-                })}
-          </div>
-        </MuiThemeProvider>
+        <Button color="primary" onClick ={this.setFilters.bind(this)}>
+          Add Filter
+        </Button>
+
+        <Paper>
+          {this.state.listOfFilters.map(data => {
+            let icon = null;
+            return (
+              <Chip
+                icon={icon}
+                label={data}
+              />
+            );
+          })}
+        </Paper>
+
+        <h1> Available programs: </h1>
+            {this.state.programList.map((program, i) => {
+              return(
+                <li>
+                  {program}
+                </li>
+              )
+            })}
       </div>
     );
   }

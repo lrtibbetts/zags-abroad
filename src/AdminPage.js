@@ -53,6 +53,13 @@ class AdminPage extends Component {
           }
         },
         {
+          name: "Core",
+          options: {
+            display: false,
+            filter: false
+          }
+        },
+        {
           name: "Comments",
           options: {
             display: false,

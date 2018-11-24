@@ -5,8 +5,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
-import Select from 'react-select';
 import axios from 'axios';
+import DropdownTextField from './DropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,
@@ -25,7 +25,7 @@ const buttonStyle = {
 const dropdownStyle = {
   width: 200,
   display: 'inline-block',
-  margin: '15px'
+  margin: '6px'
 }
 
 class CourseDetailForm extends Component {
@@ -37,14 +37,16 @@ class CourseDetailForm extends Component {
       host_course_name: this.props.course[2],
       gu_course_number: this.props.course[3],
       gu_course_name: this.props.course[4],
-      comments: this.props.course[5],
-      signature_needed: this.props.course[6],
-      approved_by: this.props.course[7],
-      approval_date: this.props.course[8],
-      approved_until: this.props.course[9],
-      department: this.props.course[10]
+      core: this.props.course[5],
+      comments: this.props.course[6],
+      signature_needed: this.props.course[7],
+      approved_by: this.props.course[8],
+      approval_date: this.props.course[9],
+      approved_until: this.props.course[10],
+      department: this.props.course[11]
     }
     this.formIsValid = this.formIsValid.bind(this);
+    this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
   }
 
   formIsValid() {
@@ -52,6 +54,10 @@ class CourseDetailForm extends Component {
     return (this.state.host_program && this.state.host_course_name && this.state.gu_course_number
     && this.state.gu_course_name && this.state.signature_needed && this.state.approved_by
     && this.state.approval_date && this.state.department);
+  }
+
+  handleChangeSignatureNeeded(selectedOption) {
+    this.setState({signature_needed: selectedOption.value});
   }
 
   render() {
@@ -87,12 +93,12 @@ class CourseDetailForm extends Component {
                 onChange = { (event) =>
                   this.setState({comments : event.target.value})}/>
               <div style = {dropdownStyle}>
-                <Select
-                  placeholder="Signature needed"
+                <DropdownTextField
+                  label="Signature needed"
+                  placeholder={this.state.signature_needed ? this.state.signature_needed : ""}
                   options={[{value: "YES", label: "YES"},
                             {value: "NO", label: "NO"}]}
-                  onChange={ (selectedOption) =>
-                    this.setState({signature_needed : selectedOption.value})}/>
+                  onChange={this.handleChangeSignatureNeeded}/>
               </div>
               <TextField required style={largeTextFieldStyle} label = "Approved by"
                 defaultValue = {this.state.approved_by}

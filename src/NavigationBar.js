@@ -4,7 +4,7 @@ import './NavigationBar.css';
 import { Link } from "react-router-dom";
 
 const buttonStyle = {
-  margin: '100px'
+  margin: '5px'
 }
 
 class NavigationBar extends Component {
@@ -27,8 +27,8 @@ class NavigationBar extends Component {
       return (
         <div className="NavigationBar">
           <h2> Zags Abroad </h2>
-          <Button variant="contained"> My Account </Button>
-          <Button variant="contained"
+          <Button style={buttonStyle} variant="contained"> My Account </Button>
+          <Button style={buttonStyle} variant="contained"
             onClick = {(event) => {
               cookies.remove('email');
               cookies.remove('role'); }}>

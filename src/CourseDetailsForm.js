@@ -112,19 +112,28 @@ class CourseDetailForm extends Component {
               <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
                 <span>
                   <Button variant="contained" style={buttonStyle}
-                    disabled = {!this.formIsValid()}
+                    disabled={!this.formIsValid()}
                     onClick = {(event) => {
                       let courseInfo = this.state;
                       if(this.props.title === "Add Course Equivalency") {
                         axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
-                            console.log(res.data);
-                            this.props.onClose();
+                          if(res.data.errno) { // Error adding the course
+                            this.props.displayMessage("Error adding course");
+                          } else { // No error, course added successfully
+                            this.props.displayMessage("Course added successfully");
+                          }
+                          this.props.onClose();
                         });
                       } else if(this.props.title === "Edit Course Equivalency") {
                         courseInfo.id = this.props.courseId; // Add course id to courseInfo object
                         axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
-                            console.log(res.data);
-                            this.props.onClose();
+                          console.log(res.data);
+                          if(res.data.errno) { // Error updating the course
+                            this.props.displayMessage("Error updating course");
+                          } else { // No error, course updated successfully
+                            this.props.displayMessage("Course updated successfully");
+                          }
+                          this.props.onClose();
                         });
                       }
                     }}>

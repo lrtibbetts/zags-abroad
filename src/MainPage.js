@@ -22,7 +22,7 @@ class MainPage extends Component {
       programList : [],
       filters : null,
       selectedIndex : 1,
-      options : ['Search options:','Department','Gonzaga course','Location'],
+      options : ['Search options:','Department','Gonzaga Course','Location'],
       listOfFilters : []
     }
     // Backend API

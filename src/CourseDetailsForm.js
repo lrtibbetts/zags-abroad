@@ -1,38 +1,89 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
+import DropdownTextField from './DropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'
 };
 
+const mediumTextFieldStyle = {
+  width: 250,
+  margin: '10px'
+};
+
 const smallTextFieldStyle = {
   width: 150,
   margin: '10px'
-}
+};
 
-class CourseDetailForm extends Component {
+const buttonStyle = {
+  margin: '5px'
+};
+
+const smallDropdownStyle = {
+  width: 200,
+  display: 'inline-block',
+  marginLeft: '10px',
+  marginTop: '6px'
+};
+
+const largeDropDownStyle = {
+  width: 300,
+  display: 'inline-block',
+  margin: '10px'
+};
+
+class CourseDetailsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      departments: [],
+      programs: [],
       host_program: this.props.course[0],
       host_course_number: this.props.course[1],
       host_course_name: this.props.course[2],
       gu_course_number: this.props.course[3],
       gu_course_name: this.props.course[4],
-      comments: this.props.course[5],
-      signature_needed: this.props.course[6],
-      approved_by: this.props.course[7],
-      approval_date: this.props.course[8],
-      approved_until: this.props.course[9],
-      department: this.props.course[10]
+      core: this.props.course[5],
+      comments: this.props.course[6],
+      signature_needed: this.props.course[7],
+      approved_by: this.props.course[8],
+      approval_date: this.props.course[9],
+      approved_until: this.props.course[10],
+      department: this.props.course[11]
     }
     this.formIsValid = this.formIsValid.bind(this);
+    this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
+    this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
+    this.handleChangeProgram = this.handleChangeProgram.bind(this);
+
+    // Get list of department codes for dropdown menu
+    axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
+      let departmentsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let deptCode = res.data[i].dept_code;
+        let deptObj = {value: deptCode, label: deptCode};
+        departmentsToAdd.push(deptObj);
+      }
+      this.setState({departments: departmentsToAdd});
+    });
+
+    // Get list of programs for dropdown menu
+    axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
+      let programsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let program = res.data[i].host_program;
+        let programObj = {value: program, label: program};
+        programsToAdd.push(programObj);
+      }
+      this.setState({programs: programsToAdd});
+    });
   }
 
   formIsValid() {
@@ -42,98 +93,134 @@ class CourseDetailForm extends Component {
     && this.state.approval_date && this.state.department);
   }
 
+  handleChangeSignatureNeeded(selectedOption) {
+    this.setState({signature_needed: selectedOption.value});
+  }
+
+  handleChangeDepartment(selectedOption) {
+    this.setState({department: selectedOption.value});
+  }
+
+  handleChangeProgram(selectedOption) {
+    this.setState({host_program: selectedOption.value});
+  }
+
   render() {
-    // TODO: confirmation message when course is added or updated successfully
-    // TODO: autofilled dropdown menus for program, department, signature (YES/NO)
-    // TODO: disable save button until required fields are filled
     return (
       <div>
-        <MuiThemeProvider>
-          <Dialog open={true} onClose={this.props.onClose} scroll='body'>
-            <DialogTitle  id="simple-dialog-title"> {this.props.title} </DialogTitle>
-            <div>
-              <TextField required style={largeTextFieldStyle} label = "Host program"
-                defaultValue = {this.state.host_program}
-                onChange = { (event) =>
-                  this.setState({host_program : event.target.value})}/><br/>
-              <TextField style={smallTextFieldStyle} label = "Host course number"
-                defaultValue = {this.state.host_course_number}
-                onChange = { (event) =>
-                  this.setState({host_course_number : event.target.value})}/>
-              <TextField required style={largeTextFieldStyle} label = "Host course name"
-                defaultValue = {this.state.host_course_name}
-                onChange = { (event) =>
-                  this.setState({host_course_name : event.target.value})}/>
-              <TextField required style={smallTextFieldStyle} label = "GU course number"
-                defaultValue = {this.state.gu_course_number}
-                onChange = { (event) =>
-                  this.setState({gu_course_number : event.target.value})}/>
-              <TextField required style={largeTextFieldStyle} label = "GU course name"
-                defaultValue = {this.state.gu_course_name}
-                onChange = { (event) =>
-                  this.setState({gu_course_name : event.target.value})}/>
-              <TextField style={largeTextFieldStyle} label = "Comments"
-                defaultValue = {this.state.comments}
-                onChange = { (event) =>
-                  this.setState({comments : event.target.value})}/>
-              <TextField required style={smallTextFieldStyle} label = "Signature needed"
-                defaultValue = {this.state.signature_needed}
-                onChange = { (event) =>
-                  this.setState({signature_needed : event.target.value})}/>
-              <TextField required style={largeTextFieldStyle} label = "Approved by"
-                defaultValue = {this.state.approved_by}
-                onChange = { (event) =>
-                  this.setState({approved_by : event.target.value})}/>
-              <TextField required style={smallTextFieldStyle} label = "Approval date"
-                type = "date"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                defaultValue = {this.state.approval_date}
-                onChange = { (event) =>
-                  this.setState({approval_date : event.target.value})}/>
-              <TextField style={smallTextFieldStyle} label = "Approved until"
-                type = "date"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                defaultValue = {this.state.approved_until}
-                onChange = { (event) =>
-                  this.setState({approved_until : event.target.value})}/>
-              <TextField required style={largeTextFieldStyle} label = "Department"
-                defaultValue = {this.state.department}
-                onChange = { (event) =>
-                  this.setState({department : event.target.value})}/>
-              <br/>
-              <Button variant="contained"
-                disabled = {!this.formIsValid()}
-                onClick = {(event) => {
-                  let courseInfo = this.state;
-                  if(this.props.title === "Add Course Equivalency") {
-                    axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
-                        console.log(res.data);
-                        this.props.onClose();
-                    });
-                  } else if(this.props.title === "Edit Course Equivalency") {
-                    courseInfo.id = this.props.courseId; // Add course id to courseInfo object
-                    axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
-                        console.log(res.data);
-                        this.props.onClose();
-                    });
-                  }
-                }}>
-                Save
-              </Button>
-              <Button variant="contained"
-                onClick = {this.props.onClose}>
-                Cancel
-              </Button>
+        <Dialog open={true} onClose={this.props.onClose} scroll='body'>
+          <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
+          <div>
+            <div style = {largeDropDownStyle}>
+              <DropdownTextField
+                label="Program"
+                placeholder={this.state.host_program ? this.state.host_program : ""}
+                options={this.state.programs}
+                onChange={this.handleChangeProgram}/>
+            </div><br/>
+            <TextField style={smallTextFieldStyle} label = "Host course number"
+              defaultValue = {this.state.host_course_number}
+              onChange = { (event) =>
+                this.setState({host_course_number : event.target.value})}/>
+            <TextField required style={largeTextFieldStyle} label = "Host course name"
+              defaultValue = {this.state.host_course_name}
+              onChange = { (event) =>
+                this.setState({host_course_name : event.target.value})}/>
+            <TextField required style={smallTextFieldStyle} label = "GU course number"
+              defaultValue = {this.state.gu_course_number}
+              onChange = { (event) =>
+                this.setState({gu_course_number : event.target.value})}/>
+            <TextField required style={largeTextFieldStyle} label = "GU course name"
+              defaultValue = {this.state.gu_course_name}
+              onChange = { (event) =>
+                this.setState({gu_course_name : event.target.value})}/>
+            <TextField style={mediumTextFieldStyle} label = "Core"
+              defaultValue = {this.state.core}
+              onChange = { (event) =>
+                this.setState({core : event.target.value})}/>
+            <TextField style={mediumTextFieldStyle} label = "Comments"
+              defaultValue = {this.state.comments}
+              onChange = { (event) =>
+                this.setState({comments : event.target.value})}/>
+            <div style = {smallDropdownStyle}>
+              <DropdownTextField
+                label="Signature needed"
+                placeholder={this.state.signature_needed ? this.state.signature_needed : ""}
+                options={[{value: "YES", label: "YES"},
+                          {value: "NO", label: "NO"}]}
+                onChange={this.handleChangeSignatureNeeded}/>
             </div>
-          </Dialog>
-        </MuiThemeProvider>
+            <TextField required style={largeTextFieldStyle} label = "Approved by"
+              defaultValue = {this.state.approved_by}
+              onChange = { (event) =>
+                this.setState({approved_by : event.target.value})}/>
+            <TextField required style={smallTextFieldStyle} label = "Approval date"
+              type = "date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              defaultValue = {this.state.approval_date}
+              onChange = { (event) =>
+                this.setState({approval_date : event.target.value})}/>
+            <TextField style={smallTextFieldStyle} label = "Approved until"
+              type = "date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              defaultValue = {this.state.approved_until}
+              onChange = { (event) =>
+                this.setState({approved_until : event.target.value})}/>
+            <div style = {smallDropdownStyle}>
+              <DropdownTextField
+                label="Department"
+                placeholder={this.state.department ? this.state.department : ""}
+                options={this.state.departments}
+                onChange={this.handleChangeDepartment}/>
+            </div>
+            <br/>
+            <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
+              <span>
+                <Button variant="contained" style={buttonStyle}
+                  disabled={!this.formIsValid()}
+                  onClick = {(event) => {
+                    let courseInfo = this.state;
+                    console.log(courseInfo);
+                    if(this.props.title === "Add Course Equivalency") {
+                      axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
+                        console.log(res.data);
+                        if(res.data.errno) { // Error adding the course
+                          this.props.displayMessage("Error adding course");
+                        } else { // No error, course added successfully
+                          this.props.displayMessage("Course added successfully");
+                        }
+                        this.props.onClose();
+                      });
+                    } else if(this.props.title === "Edit Course Equivalency") {
+                      courseInfo.id = this.props.courseId; // Add course id to courseInfo object
+                      axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
+                        console.log(res.data);
+                        if(res.data.errno) { // Error updating the course
+                          this.props.displayMessage("Error updating course");
+                        } else { // No error, course updated successfully
+                          this.props.displayMessage("Course updated successfully");
+                        }
+                        this.props.onClose();
+                      });
+                    }
+                  }}>
+                  Save
+                </Button>
+              </span>
+            </Tooltip>
+            <Button variant="contained" style={buttonStyle}
+              onClick = {this.props.onClose}>
+              Cancel
+            </Button>
+          </div>
+        </Dialog>
       </div>
     )
   }
 }
 
-export default CourseDetailForm;
+export default CourseDetailsForm;

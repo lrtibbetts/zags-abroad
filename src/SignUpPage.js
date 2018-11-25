@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -64,73 +63,69 @@ class SignUpPage extends Component {
   render() {
     return (
       <div>
-        <MuiThemeProvider>
-          <div>
-            <h1> Sign Up </h1>
-            <TextField style = {textFieldStyle}
-              label = "First Name"
-              onChange = { (event) =>
-                this.setState({firstName : event.target.value})}/>
-            <br/>
-            <TextField style = {textFieldStyle}
-              label = "Last Name"
-              onChange = { (event) =>
-                this.setState({lastName : event.target.value})}/>
-            <br/>
-            <TextField style = {textFieldStyle}
-              label = "Email"
-              onChange = { (event) => {
-                let newValue = event.target.value;
-                this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
-                && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
-                {emailError : true} : {emailError : false, email : newValue});
-              }}
-              helperText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
-            <br/>
-            <TextField style = {textFieldStyle}
-              type = "password"
-              label = "Password"
-              onChange = { (event) => {
-                let newValue = event.target.value;
-                this.setState({password : newValue, passwordMatchingError : ((this.state.confirmedPassword &&
-                newValue !== this.state.confirmedPassword) ? true : false)});
-                this.setState({passwordLengthError : (newValue.length >= 8) ? false : true});
-              }}
-              helperText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
-            <br/>
-            <TextField style = {textFieldStyle}
-              type = "password"
-              label = "Confirm Password"
-              onChange = { (event) => {
-                let newValue = event.target.value;
-                this.setState({confirmedPassword : newValue, passwordMatchingError:
-                ((this.state.password !== newValue) ? true : false)});
-              }}
-              helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
-            <br/> <br/>
-            <Button
-              disabled = {!this.formIsValid()}
-              onClick = {(event) =>
-                this.makeAccount(event)}>
-              Get Started
-            </Button>
-            {this.state.accountCreated === true ?
-              <Redirect to="/"/> :
-              <Dialog open={this.state.showPrompt}>
-                <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
-                <div>
-                  <Button variant="contained" component={Link} to="/login">
-                    Log In
-                  </Button>
-                  <Button variant="contained"
-                    onClick = {(event) =>
-                      this.setState({showPrompt : false})}>
-                    Try again
-                  </Button>
-                </div>
-              </Dialog>}
-          </div>
-        </MuiThemeProvider>
+        <h1> Sign Up </h1>
+        <TextField style = {textFieldStyle}
+          label = "First Name"
+          onChange = { (event) =>
+            this.setState({firstName : event.target.value})}/>
+        <br/>
+        <TextField style = {textFieldStyle}
+          label = "Last Name"
+          onChange = { (event) =>
+            this.setState({lastName : event.target.value})}/>
+        <br/>
+        <TextField style = {textFieldStyle}
+          label = "Email"
+          onChange = { (event) => {
+            let newValue = event.target.value;
+            this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
+            && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
+            {emailError : true} : {emailError : false, email : newValue});
+          }}
+          helperText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
+        <br/>
+        <TextField style = {textFieldStyle}
+          type = "password"
+          label = "Password"
+          onChange = { (event) => {
+            let newValue = event.target.value;
+            this.setState({password : newValue, passwordMatchingError : ((this.state.confirmedPassword &&
+            newValue !== this.state.confirmedPassword) ? true : false)});
+            this.setState({passwordLengthError : (newValue.length >= 8) ? false : true});
+          }}
+          helperText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
+        <br/>
+        <TextField style = {textFieldStyle}
+          type = "password"
+          label = "Confirm Password"
+          onChange = { (event) => {
+            let newValue = event.target.value;
+            this.setState({confirmedPassword : newValue, passwordMatchingError:
+            ((this.state.password !== newValue) ? true : false)});
+          }}
+          helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
+        <br/> <br/>
+        <Button
+          disabled = {!this.formIsValid()}
+          onClick = {(event) =>
+            this.makeAccount(event)}>
+          Get Started
+        </Button>
+        {this.state.accountCreated === true ?
+          <Redirect to="/"/> :
+          <Dialog open={this.state.showPrompt}>
+            <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
+            <div>
+              <Button variant="contained" component={Link} to="/login">
+                Log In
+              </Button>
+              <Button variant="contained"
+                onClick = {(event) =>
+                  this.setState({showPrompt : false})}>
+                Try again
+              </Button>
+            </div>
+          </Dialog>}
       </div>
     )
   }

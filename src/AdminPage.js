@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CourseDetailsForm from './CourseDetailsForm.js';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios';
 
 const addButtonStyle = {
@@ -17,12 +19,13 @@ class AdminPage extends Component {
       showEditForm: false,
       courses: [],
       ids: [], // Array to store ids internally
-      // Customize column properties
       editingCourseId: '', // Id of course being edited
       editingCourse: [], // Array with details of course being edited
+      showMessage: false,
+      message: '',
       columns: [
         {
-          name: "Host Program",
+          name: "Program",
         },
         {
           name: "Host Course Number",
@@ -46,6 +49,12 @@ class AdminPage extends Component {
           name: "GU Course Name",
           options: {
             filter: false
+          }
+        },
+        {
+          name: "Core",
+          options: {
+            display: false
           }
         },
         {
@@ -98,6 +107,7 @@ class AdminPage extends Component {
     this.toggleAddForm = this.toggleAddForm.bind(this);
     this.populateEditForm = this.populateEditForm.bind(this);
     this.hideEditForm = this.hideEditForm.bind(this);
+    this.displayMessage = this.displayMessage.bind(this);
 
     this.loadCourses();
   }
@@ -130,7 +140,11 @@ class AdminPage extends Component {
         id : id
       }
       axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
-        console.log(res.data);
+        if(res.data.errno) { // Error deleting the course
+          this.displayMessage("Error deleting course");
+        } else { // No error, course updated successfully
+          this.displayMessage("Course deleted successfully");
+        }
       });
     }
   }
@@ -151,6 +165,10 @@ class AdminPage extends Component {
     this.loadCourses();
   }
 
+  displayMessage(message) {
+    this.setState({showMessage: true, message: message});
+  }
+
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
@@ -161,36 +179,48 @@ class AdminPage extends Component {
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
-        rowsPerPage: 10, // Default to 20 rows per page
-        rowsPerPageOptions: [10, 50, 100],
+        rowsPerPage: 20, // Default to 20 rows per page
+        rowsPerPageOptions: [20, 50, 100],
         fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
         <div>
-          <MuiThemeProvider>
-            <div>
-              <h1> Course Equivalencies </h1>
-              <Button variant="contained"
-                style={addButtonStyle}
-                onClick={this.toggleAddForm}>
-                Add
-              </Button>
-              <MUIDataTable
-                columns = {this.state.columns}
-                data = {this.state.courses}
-                options = {options}/>
-              {this.state.showAddForm === true ? <CourseDetailsForm
-                course={[]} // Adding a new course, so pass an empty array
-                onClose={this.toggleAddForm}
-                title="Add Course Equivalency"/> : null}
-              {this.state.showEditForm === true ? <CourseDetailsForm
-                courseId={this.state.editingCourseId}
-                course={this.state.editingCourse}
-                onClose={this.hideEditForm}
-                title="Edit Course Equivalency"/> : null}
-            </div>
-          </MuiThemeProvider>
+          <h1> Course Equivalencies </h1>
+          <Button variant="contained"
+            style={addButtonStyle}
+            onClick={this.toggleAddForm}>
+            Add
+          </Button>
+          <MUIDataTable
+            columns = {this.state.columns}
+            data = {this.state.courses}
+            options = {options}/>
+          {this.state.showAddForm === true ? <CourseDetailsForm
+            course={[]} // Adding a new course, so pass an empty array
+            displayMessage={this.displayMessage}
+            onClose={this.toggleAddForm}
+            title="Add Course Equivalency"/> : null}
+          {this.state.showEditForm === true ? <CourseDetailsForm
+            courseId={this.state.editingCourseId}
+            course={this.state.editingCourse}
+            displayMessage={this.displayMessage}
+            onClose={this.hideEditForm}
+            title="Edit Course Equivalency"/> : null}
+          <Snackbar message={this.state.message}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={this.state.showMessage}
+            onClose={(event) =>
+              this.setState({showMessage: false})}
+            autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
+            action={
+            <IconButton
+              onClick={(event) =>
+                this.setState({showMessage: false})}>
+            <CloseIcon/> </IconButton>}/>
         </div>
       )
     } else {

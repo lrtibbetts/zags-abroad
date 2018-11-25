@@ -151,9 +151,9 @@ class MainPage extends Component {
 
         <Select
           placeholder = 'Enter a department here:'
-
-          onChange ={ (event, value) => this.setState({userInput : value},
-            () => this.setFilteredCourses()
+          onChange ={ (thing) => this.setState({userInput : thing.label},
+            () => this.setFilteredCourses(),
+            console.log(thing.label)
           )}
           options= {this.state.dataSource}
         />

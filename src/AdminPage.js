@@ -25,7 +25,7 @@ class AdminPage extends Component {
       message: '',
       columns: [
         {
-          name: "Host Program",
+          name: "Program",
         },
         {
           name: "Host Course Number",
@@ -54,8 +54,7 @@ class AdminPage extends Component {
         {
           name: "Core",
           options: {
-            display: false,
-            filter: false
+            display: false
           }
         },
         {

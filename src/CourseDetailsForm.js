@@ -12,25 +12,39 @@ const largeTextFieldStyle = {
   margin: '10px'
 };
 
+const mediumTextFieldStyle = {
+  width: 250,
+  margin: '10px'
+};
+
 const smallTextFieldStyle = {
   width: 150,
   margin: '10px'
-}
+};
 
 const buttonStyle = {
   margin: '5px'
-}
+};
 
-const dropdownStyle = {
+const smallDropdownStyle = {
   width: 200,
   display: 'inline-block',
-  margin: '6px'
-}
+  marginLeft: '10px',
+  marginTop: '6px'
+};
 
-class CourseDetailForm extends Component {
+const largeDropDownStyle = {
+  width: 300,
+  display: 'inline-block',
+  margin: '10px'
+};
+
+class CourseDetailsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      departments: [],
+      programs: [],
       host_program: this.props.course[0],
       host_course_number: this.props.course[1],
       host_course_name: this.props.course[2],
@@ -46,6 +60,30 @@ class CourseDetailForm extends Component {
     }
     this.formIsValid = this.formIsValid.bind(this);
     this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
+    this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
+    this.handleChangeProgram = this.handleChangeProgram.bind(this);
+
+    // Get list of department codes for dropdown menu
+    axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
+      let departmentsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let deptCode = res.data[i].dept_code;
+        let deptObj = {value: deptCode, label: deptCode};
+        departmentsToAdd.push(deptObj);
+      }
+      this.setState({departments: departmentsToAdd});
+    });
+
+    // Get list of programs for dropdown menu
+    axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
+      let programsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let program = res.data[i].host_program;
+        let programObj = {value: program, label: program};
+        programsToAdd.push(programObj);
+      }
+      this.setState({programs: programsToAdd});
+    });
   }
 
   formIsValid() {
@@ -59,17 +97,27 @@ class CourseDetailForm extends Component {
     this.setState({signature_needed: selectedOption.value});
   }
 
+  handleChangeDepartment(selectedOption) {
+    this.setState({department: selectedOption.value});
+  }
+
+  handleChangeProgram(selectedOption) {
+    this.setState({host_program: selectedOption.value});
+  }
+
   render() {
-    // TODO: autofilled dropdown menus for program, department
     return (
       <div>
         <Dialog open={true} onClose={this.props.onClose} scroll='body'>
           <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
           <div>
-            <TextField required style={largeTextFieldStyle} label = "Host program"
-              defaultValue = {this.state.host_program}
-              onChange = { (event) =>
-                this.setState({host_program : event.target.value})}/><br/>
+            <div style = {largeDropDownStyle}>
+              <DropdownTextField
+                label="Program"
+                placeholder={this.state.host_program ? this.state.host_program : ""}
+                options={this.state.programs}
+                onChange={this.handleChangeProgram}/>
+            </div><br/>
             <TextField style={smallTextFieldStyle} label = "Host course number"
               defaultValue = {this.state.host_course_number}
               onChange = { (event) =>
@@ -86,11 +134,15 @@ class CourseDetailForm extends Component {
               defaultValue = {this.state.gu_course_name}
               onChange = { (event) =>
                 this.setState({gu_course_name : event.target.value})}/>
-            <TextField style={largeTextFieldStyle} label = "Comments"
+            <TextField style={mediumTextFieldStyle} label = "Core"
+              defaultValue = {this.state.core}
+              onChange = { (event) =>
+                this.setState({core : event.target.value})}/>
+            <TextField style={mediumTextFieldStyle} label = "Comments"
               defaultValue = {this.state.comments}
               onChange = { (event) =>
                 this.setState({comments : event.target.value})}/>
-            <div style = {dropdownStyle}>
+            <div style = {smallDropdownStyle}>
               <DropdownTextField
                 label="Signature needed"
                 placeholder={this.state.signature_needed ? this.state.signature_needed : ""}
@@ -118,10 +170,13 @@ class CourseDetailForm extends Component {
               defaultValue = {this.state.approved_until}
               onChange = { (event) =>
                 this.setState({approved_until : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Department"
-              defaultValue = {this.state.department}
-              onChange = { (event) =>
-                this.setState({department : event.target.value})}/>
+            <div style = {smallDropdownStyle}>
+              <DropdownTextField
+                label="Department"
+                placeholder={this.state.department ? this.state.department : ""}
+                options={this.state.departments}
+                onChange={this.handleChangeDepartment}/>
+            </div>
             <br/>
             <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
               <span>
@@ -129,8 +184,10 @@ class CourseDetailForm extends Component {
                   disabled={!this.formIsValid()}
                   onClick = {(event) => {
                     let courseInfo = this.state;
+                    console.log(courseInfo);
                     if(this.props.title === "Add Course Equivalency") {
                       axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
+                        console.log(res.data);
                         if(res.data.errno) { // Error adding the course
                           this.props.displayMessage("Error adding course");
                         } else { // No error, course added successfully
@@ -166,4 +223,4 @@ class CourseDetailForm extends Component {
   }
 }
 
-export default CourseDetailForm;
+export default CourseDetailsForm;

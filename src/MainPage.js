@@ -30,24 +30,12 @@ class MainPage extends Component {
       this.setState({courses: res.data});
     });
 
-    axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       this.setState({dataSource: res.data});
-      this.setDataSource()
+      //console.log(this.state.dataSource)
     });
   }
 
-  setDataSource() {
-    var array = this.state.dataSource
-    for(var i = 0; i < this.state.dataSource.length; i++) {
-      array[i].label = array[i].dept_name
-      delete array[i].dept_name
-    }
-    array = array.map(suggestion => ({
-      value: suggestion.label,
-      label: suggestion.label,
-    }))
-    this.setState({dataSource : array})
-  }
 
   setFilteredCourses() {
     var counter = 0
@@ -90,9 +78,7 @@ class MainPage extends Component {
   }
 
   handleClickOnList = event => {
-    this.setState({
-      filters : event.currentTarget,
-    })
+    this.setState({filters : event.currentTarget,})
   }
 
   handleClose = () => {
@@ -113,7 +99,7 @@ class MainPage extends Component {
       }
     }
     this.setState({listOfFilters : array})
-}
+  }
 
   render() {
     return (
@@ -153,7 +139,7 @@ class MainPage extends Component {
 
         <Select
           placeholder = 'Enter a department here:'
-          options={this.state.dataSource}
+          options= {this.state.dataSource}
           onChange ={ (event, value) => this.setState({userInput : value},
             () => this.setFilteredCourses(),
           )}

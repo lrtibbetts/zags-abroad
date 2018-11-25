@@ -32,10 +32,22 @@ class MainPage extends Component {
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       this.setState({dataSource: res.data});
-      //console.log(this.state.dataSource)
+      this.setDataSource()
     });
   }
 
+  setDataSource() {
+    var array = this.state.dataSource
+    for(var i = 0; i < this.state.dataSource.length; i++) {
+      array[i].label = array[i].subject_name
+      delete array[i].subject_name
+    }
+    array = array.map(suggestion => ({
+      value: suggestion.label,
+      label: suggestion.label,
+    }))
+    this.setState({dataSource : array})
+  }
 
   setFilteredCourses() {
     var counter = 0
@@ -139,13 +151,14 @@ class MainPage extends Component {
 
         <Select
           placeholder = 'Enter a department here:'
-          options= {this.state.dataSource}
+
           onChange ={ (event, value) => this.setState({userInput : value},
-            () => this.setFilteredCourses(),
+            () => this.setFilteredCourses()
           )}
+          options= {this.state.dataSource}
         />
 
-        <Button color="primary" onClick ={this.setFilters.bind(this)}>
+        <Button color="primary">
           Add Filter
         </Button>
 

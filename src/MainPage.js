@@ -14,6 +14,10 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+const listItemStyle = {
+  textAlign: 'left'
+}
+
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -61,18 +65,32 @@ class MainPage extends Component {
     );
   }
 
+  // TODO: ensure we are getting an ordered list from the backend
   getPrograms() {
     var subject = {
       "subject": this.state.listOfFilters[0] // TODO: query based on multiple filters
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subject).then((res) => {
-      console.log(res.data);
       var programsToAdd = [];
-      for(var i = 0; i < res.data.length; i++) {
-        let program = res.data[i].host_program;
-        programsToAdd.push(program);
+      var i = 0;
+      while(i < res.data.length) {
+        let programName = res.data[i].host_program;
+        let courses = [];
+        let course = res.data[i].gu_course_number + " " + res.data[i].gu_course_name;
+        courses.push(course);
+        i++;
+        while(i < res.data.length && res.data[i].host_program === programName) {
+          // Add to current courses array
+          let newCourse = res.data[i].gu_course_number + " " + res.data[i].gu_course_name;
+          courses.push(newCourse);
+          if(i < res.data.length) {
+            i++;
+          }
+        }
+        let programObj = {programName: programName, courses: courses};
+        programsToAdd.push(programObj);
       }
-
+      console.log(programsToAdd);
       this.setState({programList: programsToAdd});
     });
   }
@@ -137,20 +155,24 @@ class MainPage extends Component {
         </div><br/>
         <h1> Available programs: </h1><br/>
         <div>
-        {this.state.programList.map(program => {
-          return (
-            <ExpansionPanel key={program}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{program}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Typography>
-                  List courses here
-                </Typography>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          );
-        })}
+          {this.state.programList.map(program => {
+            return (
+              <ExpansionPanel key={program.programName}>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>{program.programName}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <Typography>
+                    {program.courses.map((course, index) => {
+                      return (
+                        <li key={index} style={listItemStyle}> {course} </li>
+                      );
+                    })}
+                  </Typography>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            );
+          })}
         </div>
       </div>
     );

@@ -22,7 +22,7 @@ class MainPage extends Component {
       programList : [],
       filters: null,
       selectedIndex : 1,
-      options : ['Search options:','Department','Gonzaga Course','Location']
+      options : ['Search Options:','Department','Gonzaga Course','Location']
     }
     // Backend API
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {

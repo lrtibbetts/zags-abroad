@@ -8,6 +8,11 @@ import Menu from '@material-ui/core/Menu';
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DropdownTextField from './DropdownTextField.js';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 class MainPage extends Component {
   constructor(props) {
@@ -15,19 +20,11 @@ class MainPage extends Component {
     this.state = {
       subjects: [], // Subjects in dropdown Menu
       listOfFilters : [], // Filters applied by the user
-
-      userInput : '',
-      courses : [],
-      filteredCourses :[],
       programList : [],
-      filters: null,
+      filters: null, // Types of filters
       selectedIndex : 1,
       options : ['Search Options:','Department','Gonzaga Course','Location']
     }
-    // Backend API
-    axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
-      this.setState({courses: res.data});
-    });
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       let subjectsToAdd = [];
@@ -38,42 +35,6 @@ class MainPage extends Component {
       }
       this.setState({subjects: subjectsToAdd});
     });
-  }
-
-  setFilteredCourses() {
-    var counter = 0
-    var filteredArray = []
-    var filteredPrograms = []
-    while (counter < this.state.courses.length) {
-      var currentCourse = this.state.courses[counter].gu_course_number.substring(0,4);
-      for (var i = 0; i < this.state.listOfFilters.length; i++) {
-        if (currentCourse === this.state.listOfFilters[i]) {
-          filteredArray = filteredArray.concat(this.state.courses[counter])
-          filteredPrograms = filteredPrograms.concat(this.state.courses[counter].host_program)
-        }
-      }
-      if (currentCourse === this.state.userInput) {
-
-      }
-      counter++;
-    }
-    this.setState({filteredCourses: filteredArray})
-    this.setState(
-      {programList : filteredPrograms},
-      () => this.setProgramList()
-    )
-  }
-
-  setProgramList() {
-    var newAr = []
-    for (var i = 0; i < this.state.programList.length; i++) {
-      if (this.state.programList[i] !== this.state.programList[i + 1]) {
-        newAr = newAr.concat(this.state.programList[i])
-      }
-    }
-    this.setState(
-      {programList : newAr}
-    )
   }
 
   handleClickOnMenu = (event, index) => {
@@ -89,13 +50,31 @@ class MainPage extends Component {
   }
 
   handleDelete = filter => () => {
-    var array = []
+    var array = [];
     for (var i = 0; i < this.state.listOfFilters.length; i++) {
       if (filter !== this.state.listOfFilters[i]) {
         array.push(this.state.listOfFilters[i]);
       }
     }
-    this.setState({listOfFilters : array})
+    this.setState({listOfFilters : array},
+      () => this.getPrograms()
+    );
+  }
+
+  getPrograms() {
+    var subject = {
+      "subject": this.state.listOfFilters[0] // TODO: query based on multiple filters
+    }
+    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subject).then((res) => {
+      console.log(res.data);
+      var programsToAdd = [];
+      for(var i = 0; i < res.data.length; i++) {
+        let program = res.data[i].host_program;
+        programsToAdd.push(program);
+      }
+
+      this.setState({programList: programsToAdd});
+    });
   }
 
   render() {
@@ -132,7 +111,6 @@ class MainPage extends Component {
               </MenuItem>
           ))}
         </Menu>
-
         <DropdownTextField
           placeholder = "Enter a department"
           onChange ={ (selectedOption) => {
@@ -140,6 +118,7 @@ class MainPage extends Component {
             let filters = this.state.listOfFilters;
             filters.push(newFilter);
             this.setState({listOfFilters: filters});
+            this.getPrograms();
           }}
           options= {this.state.subjects}
         />
@@ -155,15 +134,24 @@ class MainPage extends Component {
               />
             );
           })}
+        </div><br/>
+        <h1> Available programs: </h1><br/>
+        <div>
+        {this.state.programList.map(program => {
+          return (
+            <ExpansionPanel key={program}>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>{program}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Typography>
+                  List courses here
+                </Typography>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          );
+        })}
         </div>
-        <h1> Available programs: </h1>
-            {this.state.programList.map((program, i) => {
-              return(
-                <li>
-                  {program}
-                </li>
-              )
-            })}
       </div>
     );
   }

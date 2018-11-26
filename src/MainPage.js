@@ -6,24 +6,23 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
-import Button from "@material-ui/core/Button";
-import Select from 'react-select';
+import CancelIcon from '@material-ui/icons/Cancel';
+import DropdownTextField from './DropdownTextField.js';
 
 class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      subjects: [], // Subjects in dropdown Menu
+      listOfFilters : [], // Filters applied by the user
+
       userInput : '',
-      dataSource : [],
       courses : [],
       filteredCourses :[],
-      newArray : [],
       programList : [],
-      filters : null,
+      filters: null,
       selectedIndex : 1,
-      options : ['Search options:','Department','Gonzaga Course','Location'],
-      listOfFilters : []
+      options : ['Search options:','Department','Gonzaga Course','Location']
     }
     // Backend API
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
@@ -31,22 +30,14 @@ class MainPage extends Component {
     });
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
-      this.setState({dataSource: res.data});
-      this.setDataSource()
+      let subjectsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let subjectName = res.data[i].subject_name;
+        let subjectObj = {value: subjectName, label: subjectName};
+        subjectsToAdd.push(subjectObj);
+      }
+      this.setState({subjects: subjectsToAdd});
     });
-  }
-
-  setDataSource() {
-    var array = this.state.dataSource
-    for(var i = 0; i < this.state.dataSource.length; i++) {
-      array[i].label = array[i].subject_name
-      delete array[i].subject_name
-    }
-    array = array.map(suggestion => ({
-      value: suggestion.label,
-      label: suggestion.label,
-    }))
-    this.setState({dataSource : array})
   }
 
   setFilteredCourses() {
@@ -97,17 +88,11 @@ class MainPage extends Component {
     this.setState({filters : null})
   }
 
-  setFilters() {
-    var arr = this.state.listOfFilters
-    arr = arr.concat(this.state.userInput)
-    this.setState({listOfFilters : arr})
-  }
-
-  handleDelete = (filter) => {
+  handleDelete = filter => () => {
     var array = []
     for (var i = 0; i < this.state.listOfFilters.length; i++) {
       if (filter !== this.state.listOfFilters[i]) {
-        array = array.concat(this.state.listOfFilters[i])
+        array.push(this.state.listOfFilters[i]);
       }
     }
     this.setState({listOfFilters : array})
@@ -148,32 +133,29 @@ class MainPage extends Component {
           ))}
         </Menu>
 
-
-        <Select
-          placeholder = 'Enter a department here:'
-          onChange ={ (thing) => this.setState({userInput : thing.label},
-            () => this.setFilteredCourses(),
-            console.log(thing.label)
-          )}
-          options= {this.state.dataSource}
+        <DropdownTextField
+          placeholder = "Enter a department"
+          onChange ={ (selectedOption) => {
+            let newFilter = selectedOption.value;
+            let filters = this.state.listOfFilters;
+            filters.push(newFilter);
+            this.setState({listOfFilters: filters});
+          }}
+          options= {this.state.subjects}
         />
-
-        <Button color="primary">
-          Add Filter
-        </Button>
-
-        <Paper>
-          {this.state.listOfFilters.map(data => {
-            let icon = null;
+        <br/>
+        <div>
+          {this.state.listOfFilters.map(filter => {
             return (
               <Chip
-                icon={icon}
-                label={data}
+                key={filter}
+                onDelete={this.handleDelete(filter)}
+                deleteIcon={<CancelIcon/>}
+                label={filter}
               />
             );
           })}
-        </Paper>
-
+        </div>
         <h1> Available programs: </h1>
             {this.state.programList.map((program, i) => {
               return(

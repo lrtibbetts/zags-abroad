@@ -39,7 +39,7 @@ const largeDropDownStyle = {
   margin: '10px'
 };
 
-// Make department field required 
+// Make department field required
 class CourseDetailsForm extends Component {
   constructor(props) {
     super(props);
@@ -118,7 +118,14 @@ class CourseDetailsForm extends Component {
                 placeholder={this.state.host_program ? this.state.host_program : ""}
                 options={this.state.programs}
                 onChange={this.handleChangeProgram}/>
-            </div><br/>
+            </div>
+            <div style = {smallDropdownStyle}>
+              <DropdownTextField
+                label="Department"
+                placeholder={this.state.department ? this.state.department : ""}
+                options={this.state.departments}
+                onChange={this.handleChangeDepartment}/>
+            </div>
             <TextField style={smallTextFieldStyle} label = "Host course number"
               defaultValue = {this.state.host_course_number}
               onChange = { (event) =>
@@ -171,13 +178,6 @@ class CourseDetailsForm extends Component {
               defaultValue = {this.state.approved_until}
               onChange = { (event) =>
                 this.setState({approved_until : event.target.value})}/>
-            <div style = {smallDropdownStyle}>
-              <DropdownTextField
-                label="Department"
-                placeholder={this.state.department ? this.state.department : ""}
-                options={this.state.departments}
-                onChange={this.handleChangeDepartment}/>
-            </div>
             <br/>
             <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
               <span>

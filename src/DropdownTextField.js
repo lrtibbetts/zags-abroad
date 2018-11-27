@@ -146,6 +146,7 @@ class DropdownTextField extends Component {
             placeholder={this.props.placeholder}
             textFieldProps={{
               label: this.props.label,
+              required: this.props.required,
               InputLabelProps: {
                 shrink: true,
               },

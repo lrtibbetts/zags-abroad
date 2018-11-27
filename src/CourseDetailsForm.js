@@ -114,6 +114,7 @@ class CourseDetailsForm extends Component {
           <div>
             <div style = {largeDropDownStyle}>
               <DropdownTextField
+                required={true}
                 label="Program"
                 placeholder={this.state.host_program ? this.state.host_program : ""}
                 options={this.state.programs}
@@ -121,6 +122,7 @@ class CourseDetailsForm extends Component {
             </div>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
+                required={true}
                 label="Department"
                 placeholder={this.state.department ? this.state.department : ""}
                 options={this.state.departments}
@@ -152,6 +154,7 @@ class CourseDetailsForm extends Component {
                 this.setState({comments : event.target.value})}/>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
+                required={true}
                 label="Signature needed"
                 placeholder={this.state.signature_needed ? this.state.signature_needed : ""}
                 options={[{value: "YES", label: "YES"},

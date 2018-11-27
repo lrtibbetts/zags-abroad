@@ -180,7 +180,7 @@ class MainPage extends Component {
               </ExpansionPanel>
             );
           })}
-        </div>
+        </div><br/>
       </div>
     );
   }

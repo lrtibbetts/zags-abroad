@@ -6,6 +6,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 const addButtonStyle = {
   margin: '10px'
@@ -225,9 +226,7 @@ class AdminPage extends Component {
       )
     } else {
       return (
-        <div>
-          <h1> You do not have access to this page! </h1>
-        </div>
+        <Redirect to="/"/>
       )
     }
   }

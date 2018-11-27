@@ -39,6 +39,7 @@ const largeDropDownStyle = {
   margin: '10px'
 };
 
+// Make department field required 
 class CourseDetailsForm extends Component {
   constructor(props) {
     super(props);

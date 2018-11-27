@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import List from '@material-ui/core/List';
+/*import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import Menu from '@material-ui/core/Menu';*/
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DropdownTextField from './DropdownTextField.js';
@@ -16,6 +16,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const listItemStyle = {
   textAlign: 'left'
+}
+
+const margins = {
+  marginTop: '50px',
+  marginLeft: '200px',
+  marginRight: '200px'
 }
 
 class MainPage extends Component {
@@ -98,7 +104,7 @@ class MainPage extends Component {
   render() {
     return (
       <div>
-        <List component="nav">
+        {/*<List component="nav">
           <ListItem
             button
             aria-haspopup="true"
@@ -128,19 +134,20 @@ class MainPage extends Component {
               {option}
               </MenuItem>
           ))}
-        </Menu>
-        <DropdownTextField
-          placeholder = "Enter a department"
-          onChange ={ (selectedOption) => {
-            let newFilter = selectedOption.value;
-            let filters = this.state.listOfFilters;
-            filters.push(newFilter);
-            this.setState({listOfFilters: filters});
-            this.getPrograms();
-          }}
-          options= {this.state.subjects}
-        />
-        <br/>
+        </Menu>*/}
+        <div style={margins}>
+          <DropdownTextField
+            placeholder = "Enter a department"
+            onChange ={ (selectedOption) => {
+              let newFilter = selectedOption.value;
+              let filters = this.state.listOfFilters;
+              filters.push(newFilter);
+              this.setState({listOfFilters: filters});
+              this.getPrograms();
+            }}
+            options= {this.state.subjects}
+          />
+        </div><br/>
         <div>
           {this.state.listOfFilters.map(filter => {
             return (
@@ -153,8 +160,8 @@ class MainPage extends Component {
             );
           })}
         </div><br/>
-        <h1> Available programs: </h1><br/>
-        <div>
+        <h1> Available programs: </h1>
+        <div style={margins}>
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>

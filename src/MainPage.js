@@ -59,6 +59,7 @@ class MainPage extends Component {
     this.setState({filters : null})
   }
 
+  // Remove filter from list of filters and add back to subjects dropdown
   handleDeleteFilter = filter => () => {
     var filters = this.state.listOfFilters;
     for(var i = 0; i < filters.length; i++) {
@@ -78,6 +79,7 @@ class MainPage extends Component {
     }
   }
 
+  // Remove subject from dropdown menu after it is selected
   handleDeleteSubject(subject) {
     for (var i = 0; i < this.state.subjects.length; i++) {
       if (subject === this.state.subjects[i].value) {

@@ -21,7 +21,6 @@ const styles = theme => ({
   },
   placeholder: {
     position: 'absolute',
-    left: 2,
     fontSize: 16,
   },
   paper: {

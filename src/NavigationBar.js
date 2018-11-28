@@ -7,6 +7,10 @@ const buttonStyle = {
   margin: '5px'
 }
 
+const linkStyle = {
+  color: 'black'
+}
+
 class NavigationBar extends Component {
   render() {
     const cookies = this.props.cookies;
@@ -14,7 +18,8 @@ class NavigationBar extends Component {
     if(!loggedIn) {
       return (
         <div className="NavigationBar">
-          <h2> Zags Abroad </h2>
+          <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
+            style={linkStyle}><h2> Zags Abroad </h2></Link>
           <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
             Sign Up
           </Button>
@@ -26,7 +31,8 @@ class NavigationBar extends Component {
     } else {
       return (
         <div className="NavigationBar">
-          <h2> Zags Abroad </h2>
+          <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
+            style={linkStyle}><h2> Zags Abroad </h2></Link>
           <Button style={buttonStyle} variant="contained"> My Account </Button>
           <Button style={buttonStyle} variant="contained"
             onClick = {(event) => {

@@ -71,12 +71,11 @@ class MainPage extends Component {
     );
   }
 
-  // TODO: ensure we are getting an ordered list from the backend
   getPrograms() {
-    var subject = {
-      "subject": this.state.listOfFilters[0] // TODO: query based on multiple filters
+    var subjects = {
+      "subjects": this.state.listOfFilters
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subject).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subjects).then((res) => {
       var programsToAdd = [];
       var i = 0;
       while(i < res.data.length) {

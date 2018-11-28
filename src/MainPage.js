@@ -39,7 +39,7 @@ class MainPage extends Component {
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
-        let subjectName = res.data[i].subject_name;
+        let subjectName = res.data[i].subject_name.trim();
         let subjectObj = {value: subjectName, label: subjectName};
         subjectsToAdd.push(subjectObj);
       }
@@ -52,23 +52,40 @@ class MainPage extends Component {
   }
 
   handleClickOnList = event => {
-    this.setState({filters : event.currentTarget,})
+    this.setState({filters : event.currentTarget})
   }
 
   handleClose = () => {
     this.setState({filters : null})
   }
 
-  handleDelete = filter => () => {
-    var array = [];
-    for (var i = 0; i < this.state.listOfFilters.length; i++) {
-      if (filter !== this.state.listOfFilters[i]) {
-        array.push(this.state.listOfFilters[i]);
+  handleDeleteFilter = filter => () => {
+    var filters = this.state.listOfFilters;
+    for(var i = 0; i < filters.length; i++) {
+      if (filter === filters[i]) {
+        filters.splice(i, 1);
+        this.setState({listOfFilters: filters});
       }
     }
-    this.setState({listOfFilters : array},
-      () => this.getPrograms()
-    );
+    this.getPrograms(); // Update program results based on new state
+    for(var j = 0; j < this.state.subjects.length; j++) {
+      var subjects = this.state.subjects;
+      if(filter < subjects[j].value) {
+        subjects.splice(j, 0, {value: filter, label: filter}); // Insert at j, remove 0 items
+        this.setState({subjects: subjects});
+        return;
+      }
+    }
+  }
+
+  handleDeleteSubject(subject) {
+    for (var i = 0; i < this.state.subjects.length; i++) {
+      if (subject === this.state.subjects[i].value) {
+        let subjects = this.state.subjects;
+        subjects.splice(i, 1);
+        this.setState({subjects: subjects});
+      }
+    }
   }
 
   getPrograms() {
@@ -81,12 +98,14 @@ class MainPage extends Component {
       while(i < res.data.length) {
         let programName = res.data[i].host_program;
         let courses = [];
-        let course = res.data[i].gu_course_number + " " + res.data[i].gu_course_name;
+        let course = res.data[i].gu_course_number + " " + res.data[i].gu_course_name
+        + " - " + res.data[i].host_course_name;
         courses.push(course);
         i++;
         while(i < res.data.length && res.data[i].host_program === programName) {
           // Add to current courses array
-          let newCourse = res.data[i].gu_course_number + " " + res.data[i].gu_course_name;
+          let newCourse = res.data[i].gu_course_number + " " + res.data[i].gu_course_name
+          + " - " + res.data[i].host_course_name;
           courses.push(newCourse);
           if(i < res.data.length) {
             i++;
@@ -95,7 +114,6 @@ class MainPage extends Component {
         let programObj = {programName: programName, courses: courses};
         programsToAdd.push(programObj);
       }
-      console.log(programsToAdd);
       this.setState({programList: programsToAdd});
     });
   }
@@ -137,14 +155,15 @@ class MainPage extends Component {
         <div style={margins}>
           <DropdownTextField
             placeholder = "Enter a department"
-            onChange ={ (selectedOption) => {
+            onChange = { (selectedOption) => {
               let newFilter = selectedOption.value;
               let filters = this.state.listOfFilters;
               filters.push(newFilter);
               this.setState({listOfFilters: filters});
+              this.handleDeleteSubject(newFilter);
               this.getPrograms();
             }}
-            options= {this.state.subjects}
+            options = {this.state.subjects}
           />
         </div><br/>
         <div>
@@ -152,7 +171,7 @@ class MainPage extends Component {
             return (
               <Chip
                 key={filter}
-                onDelete={this.handleDelete(filter)}
+                onDelete={this.handleDeleteFilter(filter)}
                 deleteIcon={<CancelIcon/>}
                 label={filter}
               />

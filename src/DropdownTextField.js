@@ -138,6 +138,7 @@ class DropdownTextField extends Component {
       <div>
         <NoSsr>
           <Select
+            controlShouldRenderValue={false}
             classes={classes}
             styles={selectStyles}
             options={this.props.options}

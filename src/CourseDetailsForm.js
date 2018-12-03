@@ -144,7 +144,7 @@ class CourseDetailsForm extends Component {
               defaultValue = {this.state.gu_course_name}
               onChange = { (event) =>
                 this.setState({gu_course_name : event.target.value})}/>
-            <TextField style={mediumTextFieldStyle} label = "Core"
+            <TextField style={mediumTextFieldStyle} label = "Core designation"
               defaultValue = {this.state.core}
               onChange = { (event) =>
                 this.setState({core : event.target.value})}/>

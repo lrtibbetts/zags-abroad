@@ -19,14 +19,14 @@ class LogInPage extends Component {
       password : '',
       validUser : false,
       isAdmin : false,
-      emailExists : false,
+      wrongPassword : false,
       showPrompt : false
     }
     this.logIn = this.logIn.bind(this); // Bind 'this' context to logIn function
   }
 
   logIn(event) {
-    this.setState({emailExists: false, showPrompt: false}); // Reset state
+    this.setState({wrongPassword: false, showPrompt: false}); // Reset state
     var accountInfo = {
       "email" : this.state.email,
       "password" : this.state.password
@@ -37,7 +37,7 @@ class LogInPage extends Component {
         this.setState({showPrompt : true});
       } else if(res.data === "Incorrect password") {
         // Email found but password is wrong
-        this.setState({emailExists : true});
+        this.setState({wrongPassword : true});
       } else {
         // Valid log in. Set cookies and check if admin or not
         const cookies = this.props.cookies;
@@ -57,14 +57,14 @@ class LogInPage extends Component {
     return (
       <div>
         <h1> Log In </h1>
-        <TextField label = "Email" style = {textFieldStyle}
+        <TextField id="email" label="Email" style={textFieldStyle}
           onChange = { (event) =>
             this.setState({email : event.target.value})}/>
         <br/>
-        <TextField type = "password" label = "Password" style = {textFieldStyle}
+        <TextField id="password" type="password" label="Password" style={textFieldStyle}
           onChange = { (event) =>
             this.setState({password : event.target.value})}
-          helperText = {this.state.emailExists ? "Password is incorrect" : ""}/>
+          helperText = {this.state.wrongPassword ? "Password is incorrect" : ""}/>
         <br/> <br/>
         <Button label="Log in" variant="contained"
           disabled = {!(this.state.email && this.state.password)}
@@ -72,8 +72,8 @@ class LogInPage extends Component {
             this.logIn(event)}> Log In </Button>
         {this.state.validUser === true ?
           (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
-          : (this.state.emailExists) ? null :
-          <Dialog open={this.state.showPrompt}>
+          : (this.state.wrongPassword) ? null :
+          <Dialog id="dialog" open={this.state.showPrompt}>
             <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>
             <div>
               <Button variant="contained" component={Link} to="/signup">

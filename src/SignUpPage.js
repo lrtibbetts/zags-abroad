@@ -65,16 +65,19 @@ class SignUpPage extends Component {
       <div>
         <h1> Sign Up </h1>
         <TextField style = {textFieldStyle}
+          id = "firstName"
           label = "First Name"
           onChange = { (event) =>
             this.setState({firstName : event.target.value})}/>
         <br/>
         <TextField style = {textFieldStyle}
+          id = "lastName"
           label = "Last Name"
           onChange = { (event) =>
             this.setState({lastName : event.target.value})}/>
         <br/>
         <TextField style = {textFieldStyle}
+          id = "email"
           label = "Email"
           onChange = { (event) => {
             let newValue = event.target.value;
@@ -85,6 +88,7 @@ class SignUpPage extends Component {
           helperText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>
         <br/>
         <TextField style = {textFieldStyle}
+          id = "password"
           type = "password"
           label = "Password"
           onChange = { (event) => {
@@ -96,6 +100,7 @@ class SignUpPage extends Component {
           helperText = {this.state.passwordLengthError ? "Please enter at least 8 characters" : ""}/>
         <br/>
         <TextField style = {textFieldStyle}
+          id = "confirmedPassword"
           type = "password"
           label = "Confirm Password"
           onChange = { (event) => {

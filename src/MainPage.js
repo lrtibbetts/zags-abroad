@@ -31,7 +31,7 @@ class MainPage extends Component {
       subjects: [], // Subjects in dropdown Menu
       listOfFilters : [], // Filters applied by the user
       programList : [],
-      filters: null, // Types of filters
+      typesOfFilters: null, // Types of filters
       selectedIndex : 1,
       options : ['Search Options:','Department','Gonzaga Course','Location']
     }
@@ -48,15 +48,15 @@ class MainPage extends Component {
   }
 
   handleClickOnMenu = (event, index) => {
-    this.setState({filters : null, selectedIndex : index})
+    this.setState({typesOfFilters : null, selectedIndex : index})
   }
 
   handleClickOnList = event => {
-    this.setState({filters : event.currentTarget})
+    this.setState({typesOfFilters : event.currentTarget})
   }
 
   handleClose = () => {
-    this.setState({filters : null})
+    this.setState({typesOfFilters : null})
   }
 
   // Remove filter from list of filters and add back to subjects dropdown
@@ -139,8 +139,8 @@ class MainPage extends Component {
         </List>
         <Menu
           id="lock-menu"
-          filters={this.state.filters}
-          open={Boolean(this.state.filters)}
+          typesOfFilters={this.state.typesOfFilters}
+          open={Boolean(this.state.typesOfFilters)}
           onClose={this.handleClose}
           >
           {this.state.options.map((option, index) => (
@@ -157,6 +157,8 @@ class MainPage extends Component {
         <div style={margins}>
           <DropdownTextField
             placeholder = "Enter a department"
+            id = "departments"
+            label = "departments"
             onChange = { (selectedOption) => {
               let newFilter = selectedOption.value;
               let filters = this.state.listOfFilters;

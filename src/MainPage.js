@@ -158,7 +158,6 @@ class MainPage extends Component {
           <DropdownTextField
             placeholder = "Enter a department"
             id = "departments"
-            label = "departments"
             onChange = { (selectedOption) => {
               let newFilter = selectedOption.value;
               let filters = this.state.listOfFilters;

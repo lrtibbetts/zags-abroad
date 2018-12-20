@@ -11,6 +11,11 @@ const textFieldStyle = {
   margin: '10px'
 };
 
+const buttonStyle = {
+  margin: '5px'
+};
+
+
 class SignUpPage extends Component {
 
   constructor(props) {
@@ -125,10 +130,10 @@ class SignUpPage extends Component {
           <Dialog open={this.state.showPrompt}>
             <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
             <div>
-              <Button variant="contained" component={Link} to="/login">
+              <Button style={buttonStyle} variant="contained" component={Link} to="/login">
                 Log In
               </Button>
-              <Button variant="contained"
+              <Button style={buttonStyle} variant="contained"
                 onClick = {(event) =>
                   this.setState({showPrompt : false})}>
                 Try again

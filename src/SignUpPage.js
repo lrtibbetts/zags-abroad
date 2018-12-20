@@ -15,7 +15,6 @@ const buttonStyle = {
   margin: '5px'
 };
 
-
 class SignUpPage extends Component {
 
   constructor(props) {

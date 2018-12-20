@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-/*import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';*/
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DropdownTextField from './DropdownTextField.js';
@@ -123,37 +118,6 @@ class MainPage extends Component {
   render() {
     return (
       <div>
-        {/*<List component="nav">
-          <ListItem
-            button
-            aria-haspopup="true"
-            aria-controls="lock-menu"
-            aria-label="Search By:"
-            onClick={this.handleClickOnList}
-            >
-            <ListItemText
-              primary="Search by:"
-              secondary={this.state.options[this.state.selectedIndex]}
-            />
-          </ListItem>
-        </List>
-        <Menu
-          id="lock-menu"
-          typesOfFilters={this.state.typesOfFilters}
-          open={Boolean(this.state.typesOfFilters)}
-          onClose={this.handleClose}
-          >
-          {this.state.options.map((option, index) => (
-            <MenuItem
-              key={option}
-              disabled={index === 0}
-              selected={index === this.state.selectedIndex}
-              onClick={event => this.handleClickOnMenu(event, index)}
-              >
-              {option}
-              </MenuItem>
-          ))}
-        </Menu>*/}
         <div style={margins}>
           <DropdownTextField
             placeholder = "Enter a department"

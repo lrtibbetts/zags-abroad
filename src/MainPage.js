@@ -28,10 +28,10 @@ class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subjects: [], // Subjects in dropdown Menu
+      subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
       programList : [],
-      typesOfFilters: null, // Types of filters
+      typesOfFilters: null, // Types of filters, e.g. department
       selectedIndex : 1,
       options : ['Search Options:','Department','Gonzaga Course','Location']
     }

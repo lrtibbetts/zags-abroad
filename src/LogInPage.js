@@ -64,7 +64,11 @@ class LogInPage extends Component {
         <TextField id="password" type="password" label="Password" style={textFieldStyle}
           onChange = { (event) =>
             this.setState({password : event.target.value})}
-          helperText = {this.state.wrongPassword ? "Password is incorrect" : ""}/>
+          helperText = {this.state.wrongPassword ? "Password is incorrect" : ""}
+          onKeyPress = {(event) => {
+            if(this.state.email && this.state.password && event.key === 'Enter') {
+              this.logIn(event)
+            }}}/>
         <br/> <br/>
         <Button label="Log in" variant="contained"
           disabled = {!(this.state.email && this.state.password)}

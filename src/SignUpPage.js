@@ -108,7 +108,11 @@ class SignUpPage extends Component {
             this.setState({confirmedPassword : newValue, passwordMatchingError:
             ((this.state.password !== newValue) ? true : false)});
           }}
-          helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}/>
+          helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}
+          onKeyPress = {(event) => {
+            if(this.formIsValid() && event.key === 'Enter') {
+              this.makeAccount(event)
+            }}}/>
         <br/> <br/>
         <Button
           disabled = {!this.formIsValid()}

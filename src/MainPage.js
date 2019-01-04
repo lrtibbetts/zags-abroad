@@ -25,33 +25,18 @@ class MainPage extends Component {
     this.state = {
       subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
-      programList : [],
-      typesOfFilters: null, // Types of filters, e.g. department
-      selectedIndex : 1,
-      options : ['Search Options:','Department','Gonzaga Course','Location']
+      programList : [] // Programs matching a user's search
     }
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
-        let subjectName = res.data[i].subject_name.trim();
+        let subjectName = res.data[i].subject_name.trim(); // Remove any white space
         let subjectObj = {value: subjectName, label: subjectName};
         subjectsToAdd.push(subjectObj);
       }
       this.setState({subjects: subjectsToAdd});
     });
-  }
-
-  handleClickOnMenu = (event, index) => {
-    this.setState({typesOfFilters : null, selectedIndex : index})
-  }
-
-  handleClickOnList = event => {
-    this.setState({typesOfFilters : event.currentTarget})
-  }
-
-  handleClose = () => {
-    this.setState({typesOfFilters : null})
   }
 
   // Remove filter from list of filters and add back to subjects dropdown
@@ -78,9 +63,9 @@ class MainPage extends Component {
   handleDeleteSubject(subject) {
     for (var i = 0; i < this.state.subjects.length; i++) {
       if (subject === this.state.subjects[i].value) {
-        let subjects = this.state.subjects;
-        subjects.splice(i, 1);
-        this.setState({subjects: subjects});
+        let newSubjects = this.state.subjects;
+        newSubjects.splice(i, 1);
+        this.setState({subjects: newSubjects});
       }
     }
   }

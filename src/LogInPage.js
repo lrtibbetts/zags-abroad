@@ -26,7 +26,6 @@ class LogInPage extends Component {
       wrongPassword : false,
       showPrompt : false
     }
-    this.logIn = this.logIn.bind(this); // Bind 'this' context to logIn function
   }
 
   logIn(event) {

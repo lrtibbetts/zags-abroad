@@ -59,7 +59,7 @@ class CourseDetailsForm extends Component {
       approved_until: this.props.course[10],
       department: this.props.course[11]
     }
-    this.formIsValid = this.formIsValid.bind(this);
+
     this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
     this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
     this.handleChangeProgram = this.handleChangeProgram.bind(this);

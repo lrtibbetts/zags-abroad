@@ -31,7 +31,6 @@ class SignUpPage extends Component {
       accountCreated : false,
       showPrompt : false
     }
-    this.makeAccount = this.makeAccount.bind(this); // Bind 'this' context to makeAccount function
   }
 
   makeAccount(event) {

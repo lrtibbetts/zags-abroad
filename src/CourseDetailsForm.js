@@ -46,6 +46,7 @@ class CourseDetailsForm extends Component {
     this.state = {
       departments: [],
       programs: [],
+      coreDesignations: [],
       host_program: this.props.course[0],
       host_course_number: this.props.course[1],
       host_course_name: this.props.course[2],
@@ -63,6 +64,7 @@ class CourseDetailsForm extends Component {
     this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
     this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
     this.handleChangeProgram = this.handleChangeProgram.bind(this);
+    this.handleChangeCore = this.handleChangeCore.bind(this);
 
     // Get list of department codes for dropdown menu
     axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
@@ -85,6 +87,17 @@ class CourseDetailsForm extends Component {
       }
       this.setState({programs: programsToAdd});
     });
+
+    // Get list of core designations for dropdown menu
+    axios.get("https://zagsabroad-backend.herokuapp.com/core").then((res) => {
+      let coreDesignationsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let core = res.data[i].core_name;
+        let coreObj = {value: core, label: core};
+        coreDesignationsToAdd.push(coreObj);
+      }
+      this.setState({coreDesignations: coreDesignationsToAdd});
+    });
   }
 
   formIsValid() {
@@ -104,6 +117,10 @@ class CourseDetailsForm extends Component {
 
   handleChangeProgram(selectedOption) {
     this.setState({host_program: selectedOption.value});
+  }
+
+  handleChangeCore(selectedOption) {
+    this.setState({core: selectedOption.value});
   }
 
   render() {
@@ -144,14 +161,14 @@ class CourseDetailsForm extends Component {
               defaultValue = {this.state.gu_course_name}
               onChange = { (event) =>
                 this.setState({gu_course_name : event.target.value})}/>
-            <TextField style={mediumTextFieldStyle} label = "Core designation"
-              defaultValue = {this.state.core}
-              onChange = { (event) =>
-                this.setState({core : event.target.value})}/>
-            <TextField style={mediumTextFieldStyle} label = "Comments"
-              defaultValue = {this.state.comments}
-              onChange = { (event) =>
-                this.setState({comments : event.target.value})}/>
+            <div style = {largeDropDownStyle}>
+              <DropdownTextField
+                required={true}
+                label="Core Designation"
+                placeholder={this.state.core ? this.state.core : ""}
+                options={this.state.coreDesignations}
+                onChange={this.handleChangeCore}/>
+            </div>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
                 required={true}
@@ -161,6 +178,10 @@ class CourseDetailsForm extends Component {
                           {value: "NO", label: "NO"}]}
                 onChange={this.handleChangeSignatureNeeded}/>
             </div>
+            <TextField style={mediumTextFieldStyle} label = "Comments"
+              defaultValue = {this.state.comments}
+              onChange = { (event) =>
+                this.setState({comments : event.target.value})}/>
             <TextField required style={largeTextFieldStyle} label = "Approved by"
               defaultValue = {this.state.approved_by}
               onChange = { (event) =>

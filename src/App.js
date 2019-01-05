@@ -5,6 +5,7 @@ import MainPage from "./MainPage.js";
 import LogInPage from "./LogInPage.js";
 import NavigationBar from "./NavigationBar.js";
 import AdminPage from "./AdminPage.js";
+import ProgramDetailView from "./ProgramDetailView.js";
 import { BrowserRouter, Route } from "react-router-dom";
 import { withCookies } from "react-cookie";
 
@@ -27,6 +28,9 @@ class App extends Component {
             )}/>
             <Route exact={true} path='/admin' render={() => (
                 <AdminPage cookies = {this.props.cookies}/>
+            )}/>
+            <Route exact={true} path='/program/:name' render={(props) => (
+                <ProgramDetailView name={props.match.params.name} cookies = {this.props.cookies}/>
             )}/>
           </div>
         </div>

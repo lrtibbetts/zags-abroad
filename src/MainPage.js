@@ -13,6 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Link } from "react-router-dom";
 
 const margins = {
   marginTop: '50px',
@@ -139,7 +140,8 @@ class MainPage extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <Typography>
-                    <Table className={program}>
+                    <Link to={`/program/${program.programName}`}>Learn More</Link>
+                    <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell>GU Course</TableCell>

@@ -8,10 +8,11 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-const listItemStyle = {
-  textAlign: 'left'
-}
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const margins = {
   marginTop: '50px',
@@ -80,14 +81,12 @@ class MainPage extends Component {
       while(i < res.data.length) {
         let programName = res.data[i].host_program;
         let courses = [];
-        let course = res.data[i].gu_course_number + " " + res.data[i].gu_course_name
-        + " - " + res.data[i].host_course_name;
-        courses.push(course);
-        i++;
         while(i < res.data.length && res.data[i].host_program === programName) {
           // Add to current courses array
-          let newCourse = res.data[i].gu_course_number + " " + res.data[i].gu_course_name
-          + " - " + res.data[i].host_course_name;
+          let newCourse = {guCourse: res.data[i].gu_course_number + ": " + res.data[i].gu_course_name,
+            hostCourse: res.data[i].host_course_number ? res.data[i].host_course_number + ": " + res.data[i].host_course_name
+            : res.data[i].host_course_name,
+            requiresSignature: res.data[i].signature_needed};
           courses.push(newCourse);
           if(i < res.data.length) {
             i++;
@@ -140,11 +139,26 @@ class MainPage extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <Typography>
-                    {program.courses.map((course, index) => {
-                      return (
-                        <li key={index} style={listItemStyle}> {course} </li>
-                      );
-                    })}
+                    <Table className={program}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>GU Course</TableCell>
+                          <TableCell>Host Course</TableCell>
+                          <TableCell>Requires Signature</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {program.courses.map((course, index) => {
+                          return (
+                            <TableRow key={index}>
+                              <TableCell>{course.guCourse}</TableCell>
+                              <TableCell>{course.hostCourse}</TableCell>
+                              <TableCell>{course.requiresSignature}</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
                   </Typography>
                 </ExpansionPanelDetails>
               </ExpansionPanel>

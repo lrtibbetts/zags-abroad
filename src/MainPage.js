@@ -121,7 +121,7 @@ class MainPage extends Component {
         <div>
           {this.state.listOfFilters.map(filter => {
             return (
-              <Chip
+              <Chip style={{marginRight: '10px'}}
                 key={filter}
                 onDelete={this.handleDeleteFilter(filter)}
                 deleteIcon={<CancelIcon/>}
@@ -136,11 +136,13 @@ class MainPage extends Component {
             return (
               <ExpansionPanel key={program.programName}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>{program.programName}</Typography>
+                  <b>{program.programName}</b>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <Typography>
-                    <Link to={`/program/${program.programName}`}>Learn More</Link>
+                    <div style={{textAlign: 'left'}}>
+                      <Link to={`/program/${program.programName}`}>Learn More</Link>
+                    </div>
                     <Table>
                       <TableHead>
                         <TableRow>

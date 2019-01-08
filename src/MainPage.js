@@ -152,27 +152,29 @@ class MainPage extends Component {
                   <b>{program.programName}</b>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>GU Course</TableCell>
-                        <TableCell>Host Course</TableCell>
-                        <TableCell>Requires Signature</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {program.courses.map((course, index) => {
-                        return (
-                          <TableRow key={index}>
-                            <TableCell>{course.guCourse}</TableCell>
-                            <TableCell>{course.hostCourse}</TableCell>
-                            <TableCell>{course.requiresSignature}</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                  <div style={{display: 'block', textAlign: 'left'}}>
+                    <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>GU Course</TableCell>
+                          <TableCell>Host Course</TableCell>
+                          <TableCell>Requires Signature</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {program.courses.map((course, index) => {
+                          return (
+                            <TableRow key={index}>
+                              <TableCell>{course.guCourse}</TableCell>
+                              <TableCell>{course.hostCourse}</TableCell>
+                              <TableCell>{course.requiresSignature}</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             );

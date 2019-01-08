@@ -142,6 +142,8 @@ class MainPage extends Component {
           })}
         </div><br/>
         <h1> Available programs: </h1>
+        {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
+        <p> No matching programs. Try removing a filter! </p> : null}
         <div style={margins}>
           {this.state.programList.map(program => {
             return (

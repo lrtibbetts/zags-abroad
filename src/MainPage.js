@@ -86,8 +86,7 @@ class MainPage extends Component {
           // Add to current courses array
           let newCourse = {guCourse: res.data[i].gu_course_number + ": " + res.data[i].gu_course_name,
             hostCourse: res.data[i].host_course_number ? res.data[i].host_course_number + ": " + res.data[i].host_course_name
-            : res.data[i].host_course_name,
-            requiresSignature: res.data[i].signature_needed};
+            : res.data[i].host_course_name, requiresSignature: res.data[i].signature_needed};
           courses.push(newCourse);
           if(i < res.data.length) {
             i++;
@@ -141,7 +140,7 @@ class MainPage extends Component {
             );
           })}
         </div><br/>
-        <h1> Available programs: </h1>
+        <h2> Available programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p> No matching programs. Try removing a filter! </p> : null}
         <div style={margins}>

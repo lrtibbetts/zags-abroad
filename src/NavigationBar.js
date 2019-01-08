@@ -23,10 +23,11 @@ const headerStyle = {
 class NavigationBar extends Component {
   render() {
     const cookies = this.props.cookies;
-    const loggedIn = Boolean(cookies.get('email'));
+    const loggedIn = cookies.get('email');
+    const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div className="NavigationBar">
+        <div>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link>
@@ -40,11 +41,11 @@ class NavigationBar extends Component {
       );
     } else {
       return (
-        <div className="NavigationBar">
+        <div>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          <Link to="/review" style={linkStyle}>Already studied abroad? Share here</Link>
-          <Button style={buttonStyle} variant="outlined"> My Account </Button>
+          {!isAdmin ? <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link> : null}
+          {!isAdmin ? <Button style={buttonStyle} variant="outlined"> My Account </Button> : null}
           <Button style={buttonStyle} variant="outlined"
             onClick = {(event) => {
               cookies.remove('email');

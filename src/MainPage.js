@@ -29,7 +29,7 @@ class MainPage extends Component {
       programList : [] // Programs matching a user's search
     }
 
-    axios.get("http://localhost:3001/subjects").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let subjectName = res.data[i].subject_name.trim(); // Remove any white space
@@ -76,7 +76,7 @@ class MainPage extends Component {
     var subjects = {
       "subjects": this.state.listOfFilters.map((filter) => filter.value)
     }
-    axios.post("http://localhost:3001/filterbysubject", subjects).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subjects).then((res) => {
       var programsToAdd = [];
       var i = 0;
       while(i < res.data.length) {

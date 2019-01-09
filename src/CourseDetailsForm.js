@@ -163,7 +163,6 @@ class CourseDetailsForm extends Component {
                 this.setState({gu_course_name : event.target.value})}/>
             <div style = {largeDropDownStyle}>
               <DropdownTextField
-                required={true}
                 label="Core Designation"
                 placeholder={this.state.core ? this.state.core : ""}
                 options={this.state.coreDesignations}

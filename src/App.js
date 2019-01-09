@@ -7,6 +7,7 @@ import NavigationBar from "./NavigationBar.js";
 import AdminPage from "./AdminPage.js";
 import ProgramDetailView from "./ProgramDetailView.js";
 import ProgramReviewForm from "./ProgramReviewForm.js";
+import MyAccount from "./MyAccount.js"
 import { BrowserRouter, Route } from "react-router-dom";
 import { withCookies } from "react-cookie";
 
@@ -34,6 +35,9 @@ class App extends Component {
           )}/>
           <Route exact={true} path='/review' render={() => (
               <ProgramReviewForm cookies = {this.props.cookies}/>
+          )}/>
+          <Route exact={true} path='/account' render={() => (
+              <MyAccount cookies = {this.props.cookies}/>
           )}/>
         </div>
       </BrowserRouter>

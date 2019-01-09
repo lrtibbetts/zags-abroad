@@ -45,7 +45,7 @@ class NavigationBar extends Component {
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           {!isAdmin ? <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link> : null}
-          {!isAdmin ? <Button style={buttonStyle} variant="outlined"> My Account </Button> : null}
+          {!isAdmin ? <Button style={buttonStyle} variant="outlined" component={Link} to="/account"> My Account </Button> : null}
           <Button style={buttonStyle} variant="outlined"
             onClick = {(event) => {
               cookies.remove('email');

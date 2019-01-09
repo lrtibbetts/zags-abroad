@@ -141,6 +141,9 @@ class MainPage extends Component {
           })}
         </div><br/>
         <h2> Available programs: </h2>
+        {this.state.listOfFilters.length > 0 && this.state.programList.length > 1 ?
+        <p style={{fontSize: '13px'}}> <b>Note:</b> This list is based on courses GU students
+        have gotten credit for in the past, but you may be able to get other courses approved. </p> : null}
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p> No matching programs. Try removing a filter! </p> : null}
         <div style={margins}>

@@ -141,7 +141,6 @@ class MainPage extends Component {
             );
           })}
         </div><br/>
-        <MapView/>
         <h2> Available programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p> No matching programs. Try removing a filter! </p> : null}

@@ -13,6 +13,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
+import MapView from "./MapView.js"
 
 const margins = {
   marginTop: '50px',
@@ -140,6 +141,7 @@ class MainPage extends Component {
             );
           })}
         </div><br/>
+        <MapView/>
         <h2> Available programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p> No matching programs. Try removing a filter! </p> : null}

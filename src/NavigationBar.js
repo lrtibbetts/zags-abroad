@@ -27,7 +27,7 @@ class NavigationBar extends Component {
     const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div>
+        <div style={{textAlign: 'center'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link>
@@ -41,7 +41,7 @@ class NavigationBar extends Component {
       );
     } else {
       return (
-        <div>
+        <div style={{textAlign: 'center'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           {!isAdmin ? <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link> : null}

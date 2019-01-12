@@ -10,14 +10,14 @@ class MapView extends Component {
   render() {
     const programs = this.props.programList;
     return(
-      <div style={{textAlign: 'left', marginLeft:'130px'}}>
+      <div>
         <Map
           style="mapbox://styles/mapbox/light-v9"
           containerStyle={{
-            height: "500px",
-            width: "1000px"
+            height: "350px",
+            width: "510px"
           }}
-          zoom={[1]}
+          zoom={[0]}
           center={[10, 10]}
           >
         </Map>

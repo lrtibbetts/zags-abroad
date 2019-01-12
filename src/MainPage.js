@@ -15,12 +15,6 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
 import MapView from "./MapView.js"
 
-const margins = {
-  marginTop: '50px',
-  marginLeft: '200px',
-  marginRight: '200px'
-}
-
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -114,7 +108,7 @@ class MainPage extends Component {
   render() {
     return (
       <div>
-        <div style={margins}>
+        <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
           <DropdownTextField
             placeholder = "Enter a department"
             id = "departments"
@@ -128,11 +122,14 @@ class MainPage extends Component {
             }}
             options = {this.state.subjects}
           />
-        </div><br/>
-        <div>
+        </div>
+        <div style={{float: 'right', marginRight: '100px'}}>
+          <MapView/>
+        </div>
+        <div style={{marginLeft: '100px'}}>
           {this.state.listOfFilters.map(filter => {
             return (
-              <Chip style={{marginRight: '10px'}}
+              <Chip style={{marginRight: '10px', marginTop: '10px'}}
                 key={filter.value}
                 onDelete={this.handleDeleteFilter(filter)}
                 deleteIcon={<CancelIcon/>}
@@ -140,11 +137,11 @@ class MainPage extends Component {
               />
             );
           })}
-        </div><br/>
-        <h2> Available programs: </h2>
+        </div>
+        <h2 style={{marginLeft: '100px'}}> Available programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
-        <p> No matching programs. Try removing a filter! </p> : null}
-        <div style={margins}>
+        <p style={{marginLeft: '100px'}}> No matching programs. Try removing a filter! </p> : null}
+        <div style={{marginLeft: '100px', marginRight: '660px'}}>
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>
@@ -181,7 +178,7 @@ class MainPage extends Component {
           })}
         </div><br/>
         {this.state.listOfFilters.length > 0 && this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px'}}> <b>Note:</b> This list is based on courses GU students
+        <p style={{fontSize: '13px', marginLeft: '100px'}}> <b>Note:</b> This list is based on courses GU students
         have gotten credit for in the past, but you may be able to get other courses approved. </p> : null}
       </div>
     );

@@ -58,7 +58,7 @@ class LogInPage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{textAlign: 'center'}}>
         <h1> Log In </h1>
         <TextField id="email" label="Email" style={textFieldStyle}
           onChange = { (event) =>

@@ -186,7 +186,7 @@ class AdminPage extends Component {
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
-        <div>
+        <div style={{textAlign: 'center'}}>
           <h1> Course Equivalencies </h1>
           <Button variant="contained"
             style={addButtonStyle}

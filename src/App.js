@@ -15,7 +15,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="App">
+        <div>
           <NavigationBar cookies = {this.props.cookies} />
           <Route exact={true} path='/' render={() => (
               <MainPage cookies = {this.props.cookies}/>

@@ -4,13 +4,12 @@ import MapGL, {Marker} from 'react-map-gl';
 import axios from 'axios';
 import MarkerImage from "./Marker.png"
 import 'mapbox-gl/dist/mapbox-gl.css';
-import {render} from 'react-dom';
 
 const token = "pk.eyJ1IjoibHRpYmJldHRzIiwiYSI6ImNqcXJuNHdwZTBvdWE0OHA2ZjJ1bHZhZXAifQ.LfESsOUlvlNnp_oh8R9ePA";
 
 Geocode.setApiKey("AIzaSyBFPQ0cFalfg1ea0t_HIhF9NihOeztcdgY");
 
-export default class MapView extends Component {
+class MapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -93,6 +92,4 @@ export default class MapView extends Component {
   }
 }
 
-export function renderToDom(container) {
-  render(<MapView/>, container);
-}
+export default MapView;

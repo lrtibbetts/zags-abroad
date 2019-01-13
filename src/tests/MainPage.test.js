@@ -7,7 +7,7 @@ configure({ adapter: new Adapter() });
 
 // Workaround to mock mapbox-gl
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-   Map: () => ({})
+   MapGL: () => ({})
 }));
 
 describe('Main Page', () => {

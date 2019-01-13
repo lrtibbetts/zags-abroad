@@ -124,7 +124,7 @@ class MainPage extends Component {
           />
         </div>
         <div style={{float: 'right', marginRight: '100px'}}>
-          <MapView/>
+          <MapView programs={this.state.programList.map((program) => program.programName)}/>
         </div>
         <div style={{marginLeft: '100px'}}>
           {this.state.listOfFilters.map(filter => {

@@ -178,8 +178,9 @@ class MainPage extends Component {
           })}
         </div><br/>
         {this.state.listOfFilters.length > 0 && this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '100px'}}> <b>Note:</b> This list is based on courses GU students
-        have gotten credit for in the past, but you may be able to get other courses approved. </p> : null}
+        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '660px'}}>
+        <b>Note:</b> This list is based on courses GU students have gotten credit
+        for in the past, but you may be able to get other courses approved. </p> : null} <br/>
       </div>
     );
   }

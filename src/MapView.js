@@ -6,7 +6,6 @@ import MarkerImage from "./Marker.png"
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const token = "pk.eyJ1IjoibHRpYmJldHRzIiwiYSI6ImNqcXJuNHdwZTBvdWE0OHA2ZjJ1bHZhZXAifQ.LfESsOUlvlNnp_oh8R9ePA";
-
 Geocode.setApiKey("AIzaSyBFPQ0cFalfg1ea0t_HIhF9NihOeztcdgY");
 
 class MapView extends Component {
@@ -20,12 +19,10 @@ class MapView extends Component {
         zoom: 0
       }
     }
-
-    this.getCities = this.getCities.bind(this);
   }
 
   getCities() {
-    let programs = []; // Store program name, city, latitude, and longitude
+    let programs = []; // Store program name, latitude, and longitude
     axios.get("https://zagsabroad-backend.herokuapp.com/cities").then((res) => {
       let allPrograms = res.data;
       let matchingPrograms = this.props.programs;
@@ -38,17 +35,13 @@ class MapView extends Component {
               programInfo["lat"] = lat;
               programInfo["lng"] = lng;
               programs.push(programInfo);
-            },
-            error => {
-              console.error(error);
-            }
-          );
+            });
         } else {
           console.log("Error: Program not found")
         }
       }
+      this.setState({programs: programs});
     });
-    this.setState({programs: programs});
   }
 
   componentWillReceiveProps() {
@@ -61,9 +54,7 @@ class MapView extends Component {
           key={program.host_program}
           longitude={program.lng}
           latitude={program.lat} >
-          <div>
-            <img src={MarkerImage} width={15} height={20} alt=""/>
-          </div>
+          <img src={MarkerImage} width={15} height={20} alt=""/>
       </Marker>
     );
   }
@@ -74,20 +65,16 @@ class MapView extends Component {
 
   render() {
     const {viewport} = this.state;
-    const programs = this.state.programs;
-    console.log(programs);
     return(
-      <div>
-        <MapGL
-          {...viewport}
-          width="510px"
-          height="350px"
-          mapStyle="mapbox://styles/mapbox/light-v9"
-          onViewportChange={this.updateViewport}
-          mapboxApiAccessToken={token} >
-          { programs.map(this.renderMarker) }
-        </MapGL>
-      </div>
+      <MapGL
+        {...viewport}
+        width="510px"
+        height="350px"
+        mapStyle="mapbox://styles/mapbox/light-v9"
+        onViewportChange={this.updateViewport}
+        mapboxApiAccessToken={token} >
+        { this.state.programs.map(this.renderMarker) }
+      </MapGL>
     );
   }
 }

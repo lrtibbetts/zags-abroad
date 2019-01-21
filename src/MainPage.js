@@ -138,7 +138,7 @@ class MainPage extends Component {
             );
           })}
         </div>
-        <h2 style={{marginLeft: '100px'}}> Available programs: </h2>
+        <h2 style={{marginLeft: '100px'}}> Available Programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p style={{marginLeft: '100px'}}> No matching programs. Try removing a filter! </p> : null}
         <div style={{marginLeft: '100px', marginRight: '660px'}}>

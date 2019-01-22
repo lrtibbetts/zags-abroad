@@ -119,7 +119,7 @@ class MainPage extends Component {
   render() {
     return (
       <div>
-        <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
+        <div style={{marginTop: '10px', marginLeft: '75px', width: '575px'}}>
           <DropdownTextField
             placeholder = "Enter a department"
             id = "departments"
@@ -134,10 +134,10 @@ class MainPage extends Component {
             options = {this.state.subjects}
           />
         </div>
-        <div style={{float: 'right', marginRight: '100px'}}>
+        <div style={{float: 'right', marginRight: '75px'}}>
           <MapView programs={this.state.programList.map((program) => program.programName)}/>
         </div>
-        <div style={{marginLeft: '100px'}}>
+        <div style={{marginLeft: '75px'}}>
           {this.state.listOfFilters.map(filter => {
             return (
               <Chip style={{marginRight: '10px', marginTop: '10px'}}
@@ -149,10 +149,10 @@ class MainPage extends Component {
             );
           })}
         </div>
-        <h2 style={{marginLeft: '100px'}}> Available Programs: </h2>
+        <h2 style={{marginLeft: '75px'}}> Available Programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
-        <p style={{marginLeft: '100px'}}> No matching programs. Try removing a filter! </p> : null}
-        <div style={{marginLeft: '100px', marginRight: '640px'}}>
+        <p style={{marginLeft: '75px'}}> No matching programs. Try removing a filter! </p> : null}
+        <div style={{marginLeft: '75px', marginRight: '615px'}}>
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>
@@ -189,7 +189,7 @@ class MainPage extends Component {
           })}
         </div><br/>
         {this.state.listOfFilters.length > 0 && this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '660px'}}>
+        <p style={{fontSize: '13px', marginLeft: '75px', marginRight: '615px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
       </div>

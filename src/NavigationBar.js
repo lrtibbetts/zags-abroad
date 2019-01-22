@@ -8,9 +8,7 @@ const buttonStyle = {
 
 const linkStyle = {
   color: 'black',
-  margin: '10px',
-  textDecoration: 'none',
-  fontSize: '15px'
+  marginRight: '10px'
 }
 
 const headerStyle = {
@@ -30,7 +28,8 @@ class NavigationBar extends Component {
         <div style={{textAlign: 'center'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link>
+          <p style={{display: 'inline'}}> Already studied abroad? </p>
+          <Link to="/review" style={linkStyle}>Share here.</Link>
           <Button style={buttonStyle} variant="outlined" component={Link} to="/signup">
             Sign Up
           </Button>
@@ -44,7 +43,8 @@ class NavigationBar extends Component {
         <div style={{textAlign: 'center'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          {!isAdmin ? <Link to="/review" style={linkStyle}>Already studied abroad? Share here.</Link> : null}
+          {!isAdmin ? <p style={{display: 'inline'}}> Already studied abroad? </p> : null}
+          {!isAdmin ? <Link to="/review" style={linkStyle}> Share here.</Link> : null}
           {!isAdmin ? <Button style={buttonStyle} variant="outlined" component={Link} to="/account"> My Account </Button> : null}
           <Button style={buttonStyle} variant="outlined"
             onClick = {(event) => {

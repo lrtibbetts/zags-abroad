@@ -34,6 +34,8 @@ class MainPage extends Component {
       }
       this.setState({subjects: subjectsToAdd});
     });
+
+    this.getAllPrograms();
   }
 
   // Remove filter from list of filters and add back to subjects dropdown
@@ -45,7 +47,7 @@ class MainPage extends Component {
         this.setState({listOfFilters: filters});
       }
     }
-    this.getPrograms(); // Update program results based on new state
+    filters.length > 0 ? this.getPrograms() : this.getAllPrograms();
     for(var j = 0; j < this.state.subjects.length; j++) {
       var subjects = this.state.subjects;
       if(filter.value < subjects[j].value) {
@@ -67,41 +69,50 @@ class MainPage extends Component {
     }
   }
 
+  formatPrograms(data) {
+    var programsToAdd = [];
+    var i = 0;
+    while(i < data.length) {
+      let programName = data[i].host_program;
+      let courses = [];
+      while(i < data.length && data[i].host_program === programName) {
+        let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
+          hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
+          : data[i].host_course_name, requiresSignature: data[i].signature_needed};
+        courses.push(newCourse);
+        if(i < data.length) {
+          i++;
+        }
+      }
+      let programObj = {programName: programName, courses: courses};
+      // Only display programs with courses for all filters
+      let matchingProgram = true;
+      for(let j = 0; j < this.state.listOfFilters.length; j++) {
+        let hasMatchingResult = courses.some( (course) => course['guCourse'].substring(0, 4) === this.state.listOfFilters[j].value );
+        if(!hasMatchingResult) {
+          matchingProgram = false;
+          break;
+        }
+      }
+      if(matchingProgram) {
+        programsToAdd.push(programObj);
+      }
+    }
+    this.setState({programList: programsToAdd});
+  }
+
+  getAllPrograms() {
+    axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
+      this.formatPrograms(res.data);
+    });
+  }
+
   getPrograms() {
     var subjects = {
       "subjects": this.state.listOfFilters.map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subjects).then((res) => {
-      var programsToAdd = [];
-      var i = 0;
-      while(i < res.data.length) {
-        let programName = res.data[i].host_program;
-        let courses = [];
-        while(i < res.data.length && res.data[i].host_program === programName) {
-          // Add to current courses array
-          let newCourse = {guCourse: res.data[i].gu_course_number + ": " + res.data[i].gu_course_name,
-            hostCourse: res.data[i].host_course_number ? res.data[i].host_course_number + ": " + res.data[i].host_course_name
-            : res.data[i].host_course_name, requiresSignature: res.data[i].signature_needed};
-          courses.push(newCourse);
-          if(i < res.data.length) {
-            i++;
-          }
-        }
-        let programObj = {programName: programName, courses: courses};
-        // Only display programs with courses for all filters
-        let matchingProgram = true;
-        for(let j = 0; j < this.state.listOfFilters.length; j++) {
-          let hasMatchingResult = courses.some( (course) => course['guCourse'].substring(0, 4) === this.state.listOfFilters[j].value );
-          if(!hasMatchingResult) {
-            matchingProgram = false;
-            break;
-          }
-        }
-        if(matchingProgram) {
-          programsToAdd.push(programObj);
-        }
-      }
-      this.setState({programList: programsToAdd});
+      this.formatPrograms(res.data);
     });
   }
 
@@ -141,7 +152,7 @@ class MainPage extends Component {
         <h2 style={{marginLeft: '100px'}}> Available Programs: </h2>
         {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
         <p style={{marginLeft: '100px'}}> No matching programs. Try removing a filter! </p> : null}
-        <div style={{marginLeft: '100px', marginRight: '660px'}}>
+        <div style={{marginLeft: '100px', marginRight: '640px'}}>
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>

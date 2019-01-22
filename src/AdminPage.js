@@ -7,15 +7,42 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+
 
 const addButtonStyle = {
   margin: '10px'
 };
 
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{padding: 8*3}}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.PropTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+});
+
 class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: 0,
       showAddForm: false,
       showEditForm: false,
       courses: [],
@@ -170,7 +197,13 @@ class AdminPage extends Component {
     this.setState({showMessage: true, message: message});
   }
 
+  handleChange = (event, value) => {
+    this.setState({value});
+  }
+
   render() {
+    const {classes} = this.props;
+    const {value} = this.state;
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
@@ -187,7 +220,14 @@ class AdminPage extends Component {
       };
       return (
         <div style={{textAlign: 'center'}}>
-          <h1> Course Equivalencies </h1>
+          <AppBar position="static">
+            <Tabs value={value} centered onChange={this.handleChange}>
+              <Tab label="Course Equivalencies" />
+              <Tab label="Survey Approvals" />
+              <Tab label="Other" />
+            </Tabs>
+          </AppBar>
+          {value === 0 && <TabContainer><h1> Course Equivalencies </h1>
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
@@ -221,7 +261,12 @@ class AdminPage extends Component {
             <IconButton
               onClick={(event) =>
                 this.setState({showMessage: false})}>
-            <CloseIcon/> </IconButton>}/>
+            <CloseIcon/> </IconButton>}/></TabContainer>}
+          {value === 1 && <TabContainer>
+              <h1>Survey Approvals</h1>
+            </TabContainer>}
+          {value === 2 && <TabContainer><h1>Honestly, I forget what is supposed to be here... but welcome</h1></TabContainer>}
+
         </div>
       )
     } else {
@@ -232,4 +277,8 @@ class AdminPage extends Component {
   }
 }
 
-export default AdminPage;
+AdminPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(AdminPage);

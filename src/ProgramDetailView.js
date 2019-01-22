@@ -81,37 +81,8 @@ class ProgramDetailView extends Component {
       }
       console.log(courses);
       this.setState({courseList: courses});
-      // var programsToAdd = [];
-      // var i = 0;
-      // while(i < res.data.length) {
-      //   let programName = res.data[i].host_program;
-      //   let courses = [];
-      //   while(i < res.data.length && res.data[i].host_program === programName) {
-      //     // Add to current courses array
-      //     let newCourse = {guCourse: res.data[i].gu_course_number + ": " + res.data[i].gu_course_name,
-      //       hostCourse: res.data[i].host_course_number ? res.data[i].host_course_number + ": " + res.data[i].host_course_name
-      //       : res.data[i].host_course_name, requiresSignature: res.data[i].signature_needed};
-      //     courses.push(newCourse);
-      //     if(i < res.data.length) {
-      //       i++;
-      //     }
-      //   }
-      //   let programObj = {programName: programName, courses: courses};
-      //   // Only display programs with courses for all filters
-      //   let matchingProgram = true;
-      //   for(let j = 0; j < this.state.listOfFilters.length; j++) {
-      //     let hasMatchingResult = courses.some( (course) => course['guCourse'].substring(0, 4) === this.state.listOfFilters[j].value );
-      //     if(!hasMatchingResult) {
-      //       matchingProgram = false;
-      //       break;
-      //     }
-      //   }
-      //   if(matchingProgram) {
-      //     programsToAdd.push(programObj);
-      //   }
-      // }
-      // this.setState({courseList: programsToAdd});
     });
+    
   }
 
   render() {

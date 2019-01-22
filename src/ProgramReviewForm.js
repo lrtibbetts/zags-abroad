@@ -103,8 +103,8 @@ class ProgramReviewForm extends Component {
             this.setState({year : event.target.value})}/>
         <br/>
         <TextField id="residence" multiline={true} rows={10} style={textFieldStyle}
-          label="Tell us about your residence abroad."
-          placeholder = "E.g. Homestay, dormitory, etc."
+          label="Where did you stay while abroad? What was it like?"
+          placeholder = "E.g. homestay, dormitory, etc."
           variant = "outlined"
           inputProps={{maxLength: 1000}}
           onChange = { (event) =>
@@ -112,8 +112,8 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.residence.length) + ' characters remaining'}/>
         <br/>
         <TextField id="trips" multiline={true} rows={10} style={textFieldStyle}
-          label = "Tell us about any favorite trips you took while abroad."
-          placeholder = "E.g. places you recommend, travel advice, etc."
+          label = "Tell us about any favorite trips you took while abroad"
+          placeholder = "Include any places you recommend, travel advice, etc."
           variant = "outlined"
           inputProps={{maxLength: 1000}}
           onChange = { (event) =>
@@ -121,7 +121,7 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.trips.length) + ' characters remaining'}/>
         <br/>
         <TextField id="classes" multiline={true} rows={10} style={textFieldStyle}
-          label = "Tell us about your classes abroad."
+          label = "What were your classes like?"
           placeholder = "E.g. any favorite classes, overall workload, etc."
           variant = "outlined"
           inputProps={{maxLength: 1000}}
@@ -130,7 +130,7 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.classes.length) + ' characters remaining'}/>
         <br/>
         <TextField id="activities" multiline={true} rows={10} style={textFieldStyle}
-          label = "Tell us about any extracurricular activities you participated in."
+          label = "Tell us about any extracurricular activities you participated in"
           placeholder = "E.g. sports teams, volunteering, clubs, etc."
           variant = "outlined"
           inputProps={{maxLength: 1000}}
@@ -139,15 +139,15 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.activities.length) + ' characters remaining'}/>
         <br/>
         <TextField id="other" multiline={true} rows={10} style={textFieldStyle}
-          label = "Anything else you would like to share?"
+          label = "Is there anything else you would like to share?"
           variant = "outlined"
           inputProps={{maxLength: 1000}}
           onChange = { (event) =>
             this.setState({other : event.target.value})}
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
-        <p style = {{fontSize: '13px'}}> If you're open to being contacted by a
-        prospective study abroad student, please provide <br/> your contact information. </p>
+        <p style = {{fontSize: '14px'}}> If you're open to being contacted by a
+        prospective study abroad student, please <br/> provide your contact information: </p>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>
             this.setState({name : event.target.value})}/>

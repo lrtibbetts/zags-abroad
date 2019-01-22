@@ -12,15 +12,17 @@ import TableRow from '@material-ui/core/TableRow';
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
-    let program = this.props.name;
 
     this.state = {
       subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
-      courseList : [] // Programs matching a user's search
+      courseList : [] // Courses matching a user's search
     }
 
-    axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
+    this.getAllCourses();
+
+    axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
+      console.log(res.data);
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let subjectName = res.data[i].subject_name.trim(); // Remove any white space
@@ -41,7 +43,7 @@ class ProgramDetailView extends Component {
         this.setState({listOfFilters: filters});
       }
     }
-    this.getCourses(); // Update program results based on new state
+    filters.length > 0 ? this.getCourses() : this.getAllCourses();
     for(var j = 0; j < this.state.subjects.length; j++) {
       var subjects = this.state.subjects;
       if(filter.value < subjects[j].value) {
@@ -63,26 +65,33 @@ class ProgramDetailView extends Component {
     }
   }
 
-  getCourses() {
-    var subjects = {
-      "subjects": this.state.listOfFilters.map((filter) => filter.value),
+  formatCourses(data) {
+    let courses = [];
+    for(var i = 0; i < data.length; i++) {
+      let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
+        hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
+          : data[i].host_course_name,
+        requiresSignature: data[i].signature_needed};
+      courses.push(newCourse);
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subjects).then((res) => {
-      console.log(res.data);
-      let courses = [];
-      for(var i = 0; i < res.data.length; i++) {
-        if(res.data[i].host_program === this.props.name) {
-          let newCourse = {guCourse: res.data[i].gu_course_number + ": " + res.data[i].gu_course_name,
-            hostCourse: res.data[i].host_course_number ? res.data[i].host_course_number + ": " + res.data[i].host_course_name
-              : res.data[i].host_course_name,
-            requiresSignature: res.data[i].signature_needed};
-          courses.push(newCourse);
-        }
-      }
-      console.log(courses);
-      this.setState({courseList: courses});
+    console.log(courses);
+    this.setState({courseList: courses});
+  }
+
+  getAllCourses() {
+      axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
+        this.formatCourses(res.data);
+      });
+  }
+
+  getCourses() {
+    var params = {
+      "program": this.props.name,
+      "subjects": this.state.listOfFilters.map((filter) => filter.value)
+    }
+    axios.post("https://zagsabroad-backend.herokuapp.com/filterbyprogramsubject", params).then((res) => {
+      this.formatCourses(res.data);
     });
-    
   }
 
   render() {

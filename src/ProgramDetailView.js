@@ -8,6 +8,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 class ProgramDetailView extends Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class ProgramDetailView extends Component {
     this.getAllCourses();
 
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
-      console.log(res.data);
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let subjectName = res.data[i].subject_name.trim(); // Remove any white space
@@ -71,11 +72,9 @@ class ProgramDetailView extends Component {
     for(var i = 0; i < data.length; i++) {
       let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
         hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
-          : data[i].host_course_name,
-        requiresSignature: data[i].signature_needed};
+        : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id};
       courses.push(newCourse);
     }
-    console.log(courses);
     this.setState({courseList: courses});
   }
 
@@ -144,22 +143,25 @@ class ProgramDetailView extends Component {
                 <TableCell>GU Course</TableCell>
                 <TableCell>Host Course</TableCell>
                 <TableCell>Requires Signature</TableCell>
+                <TableCell> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.courseList.map((course, index) => {
+              {this.state.courseList.map((course) => {
                 return (
-                  <TableRow key={index}>
+                  <TableRow key={course.id}>
                     <TableCell>{course.guCourse}</TableCell>
                     <TableCell>{course.hostCourse}</TableCell>
                     <TableCell>{course.requiresSignature}</TableCell>
+                    <TableCell>{<IconButton
+                      aria-label="Add" color="primary"><AddIcon/></IconButton>}</TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
         </div><br/>
-        {this.state.listOfFilters.length > 0 && this.state.courseList.length > 0 ?
+        {this.state.courseList.length > 0 ?
         <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '660px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>

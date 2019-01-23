@@ -14,7 +14,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 
-
 const addButtonStyle = {
   margin: '10px'
 };
@@ -202,7 +201,6 @@ class AdminPage extends Component {
   }
 
   render() {
-    const {classes} = this.props;
     const {value} = this.state;
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {

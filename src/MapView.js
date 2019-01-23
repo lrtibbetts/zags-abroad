@@ -21,31 +21,26 @@ class MapView extends Component {
     }
   }
 
-  getCities() {
+  getAllCities() {
     let programs = []; // Store program name, latitude, and longitude
     axios.get("https://zagsabroad-backend.herokuapp.com/cities").then((res) => {
       let allPrograms = res.data;
-      let matchingPrograms = this.props.programs;
-      for(let i = 0; i < matchingPrograms.length; i++) {
-        let programInfo = allPrograms.find((program) => program.host_program === matchingPrograms[i]);
-        if(programInfo) {
-          Geocode.fromAddress(programInfo.city).then(
-            response => {
-              const { lat, lng } = response.results[0].geometry.location;
-              programInfo["lat"] = lat;
-              programInfo["lng"] = lng;
-              programs.push(programInfo);
-            });
-        } else {
-          console.log("Error: Program not found")
-        }
+      for(let i = 0; i < allPrograms.length; i++) {
+        let programInfo = allPrograms[i];
+        Geocode.fromAddress(programInfo.city).then(
+          response => {
+            const { lat, lng } = response.results[0].geometry.location;
+            programInfo["lat"] = lat;
+            programInfo["lng"] = lng;
+            programs.push(programInfo);
+        });
       }
       this.setState({programs: programs});
     });
   }
 
-  componentWillReceiveProps() {
-    this.getCities();
+  componentDidMount() {
+    this.getAllCities();
   }
 
   renderMarker = (program) => {
@@ -73,7 +68,7 @@ class MapView extends Component {
         mapStyle="mapbox://styles/mapbox/light-v9"
         onViewportChange={this.updateViewport}
         mapboxApiAccessToken={token} >
-        { this.state.programs.map(this.renderMarker) }
+        { this.state.programs.map((program) => this.renderMarker(program)) }
       </MapGL>
     );
   }

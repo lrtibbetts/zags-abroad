@@ -6,7 +6,6 @@ import DropdownTextField from './DropdownTextField.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const textFieldStyle = {
   width: 500,
@@ -148,7 +147,7 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
         <div>
-        <p style = {{fontSize: '14px'}}> Please Upload any photos you would like to share! </p>
+        <p style = {{fontSize: '14px'}}> Please upload any photos you would like to share! </p>
           <Button variant="contained" component="label">
             <input type="file" />
           </Button>

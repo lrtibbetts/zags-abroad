@@ -201,7 +201,6 @@ class AdminPage extends Component {
   }
 
   render() {
-    const {classes} = this.props;
     const {value} = this.state;
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {

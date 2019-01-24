@@ -91,16 +91,14 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses});
   }
 
-  // No filters applied
-  // Pull all courses in program
+  // No filters, Pull all courses in program
   getAllCourses() {
     axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
       this.formatCourses(res.data);
     });
   }
 
-  // Filters appiled and passed
-  // Pull courses in program relevant to filters
+  // Filters applied, pull matching courses in program
   getCourses() {
     let params = {
       "program": this.props.name,
@@ -125,7 +123,7 @@ class ProgramDetailView extends Component {
         } else if(res.data.errno) {
           this.setState({showMessage: true, message: "Error saving course"});
         } else {
-          this.setState({showMessage: true, message: "Course saved successfully"});
+          this.setState({showMessage: true, message: "Course saved to My Account"});
         }
       });
     } else {
@@ -190,7 +188,7 @@ class ProgramDetailView extends Component {
                     <TableCell>{course.hostCourse}</TableCell>
                     <TableCell>{course.requiresSignature}</TableCell>
                     <TableCell>{<IconButton onClick={(event) => this.saveCourse(course.id)}
-                      aria-label="Add" color="primary"><AddIcon/></IconButton>}</TableCell>
+                      color="primary"><AddIcon/></IconButton>}</TableCell>
                   </TableRow>
                 );
               })}

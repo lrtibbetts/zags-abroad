@@ -8,12 +8,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import IconButton from '@material-ui/core/IconButton';
 import { Redirect } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 
 class MyAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: []
+      email: this.props.cookies.get('email'),
+      courses: [],
+      showMessage: false,
+      message: ''
     }
     this.getCourses();
   }
@@ -31,9 +36,20 @@ class MyAccount extends Component {
   }
 
   getCourses() {
-    let email = this.props.cookies.get('email');
-    axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: this.state.email}).then((res) => {
       this.formatCourses(res.data);
+    });
+  }
+
+  deleteCourse(id) {
+    let params = {
+      email: this.state.email,
+      id: id
+    }
+    axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
+      res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
+      this.setState({showMessage: true, message: "Course deleted successfully"},
+      this.getCourses());
     });
   }
 
@@ -61,13 +77,27 @@ class MyAccount extends Component {
                   <TableCell>{course.guCourse}</TableCell>
                   <TableCell>{course.hostCourse}</TableCell>
                   <TableCell>{course.requiresSignature}</TableCell>
-                  <TableCell>{<IconButton onClick={(event) => {console.log('delete')}}
-                    aria-label="Add" color="primary"><DeleteIcon/></IconButton>}</TableCell>
+                  <TableCell>{<IconButton onClick={(event) => {this.deleteCourse(course.id)}}
+                    color="primary"><DeleteIcon/></IconButton>}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
+        <Snackbar message={this.state.message}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={this.state.showMessage}
+          onClose={(event) =>
+            this.setState({showMessage: false})}
+          autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
+          action={
+          <IconButton
+            onClick={(event) =>
+              this.setState({showMessage: false})}>
+          <CloseIcon/> </IconButton>}/>
       </div>
     );
     } else {

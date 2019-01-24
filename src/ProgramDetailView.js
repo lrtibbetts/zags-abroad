@@ -100,7 +100,7 @@ class ProgramDetailView extends Component {
   }
 
   // Filters appiled and passed
-  // Pull courses in program relevant to filters 
+  // Pull courses in program relevant to filters
   getCourses() {
     let params = {
       "program": this.props.name,
@@ -220,6 +220,9 @@ class ProgramDetailView extends Component {
             <div>
               <Button style={buttonStyle} variant="contained" component={Link} to="/login">
                 Log in
+              </Button>
+              <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
+                Sign up
               </Button>
               <Button style={buttonStyle} variant="contained"
                 onClick = {(event) =>

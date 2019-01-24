@@ -10,6 +10,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Link } from "react-router-dom";
+
+const buttonStyle = {
+  margin: '5px'
+};
 
 class ProgramDetailView extends Component {
   constructor(props) {
@@ -18,7 +28,10 @@ class ProgramDetailView extends Component {
     this.state = {
       subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
-      courseList : [] // Courses matching a user's search
+      courseList : [], // Courses matching a user's search
+      showMessage : false,
+      message: '',
+      showLogInPrompt: false
     }
 
     this.getAllCourses();
@@ -89,13 +102,36 @@ class ProgramDetailView extends Component {
   // Filters appiled and passed
   // Pull courses in program relevant to filters 
   getCourses() {
-    var params = {
+    let params = {
       "program": this.props.name,
       "subjects": this.state.listOfFilters.map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/filterbyprogramsubject", params).then((res) => {
       this.formatCourses(res.data);
     });
+  }
+
+  saveCourse(id) {
+    let email = this.props.cookies.get('email');
+    if(email) {
+      // User is logged in
+      let params = {
+        "email": email,
+        "course_id": id
+      }
+      axios.post("https://zagsabroad-backend.herokuapp.com/savecourse", params).then((res) => {
+        if(res.data.code === "ER_DUP_ENTRY") {
+          this.setState({showMessage: true, message: "Course already added to My Account"});
+        } else if(res.data.errno) {
+          this.setState({showMessage: true, message: "Error saving course"});
+        } else {
+          this.setState({showMessage: true, message: "Course saved successfully"});
+        }
+      });
+    } else {
+      // Not logged in
+      this.setState({showLogInPrompt: true})
+    }
   }
 
   render() {
@@ -153,7 +189,7 @@ class ProgramDetailView extends Component {
                     <TableCell>{course.guCourse}</TableCell>
                     <TableCell>{course.hostCourse}</TableCell>
                     <TableCell>{course.requiresSignature}</TableCell>
-                    <TableCell>{<IconButton
+                    <TableCell>{<IconButton onClick={(event) => this.saveCourse(course.id)}
                       aria-label="Add" color="primary"><AddIcon/></IconButton>}</TableCell>
                   </TableRow>
                 );
@@ -165,6 +201,33 @@ class ProgramDetailView extends Component {
         <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '660px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
+        <Snackbar message={this.state.message}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={this.state.showMessage}
+          onClose={(event) =>
+            this.setState({showMessage: false})}
+          autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
+          action={
+          <IconButton
+            onClick={(event) =>
+              this.setState({showMessage: false})}>
+          <CloseIcon/> </IconButton>}/>
+          <Dialog id="dialog" open={this.state.showLogInPrompt}>
+            <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>
+            <div>
+              <Button style={buttonStyle} variant="contained" component={Link} to="/login">
+                Log in
+              </Button>
+              <Button style={buttonStyle} variant="contained"
+                onClick = {(event) =>
+                  this.setState({showLogInPrompt : false})}>
+                Close
+              </Button>
+            </div>
+          </Dialog>
       </div>
     );
   }

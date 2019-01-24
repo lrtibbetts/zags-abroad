@@ -12,7 +12,7 @@ class MapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      programs: [],
+      programs: [], //all programs that will appear on the map
       viewport: {
         latitude: 10,
         longitude: 10,

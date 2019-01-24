@@ -6,6 +6,8 @@ import DropdownTextField from './DropdownTextField.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
+import Dropzone from 'react-dropzone';
+import classNames from 'classnames';
 
 const textFieldStyle = {
   width: 500,
@@ -64,6 +66,32 @@ class ProgramReviewForm extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/submitsurvey", accountInfo).then((res) => {
         console.log(res.data);
         this.setState({formSubmitted: true});
+    });
+  }
+
+
+  handleUploadImages = images => {
+    // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
+    const uploads = images.map(image => {
+      // our formdata
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("tags", '{TAGS}'); // image tags - {Array} OPTIONAL
+      formData.append("upload_preset", "bdbcyhiw"); // preset name
+      formData.append("api_key", "{447116233167845}"); // Cloudinary API key
+
+      // cloudinary upload URL
+      return axios.post(
+        "https://api.cloudinary.com/v1_1/zagsabroad/image/upload",
+        formData,
+        { headers: { "X-Requested-With": "XMLHttpRequest" }})
+        .then(response => console.log(response.data))
+    });
+
+    // We would use axios `.all()` method to perform concurrent image upload to cloudinary.
+    axios.all(uploads).then(() => {
+      // ... do anything after successful upload. You can setState() or save the data
+      console.log('Images have all being uploaded')
     });
   }
 
@@ -146,12 +174,24 @@ class ProgramReviewForm extends Component {
             this.setState({other : event.target.value})}
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
-        <div>
-        <p style = {{fontSize: '14px'}}> Please upload any photos you would like to share! </p>
-          <Button variant="contained" component="label">
-            <input type="file" />
-          </Button>
-        </div>
+        <Dropzone
+              onDrop={this.handleUploadImages}>
+                      {({getRootProps, getInputProps, isDragActive}) => {
+                        return (
+                          <div
+                            {...getRootProps()}
+                            className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
+                          >
+                            <input {...getInputProps()} />
+                            {
+                              isDragActive ?
+                                <p>Drop files here...</p> :
+                                <p>Try dropping some files here, or click to select files to upload.</p>
+                            }
+                          </div>
+                        )
+                      }}
+        </Dropzone>
         <br/>
         <p style = {{fontSize: '14px'}}> If you're open to being contacted by a
         prospective study abroad student, please <br/> provide your contact information: </p>

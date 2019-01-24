@@ -88,9 +88,9 @@ class ProgramReviewForm extends Component {
         .then(response => console.log(response.data))
     });
 
-    // We would use axios `.all()` method to perform concurrent image upload to cloudinary.
+    // perform concurrent image upload to cloudinary
     axios.all(uploads).then(() => {
-      // ... do anything after successful upload. You can setState() or save the data
+      // ... after successul upload
       console.log('Images have all being uploaded')
     });
   }

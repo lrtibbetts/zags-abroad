@@ -91,9 +91,9 @@ class ProgramDetailView extends Component {
   }
 
   getAllCourses() {
-      axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
-        this.formatCourses(res.data);
-      });
+    axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
+      this.formatCourses(res.data);
+    });
   }
 
   getCourses() {

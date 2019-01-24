@@ -79,6 +79,7 @@ class ProgramDetailView extends Component {
     }
   }
 
+  // Populate table with relevant courses in list
   formatCourses(data) {
     let courses = [];
     for(var i = 0; i < data.length; i++) {
@@ -90,12 +91,16 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses});
   }
 
+  // No filters applied
+  // Pull all courses in program
   getAllCourses() {
     axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
       this.formatCourses(res.data);
     });
   }
 
+  // Filters appiled and passed
+  // Pull courses in program relevant to filters 
   getCourses() {
     let params = {
       "program": this.props.name,

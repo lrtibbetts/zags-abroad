@@ -19,14 +19,25 @@ class MapView extends Component {
     }
   }
 
-  getAllCities() {
+  getCities() {
+    let programs = [];
     axios.get("https://zagsabroad-backend.herokuapp.com/locations").then((res) => {
-      this.setState({programs: res.data});
+      let allPrograms = res.data;
+      let matchingPrograms = this.props.programs;
+      for(let i = 0; i < matchingPrograms.length; i++) {
+        let programInfo = allPrograms.find((program) => program.host_program === matchingPrograms[i]);
+        if(programInfo) {
+          programs.push(programInfo);
+        } else {
+          console.log("Couldn't find program");
+        }
+      }
+      this.setState({programs: programs});
     });
   }
 
-  componentDidMount() {
-    this.getAllCities();
+  componentWillReceiveProps() {
+    this.getCities();
   }
 
   renderMarker = (program) => {

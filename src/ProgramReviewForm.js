@@ -90,7 +90,7 @@ class ProgramReviewForm extends Component {
 
     // perform concurrent image upload to cloudinary
     axios.all(uploads).then(() => {
-      // ... after successul upload
+      // ... after successful upload
       console.log('Images have all being uploaded')
     });
   }

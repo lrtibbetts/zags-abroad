@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import MapGL, {Marker} from 'react-map-gl';
+import MapGL, {Marker, Popup} from 'react-map-gl';
 import axios from 'axios';
 import MarkerImage from "./Marker.png"
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Link } from "react-router-dom";
 
 const token = "pk.eyJ1IjoibHRpYmJldHRzIiwiYSI6ImNqcXJuNHdwZTBvdWE0OHA2ZjJ1bHZhZXAifQ.LfESsOUlvlNnp_oh8R9ePA";
 
@@ -15,7 +16,8 @@ class MapView extends Component {
         latitude: 10,
         longitude: 10,
         zoom: 0
-      }
+      },
+      popupInfo: null
     }
   }
 
@@ -40,13 +42,31 @@ class MapView extends Component {
     this.getCities();
   }
 
+  //https://github.com/uber/react-map-gl/blob/4.0-release/examples/controls/src/app.js
+  renderPopup() {
+    const {popupInfo} = this.state;
+
+    return popupInfo && (
+      <Popup tipSize={5}
+        anchor="top"
+        longitude={popupInfo.lng}
+        latitude={popupInfo.lat}
+        closeOnClick={false}
+        onClose={() => this.setState({popupInfo: null})} >
+        <Link to={`/program/${this.state.popupInfo.host_program}`} target="_blank">
+        {this.state.popupInfo.host_program}</Link>
+      </Popup>
+    );
+  }
+
   renderMarker = (program) => {
     return(
       <Marker
           key={program.host_program}
           longitude={program.lng}
-          latitude={program.lat} >
-          <img src={MarkerImage} width={15} height={20} alt=""/>
+          latitude={program.lat}>
+          <img src={MarkerImage} width={15} height={20} alt=""
+          onClick={() => this.setState({popupInfo: program})}/>
       </Marker>
     );
   }
@@ -66,6 +86,7 @@ class MapView extends Component {
         onViewportChange={this.updateViewport}
         mapboxApiAccessToken={token} >
         { this.state.programs.map((program) => this.renderMarker(program)) }
+        {this.renderPopup()}
       </MapGL>
     );
   }

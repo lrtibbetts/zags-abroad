@@ -46,10 +46,10 @@ class LogInPage extends Component {
         const cookies = this.props.cookies;
         cookies.set('email', this.state.email, {'maxAge': 7200, 'path': '/'}); // Might be good to store user ID instead
         if(res.data.is_admin === 1) {
-          cookies.set('role', 'admin', {'maxAge': 7200}); // Cookies will expire after two hours
+          cookies.set('role', 'admin', {'maxAge': 7200, 'path': '/'}); // Cookies will expire after two hours
           this.setState({validUser : true, isAdmin : true});
         } else {
-          cookies.set('role', 'user', {'maxAge': 7200});
+          cookies.set('role', 'user', {'maxAge': 7200, 'path': '/'});
           this.setState({validUser : true});
         }
       }

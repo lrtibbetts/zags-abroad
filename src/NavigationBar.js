@@ -48,8 +48,8 @@ class NavigationBar extends Component {
           {!isAdmin ? <Button style={buttonStyle} variant="outlined" component={Link} to="/account"> My Account </Button> : null}
           <Button style={buttonStyle} variant="outlined"
             onClick = {(event) => {
-              cookies.remove('email');
-              cookies.remove('role'); }}>
+              cookies.remove('email', {'path': '/'});
+              cookies.remove('role', {'path': '/'}); }}>
               Log Out </Button>
         </div>
       );

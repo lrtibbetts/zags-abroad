@@ -14,6 +14,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
 import MapView from "./MapView.js"
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class MainPage extends Component {
   constructor(props) {
@@ -21,7 +22,8 @@ class MainPage extends Component {
     this.state = {
       subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
-      programList : [] // Programs matching a user's search
+      programList : [], // Programs matching a user's search
+      loading: true
     }
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
@@ -98,16 +100,18 @@ class MainPage extends Component {
         programsToAdd.push(programObj);
       }
     }
-    this.setState({programList: programsToAdd});
+    this.setState({programList: programsToAdd, loading: false});
   }
 
   getAllPrograms() {
+    this.setState({programList: [], loading: true})
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
       this.formatPrograms(res.data);
     });
   }
 
   getPrograms() {
+    this.setState({programList: [], loading: true})
     var subjects = {
       "subjects": this.state.listOfFilters.map((filter) => filter.value)
     }
@@ -150,8 +154,11 @@ class MainPage extends Component {
           })}
         </div>
         <h2 style={{marginLeft: '75px'}}> Available Programs: </h2>
-        {this.state.listOfFilters.length > 1 && this.state.programList.length === 0 ?
-        <p style={{marginLeft: '75px'}}> No matching programs. Try removing a filter! </p> : null}
+        {this.state.loading ? <div id="loading" style={{marginLeft: '75px'}}>
+          <CircularProgress variant="indeterminate"/> </div>: null}
+        {this.state.listOfFilters.length > 0 && this.state.programList.length === 0
+          && !this.state.loading ? <p id="no programs" style={{marginLeft: '75px'}}>
+          No matching programs. Try removing a filter! </p> : null}
         <div style={{marginLeft: '75px', marginRight: '615px'}}>
           {this.state.programList.map(program => {
             return (

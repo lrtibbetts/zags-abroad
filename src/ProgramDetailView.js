@@ -170,7 +170,7 @@ class ProgramDetailView extends Component {
         <h2 style={{marginLeft: '100px'}}> Available Courses: </h2>
         {this.state.listOfFilters.length > 1 && this.state.courseList.length === 0 ?
         <p style={{marginLeft: '100px'}}> No matching courses. Try removing a filter! </p> : null}
-        <div style={{marginLeft: '100px', marginRight: '660px'}}>
+        <div style={{marginLeft: '100px', marginRight: '100px'}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -196,7 +196,7 @@ class ProgramDetailView extends Component {
           </Table>
         </div><br/>
         {this.state.courseList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '660px'}}>
+        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '100px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
         <Snackbar message={this.state.message}

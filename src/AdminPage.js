@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import CourseEquivalencyPage from './CourseEquivalencyPage.js'
+import { Redirect } from "react-router-dom";
 
 //this function allows us to manipulate the spacing of the
 //tab bar
@@ -45,6 +46,8 @@ class AdminPage extends Component {
 
   render() {
     const {value} = this.state;
+    const cookies = this.props.cookies;
+    if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center'}}>
           <AppBar position="static">
@@ -66,7 +69,12 @@ class AdminPage extends Component {
           {value === 3 && <TabContainer><h1>Admin Accounts</h1>
             <p> Grant administrative access to other users here</p></TabContainer>}
         </div>
-      )
+      );
+    } else {
+        return (
+          <Redirect to="/"/>
+        );
+      }
 
   }
 }

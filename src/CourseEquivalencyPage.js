@@ -1,5 +1,3 @@
-//this is the course equivalency one
-
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';

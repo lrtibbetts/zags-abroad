@@ -187,7 +187,7 @@ class CourseEquivalencyPage extends Component {
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
         rowsPerPage: 20, // Default to 20 rows per page
-        rowsPerPageOptions: [10, 50, 100],
+        rowsPerPageOptions: [20, 50, 100],
         fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };

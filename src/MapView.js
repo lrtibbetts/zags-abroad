@@ -39,7 +39,7 @@ class MapView extends Component {
   }
 
   componentWillReceiveProps() {
-    this.getCities();
+    this.setState({popupInfo: null}, this.getCities());
   }
 
   //https://github.com/uber/react-map-gl/blob/4.0-release/examples/controls/src/app.js

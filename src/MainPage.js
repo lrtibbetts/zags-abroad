@@ -15,6 +15,8 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
 import MapView from "./MapView.js"
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class MainPage extends Component {
   constructor(props) {
@@ -23,7 +25,8 @@ class MainPage extends Component {
       subjects: [], // Subjects in dropdown menu
       listOfFilters : [], // Filters applied by the user
       programList : [], // Programs matching a user's search
-      loading: true
+      loading: true,
+      searchBy: 'department'
     }
 
     axios.get("https://zagsabroad-backend.herokuapp.com/subjects").then((res) => {
@@ -122,10 +125,19 @@ class MainPage extends Component {
 
   render() {
     return (
-      <div>
-        <div style={{marginTop: '10px', marginLeft: '75px', width: '575px'}}>
+      <div style={{textAlign: 'center'}}>
+        <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
+        <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+          <Select autoWidth={true} value={this.state.searchBy}
+            onChange = { (event) =>
+              this.setState({searchBy : event.target.value})}>
+            <MenuItem value='department'> Department </MenuItem>
+            <MenuItem value='core'> Core designation </MenuItem>
+          </Select>
+        </div>
+        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
           <DropdownTextField
-            placeholder = "Enter a department"
+            placeholder = {this.state.searchBy === 'department' ? "E.g. Computer Science" : "E.g. Global Studies"}
             id = "departments"
             onChange = { (selectedOption) => {
               let newFilter = {value: selectedOption.value, label: selectedOption.label};
@@ -138,10 +150,7 @@ class MainPage extends Component {
             options = {this.state.subjects}
           />
         </div>
-        <div style={{float: 'right', marginRight: '75px'}}>
-          <MapView programs={this.state.programList.map((program) => program.programName)}/>
-        </div>
-        <div style={{marginLeft: '75px'}}>
+        <div>
           {this.state.listOfFilters.map(filter => {
             return (
               <Chip style={{marginRight: '10px', marginTop: '10px'}}
@@ -153,13 +162,15 @@ class MainPage extends Component {
             );
           })}
         </div>
-        <h2 style={{marginLeft: '75px'}}> Available Programs: </h2>
-        {this.state.loading ? <div id="loading" style={{marginLeft: '75px'}}>
+        <div style={{marginTop: '20px', display: 'inline-block', textAlign: 'justify'}}>
+          <MapView programs={this.state.programList.map((program) => program.programName)}/>
+        </div>
+        <h2> Available Programs: </h2>
+        {this.state.loading ? <div id="loading">
           <CircularProgress variant="indeterminate"/> </div>: null}
         {this.state.listOfFilters.length > 0 && this.state.programList.length === 0
-          && !this.state.loading ? <p id="no programs" style={{marginLeft: '75px'}}>
-          No matching programs. Try removing a filter! </p> : null}
-        <div style={{marginLeft: '75px', marginRight: '615px'}}>
+          && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
+        <div style={{marginLeft:'10%', marginRight: '10%'}}>
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>
@@ -167,7 +178,7 @@ class MainPage extends Component {
                   <b>{program.programName}</b>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  <div style={{display: 'block', textAlign: 'left'}}>
+                  <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
                     <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
                     <Table>
                       <TableHead>
@@ -196,7 +207,7 @@ class MainPage extends Component {
           })}
         </div><br/>
         {this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '75px', marginRight: '615px'}}>
+        <p style={{fontSize: '13px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
       </div>

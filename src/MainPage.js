@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import DropdownTextField from './DropdownTextField.js';
@@ -12,18 +11,21 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from "react-router-dom";
-import MapView from "./MapView.js"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import axios from 'axios';
+import { Link } from "react-router-dom";
+import MapView from "./MapView.js";
 
 class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       subjects: [], // Subjects in dropdown menu
-      listOfFilters : [], // Filters applied by the user
+      core: [], // Core designations in dropdown menu
+      subjectFilters : [], // Filters applied by the user
+      coreFilters: [],
       programList : [], // Programs matching a user's search
       loading: true,
       searchBy: 'department'
@@ -40,36 +42,74 @@ class MainPage extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
-    this.getAllPrograms();
+    axios.get("https://zagsabroad-backend.herokuapp.com/core").then((res) => {
+      let coreToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let core = res.data[i].core_name.trim(); // Remove any white space
+        let coreObj = {value: 'core', label: core};
+        coreToAdd.push(coreObj);
+      }
+      this.setState({core: coreToAdd},
+          this.getAllPrograms()); // Fetch all programs after state has changed
+    });
   }
 
-  // Remove filter from list of filters and add back to subjects dropdown
+  // Remove filter from list of filters and add back to dropdown
   handleDeleteFilter = filter => () => {
-    var filters = this.state.listOfFilters;
-    for(var i = 0; i < filters.length; i++) {
-      if (filter.value === filters[i].value) {
-        filters.splice(i, 1);
-        this.setState({listOfFilters: filters});
+    if(filter.value === 'core') {
+      var filters = this.state.coreFilters;
+      for(var i = 0; i < filters.length; i++) {
+        if (filter.label === filters[i].label) { // Compare unique core label, not value
+          filters.splice(i, 1);
+          this.setState({coreFilters: filters});
+        }
       }
-    }
-    filters.length > 0 ? this.getPrograms() : this.getAllPrograms();
-    for(var j = 0; j < this.state.subjects.length; j++) {
-      var subjects = this.state.subjects;
-      if(filter.value < subjects[j].value) {
-        subjects.splice(j, 0, filter); // Insert at j, remove 0 items
-        this.setState({subjects: subjects});
-        return;
+      (filters.length + this.state.subjectFilters.length) > 0 ? this.getPrograms() : this.getAllPrograms();
+      for(var j = 0; j < this.state.core.length; j++) {
+        var core = this.state.core;
+        if(filter.label < core[j].label) {
+          core.splice(j, 0, filter); // Insert at j, remove 0 items
+          this.setState({core: core});
+          return;
+        }
+      }
+    } else {
+      filters = this.state.subjectFilters;
+      for(var k = 0; k < filters.length; k++) {
+        if (filter.value === filters[k].value) {
+          filters.splice(k, 1);
+          this.setState({subjectFilters: filters});
+        }
+      }
+      (filters.length + this.state.coreFilters.length) > 0 ? this.getPrograms() : this.getAllPrograms();
+      for(var m = 0; m < this.state.subjects.length; m++) {
+        var subjects = this.state.subjects;
+        if(filter.value < subjects[m].value) {
+          subjects.splice(m, 0, filter); // Insert at j, remove 0 items
+          this.setState({subjects: subjects});
+          return;
+        }
       }
     }
   }
 
-  // Remove subject from dropdown menu after it is selected
-  handleDeleteSubject(subject) {
-    for (var i = 0; i < this.state.subjects.length; i++) {
-      if (subject.value === this.state.subjects[i].value) {
-        let newSubjects = this.state.subjects;
-        newSubjects.splice(i, 1);
-        this.setState({subjects: newSubjects});
+  // Remove item from dropdown menu after it is selected
+  handleDeleteMenuItem(item) {
+    if(item.value === 'core') {
+      for (var i = 0; i < this.state.core.length; i++) {
+        if (item.label === this.state.core[i].label) { // Compare unique core label, not value
+          let newCore = this.state.core;
+          newCore.splice(i, 1);
+          this.setState({core: newCore});
+        }
+      }
+    } else {
+      for (var j = 0; j < this.state.subjects.length; j++) {
+        if (item.value === this.state.subjects[j].value) {
+          let newSubjects = this.state.subjects;
+          newSubjects.splice(j, 1);
+          this.setState({subjects: newSubjects});
+        }
       }
     }
   }
@@ -83,7 +123,7 @@ class MainPage extends Component {
       while(i < data.length && data[i].host_program === programName) {
         let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
           hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
-          : data[i].host_course_name, requiresSignature: data[i].signature_needed};
+          : data[i].host_course_name, requiresSignature: data[i].signature_needed, core: data[i].core};
         courses.push(newCourse);
         if(i < data.length) {
           i++;
@@ -92,8 +132,17 @@ class MainPage extends Component {
       let programObj = {programName: programName, courses: courses};
       // Only display programs with courses for all filters
       let matchingProgram = true;
-      for(let j = 0; j < this.state.listOfFilters.length; j++) {
-        let hasMatchingResult = courses.some( (course) => course['guCourse'].substring(0, 4) === this.state.listOfFilters[j].value );
+      for(let j = 0; j < this.state.subjectFilters.length; j++) {
+        let hasMatchingResult = courses.some( (course) =>
+          course['guCourse'].substring(0, 4) === this.state.subjectFilters[j].value );
+        if(!hasMatchingResult) {
+          matchingProgram = false;
+          break;
+        }
+      }
+      for(let k = 0; k < this.state.coreFilters.length; k++) {
+        let hasMatchingResult = courses.some( (course) =>
+          course['core'].includes(this.state.coreFilters[k].label) );
         if(!hasMatchingResult) {
           matchingProgram = false;
           break;
@@ -115,10 +164,11 @@ class MainPage extends Component {
 
   getPrograms() {
     this.setState({programList: [], loading: true})
-    var subjects = {
-      "subjects": this.state.listOfFilters.map((filter) => filter.value)
+    var filters = {
+      "subjects": this.state.subjectFilters.map((filter) => filter.value),
+      "core": this.state.coreFilters.map((filter) => filter.label)
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubject", subjects).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubjectcore", filters).then((res) => {
       this.formatPrograms(res.data);
     });
   }
@@ -141,20 +191,36 @@ class MainPage extends Component {
             id = "departments"
             onChange = { (selectedOption) => {
               let newFilter = {value: selectedOption.value, label: selectedOption.label};
-              let filters = this.state.listOfFilters;
-              filters.push(newFilter);
-              this.setState({listOfFilters: filters});
-              this.handleDeleteSubject(newFilter);
+              if(this.state.searchBy === 'department') {
+                let subjFilters = this.state.subjectFilters;
+                subjFilters.push(newFilter);
+                this.setState({subjectFilters: subjFilters})
+              } else {
+                let coreFilters = this.state.coreFilters;
+                coreFilters.push(newFilter);
+                this.setState({coreFilters: coreFilters})
+              }
+              this.handleDeleteMenuItem(newFilter);
               this.getPrograms();
             }}
-            options = {this.state.subjects}
+            options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
         <div>
-          {this.state.listOfFilters.map(filter => {
+          {this.state.subjectFilters.map(filter => {
             return (
               <Chip style={{marginRight: '10px', marginTop: '10px'}}
                 key={filter.value}
+                onDelete={this.handleDeleteFilter(filter)}
+                deleteIcon={<CancelIcon/>}
+                label={filter.label}
+              />
+            );
+          })}
+          {this.state.coreFilters.map(filter => {
+            return (
+              <Chip style={{marginRight: '10px', marginTop: '10px'}}
+                key={filter.label}
                 onDelete={this.handleDeleteFilter(filter)}
                 deleteIcon={<CancelIcon/>}
                 label={filter.label}
@@ -168,7 +234,7 @@ class MainPage extends Component {
         <h2> Available Programs: </h2>
         {this.state.loading ? <div id="loading">
           <CircularProgress variant="indeterminate"/> </div>: null}
-        {this.state.listOfFilters.length > 0 && this.state.programList.length === 0
+        {(this.state.subjectFilters.length + this.state.coreFilters.length) > 0 && this.state.programList.length === 0
           && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
         <div style={{marginLeft:'10%', marginRight: '10%'}}>
           {this.state.programList.map(program => {
@@ -185,6 +251,7 @@ class MainPage extends Component {
                         <TableRow>
                           <TableCell>GU Course</TableCell>
                           <TableCell>Host Course</TableCell>
+                          <TableCell>Core Designation</TableCell>
                           <TableCell>Requires Signature</TableCell>
                         </TableRow>
                       </TableHead>
@@ -194,6 +261,7 @@ class MainPage extends Component {
                             <TableRow key={index}>
                               <TableCell>{course.guCourse}</TableCell>
                               <TableCell>{course.hostCourse}</TableCell>
+                              <TableCell>{course.core}</TableCell>
                               <TableCell>{course.requiresSignature}</TableCell>
                             </TableRow>
                           );

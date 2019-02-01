@@ -33,7 +33,9 @@ class ProgramReviewForm extends Component {
       other: '',
       name: '',
       email: '',
-      formSubmitted: ''
+      formSubmitted: '',
+      accepted: [],
+      staff: ''
     }
 
     // Get list of programs for dropdown menu
@@ -49,6 +51,7 @@ class ProgramReviewForm extends Component {
 
   }
 
+//call on the survey table
   submit(event) {
     var accountInfo = {
       "major" : this.state.major,
@@ -61,7 +64,8 @@ class ProgramReviewForm extends Component {
       "activities" : this.state.activities,
       "other" : this.state.other,
       "name" : this.state.name,
-      "email" : this.state.email
+      "email" : this.state.email,
+      "staff" : this.state.staff,
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/submitsurvey", accountInfo).then((res) => {
         console.log(res.data);
@@ -69,7 +73,7 @@ class ProgramReviewForm extends Component {
     });
   }
 
-
+//this is called in the onclick for the submit button
   handleUploadImages = images => {
     // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
     const uploads = images.map(image => {
@@ -88,9 +92,9 @@ class ProgramReviewForm extends Component {
         .then(response => console.log(response.data))
     });
 
-    // We would use axios `.all()` method to perform concurrent image upload to cloudinary.
+    // perform concurrent image upload to cloudinary
     axios.all(uploads).then(() => {
-      // ... do anything after successful upload. You can setState() or save the data
+      // ... after successful upload
       console.log('Images have all being uploaded')
     });
   }
@@ -99,10 +103,21 @@ class ProgramReviewForm extends Component {
     return(
       <div style={{textAlign: 'center'}}>
         <h3>Tell us about your time abroad!</h3>
+        <TextField id="name" label="Name (optional)" style={textFieldStyle}
+          onChange = { (event) =>
+            this.setState({name : event.target.value})}/>
+        <br/>
+
+        <TextField id="email" label="Email (optional)" style={textFieldStyle}
+          onChange = { (event) =>
+            this.setState({email : event.target.value})}/>
+        <br/>
+
         <TextField id="major" label="What is your major?" required={true} style={textFieldStyle}
           onChange = { (event) =>
             this.setState({major : event.target.value})}/>
         <br/>
+
         <div style={{width: 500, margin: '10px', display: 'inline-block', zIndex: 1}}>
           <DropdownTextField
             required={true}
@@ -113,23 +128,26 @@ class ProgramReviewForm extends Component {
               this.setState({program : selectedOption.value})}/>
         </div>
         <br/>
-        <div style={{width: 500, margin: '10px', display: 'inline-block', zIndex: 1}}>
-          <DropdownTextField
+
+        <div >
+          <TextField id = "term"
             required={true}
             label="What term did you go abroad?"
-            placeholder={this.state.term ? this.state.term : ""}
-            options={this.state.terms}
-            onChange={(selectedOption) =>
-              this.setState({term : selectedOption.value})}/>
+            placeholder="E.g. Fall 2017"
+            style ={textFieldStyle}
+            onChange={(event) =>
+              this.setState({term : event.target.value})}/>
         </div>
         <br/>
+
         <TextField id="year" label="What year did you begin your study abroad program?"
           required={true}
           style={textFieldStyle}
-          placeholder="E.g. 2017"
+          placeholder="E.g. Freshman"
           onChange = { (event) =>
             this.setState({year : event.target.value})}/>
         <br/>
+
         <TextField id="residence" multiline={true} rows={10} style={textFieldStyle}
           label="Where did you stay while abroad? What was it like?"
           placeholder = "E.g. homestay, dormitory, etc."
@@ -139,6 +157,7 @@ class ProgramReviewForm extends Component {
             this.setState({residence : event.target.value})}
           helperText = {(1000 - this.state.residence.length) + ' characters remaining'}/>
         <br/>
+
         <TextField id="trips" multiline={true} rows={10} style={textFieldStyle}
           label = "Tell us about any favorite trips you took while abroad"
           placeholder = "Include any places you recommend, travel advice, etc."
@@ -148,6 +167,7 @@ class ProgramReviewForm extends Component {
             this.setState({trips : event.target.value})}
           helperText = {(1000 - this.state.trips.length) + ' characters remaining'}/>
         <br/>
+
         <TextField id="classes" multiline={true} rows={10} style={textFieldStyle}
           label = "What were your classes like?"
           placeholder = "E.g. any favorite classes, overall workload, etc."
@@ -157,6 +177,7 @@ class ProgramReviewForm extends Component {
             this.setState({classes : event.target.value})}
           helperText = {(1000 - this.state.classes.length) + ' characters remaining'}/>
         <br/>
+
         <TextField id="activities" multiline={true} rows={10} style={textFieldStyle}
           label = "Tell us about any extracurricular activities you participated in"
           placeholder = "E.g. sports teams, volunteering, clubs, etc."
@@ -166,6 +187,17 @@ class ProgramReviewForm extends Component {
             this.setState({activities : event.target.value})}
           helperText = {(1000 - this.state.activities.length) + ' characters remaining'}/>
         <br/>
+
+        <TextField id="staff" multiline={true} rows={10} style={textFieldStyle}
+          label = "What were your experiences with on-campus staff/facilities?"
+          placeholder = "E.g. Health Center, Gym, etc."
+          variant = "outlined"
+          inputProps={{maxLength: 1000}}
+          onChange = { (event) =>
+            this.setState({staff : event.target.value})}
+          helperText = {(1000 - this.state.staff.length) + ' characters remaining'}/>
+        <br/>
+
         <TextField id="other" multiline={true} rows={10} style={textFieldStyle}
           label = "Is there anything else you would like to share?"
           variant = "outlined"
@@ -174,8 +206,10 @@ class ProgramReviewForm extends Component {
             this.setState({other : event.target.value})}
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
+        <p>Please share some photos of your travels by clicking the button below! <br/> *only .png and .jpeg files allowed</p>
         <Dropzone
-              onDrop={this.handleUploadImages}>
+        accept = "image/png, image/jpeg"
+              onDrop={(accepted) => {this.setState({accepted});}}>
                       {({getRootProps, getInputProps, isDragActive}) => {
                         return (
                           <div
@@ -186,27 +220,30 @@ class ProgramReviewForm extends Component {
                             {
                               isDragActive ?
                                 <p>Drop files here...</p> :
-                                <p>Try dropping some files here, or click to select files to upload.</p>
+                                <Button variant="contained">upload</Button>
                             }
                           </div>
                         )
                       }}
         </Dropzone>
+        <aside>
+          <h4>Selected Files:</h4>
+          <ul>
+            {
+              this.state.accepted.map(photo => <li key={photo.name}>{photo.name} - {photo.size} bytes</li>)
+            }
+          </ul>
+        </aside>
         <br/>
-        <p style = {{fontSize: '14px'}}> If you're open to being contacted by a
-        prospective study abroad student, please <br/> provide your contact information: </p>
-        <TextField id="name" label="Name" style={textFieldStyle}
-          onChange = { (event) =>
-            this.setState({name : event.target.value})}/>
-        <br/>
-        <TextField id="email" label="Email" style={textFieldStyle}
-          onChange = { (event) =>
-            this.setState({email : event.target.value})}/>
-        <br/>
+
         <Button label="submit" variant="contained" style={{margin: '10px'}}
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.year)}
-          onClick = {(event) =>
-            this.submit(event)}> Submit </Button>
+          onClick = {(event) => {
+            this.submit(event)
+            let pics = this.state.accepted
+            this.handleUploadImages(pics)
+            console.log("Clicked")
+          }}> Submit </Button>
         {this.state.formSubmitted ?
           <Dialog id="dialog" open={true}>
             <DialogTitle id="simple-dialog-title">Thanks for sharing!</DialogTitle>

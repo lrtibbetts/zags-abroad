@@ -50,7 +50,7 @@ class SignUpPage extends Component {
         this.setState({accountCreated : true});
         const cookies = this.props.cookies;
         cookies.set('email', this.state.email, {'maxAge': 7200, 'path': '/'}); // Might be good to store user ID instead
-        cookies.set('role', 'user', {'maxAge': 7200}); // By default, users are not given admin access
+        cookies.set('role', 'user', {'maxAge': 7200, 'path': '/'}); // By default, users are not given admin access
       } else {
         this.setState({showPrompt : true});
       }

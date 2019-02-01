@@ -118,7 +118,7 @@ class ProgramDetailView extends Component {
       }
       axios.post("https://zagsabroad-backend.herokuapp.com/savecourse", params).then((res) => {
         if(res.data.code === "ER_DUP_ENTRY") {
-          this.setState({showMessage: true, message: "Course already added to My Account"});
+          this.setState({showMessage: true, message: "Course already added.  See My Account"});
         } else if(res.data.errno) {
           this.setState({showMessage: true, message: "Error saving course"});
         } else {

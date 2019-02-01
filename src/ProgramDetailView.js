@@ -17,6 +17,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
 
+
 const buttonStyle = {
   margin: '5px'
 };
@@ -31,7 +32,8 @@ class ProgramDetailView extends Component {
       courseList : [], // Courses matching a user's search
       showMessage : false,
       message: '',
-      showLogInPrompt: false
+      showLogInPrompt: false,
+      photos: []
     }
 
     this.getAllCourses();
@@ -47,6 +49,8 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
   }
+
+
 
   // Remove filter from list of filters and add back to subjects dropdown
   handleDeleteFilter = filter => () => {
@@ -91,12 +95,7 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses});
   }
 
-  // No filters, Pull all courses in program
-  getAllCourses() {
-    axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
-      this.formatCourses(res.data);
-    });
-  }
+
 
   // Filters applied, pull matching courses in program
   getCourses() {
@@ -133,6 +132,7 @@ class ProgramDetailView extends Component {
   }
 
   render() {
+    const {photos} =  this.state;
     return (
       <div>
         <div style={{textAlign: 'center'}}>

@@ -35,7 +35,8 @@ class ProgramReviewForm extends Component {
       email: '',
       formSubmitted: '',
       accepted: [],
-      staff: ''
+      staff: '',
+      photos: []
     }
 
     // Get list of programs for dropdown menu
@@ -75,12 +76,13 @@ class ProgramReviewForm extends Component {
 
 //this is called in the onclick for the submit button
   handleUploadImages = images => {
+
     // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
     const uploads = images.map(image => {
       // our formdata
       const formData = new FormData();
       formData.append("file", image);
-      formData.append("tags", '{TAGS}'); // image tags - {Array} OPTIONAL
+      formData.append("tags", this.state.program); // image tags - {Array} OPTIONAL
       formData.append("upload_preset", "bdbcyhiw"); // preset name
       formData.append("api_key", "{447116233167845}"); // Cloudinary API key
 
@@ -89,7 +91,18 @@ class ProgramReviewForm extends Component {
         "https://api.cloudinary.com/v1_1/zagsabroad/image/upload",
         formData,
         { headers: { "X-Requested-With": "XMLHttpRequest" }})
-        .then(response => console.log(response.data))
+        .then(response => {
+          var upload = {
+            "program" : this.state.program,
+            "photos" : response.data.secure_url
+          }
+          console.log("UPLOAD: " + upload)
+          axios.post("https://zagsabroad-backend.herokuapp.com/photos", upload).then((res) => {
+            console.log("SUCCESS")
+            console.log(res)
+          }
+          )
+        })
     });
 
     // perform concurrent image upload to cloudinary
@@ -98,6 +111,7 @@ class ProgramReviewForm extends Component {
       console.log('Images have all being uploaded')
     });
   }
+
 
   render() {
     return(
@@ -230,7 +244,7 @@ class ProgramReviewForm extends Component {
           <h4>Selected Files:</h4>
           <ul>
             {
-              this.state.accepted.map(photo => <li key={photo.name}>{photo.name} - {photo.size} bytes</li>)
+              this.state.accepted.map(photo => <li key={photo.name}>{photo.name}</li>)
             }
           </ul>
         </aside>
@@ -241,8 +255,8 @@ class ProgramReviewForm extends Component {
           onClick = {(event) => {
             this.submit(event)
             let pics = this.state.accepted
+            console.log(pics)
             this.handleUploadImages(pics)
-            console.log("Clicked")
           }}> Submit </Button>
         {this.state.formSubmitted ?
           <Dialog id="dialog" open={true}>

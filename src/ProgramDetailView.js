@@ -16,6 +16,8 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
+import Gallery from 'react-photo-gallery';
+import Dimensions from 'react-dimensions';
 
 const buttonStyle = {
   margin: '5px'
@@ -132,12 +134,29 @@ class ProgramDetailView extends Component {
     }
   }
 
+
+  handleSize(image) {
+    console.log(image.offsetWidth, image.offsetHeight)
+  }
+
   render() {
     return (
       <div>
         <div style={{textAlign: 'center'}}>
           <h1>{this.props.name}</h1>
         </div>
+        <Gallery photos={
+          [
+            {
+              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg',
+              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg'),
+            },
+            {
+              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg',
+              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg')
+            }
+          ]
+        } />;
         <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
           <DropdownTextField
             placeholder = "Enter a department"

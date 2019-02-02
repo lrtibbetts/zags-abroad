@@ -102,9 +102,10 @@ class ProgramDetailView extends Component {
   getCourses() {
     let params = {
       "program": this.props.name,
-      "subjects": this.state.listOfFilters.map((filter) => filter.value)
+      "subjects": this.state.listOfFilters.map((filter) => filter.value),
+      "core": []
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbyprogramsubject", params).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
       this.formatCourses(res.data);
     });
   }

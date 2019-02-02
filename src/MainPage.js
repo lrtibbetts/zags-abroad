@@ -84,7 +84,7 @@ class MainPage extends Component {
       (filters.length + this.state.coreFilters.length) > 0 ? this.getPrograms() : this.getAllPrograms();
       for(var m = 0; m < this.state.subjects.length; m++) {
         var subjects = this.state.subjects;
-        if(filter.value < subjects[m].value) {
+        if(filter.label < subjects[m].label) {
           subjects.splice(m, 0, filter); // Insert at j, remove 0 items
           this.setState({subjects: subjects});
           return;

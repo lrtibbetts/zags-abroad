@@ -16,6 +16,8 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from "react-router-dom";
 import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
@@ -38,7 +40,8 @@ class ProgramDetailView extends Component {
       message: '',
       showLogInPrompt: false,
       photos: [],
-      loading: true
+      loading: true,
+      searchBy: 'department'
     }
 
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
@@ -94,7 +97,7 @@ class ProgramDetailView extends Component {
       (filters.length + this.state.coreFilters.length) > 0 ? this.getCourses() : this.getAllCourses();
       for(var m = 0; m < this.state.subjects.length; m++) {
         var subjects = this.state.subjects;
-        if(filter.value < subjects[m].value) {
+        if(filter.label < subjects[m].label) {
           subjects.splice(m, 0, filter); // Insert at j, remove 0 items
           this.setState({subjects: subjects});
           return;
@@ -152,7 +155,8 @@ class ProgramDetailView extends Component {
       "subjects": this.state.subjectFilters.map((filter) => filter.value),
       "core": this.state.coreFilters.map((filter) => filter.label)
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
+    axios.post("http://localhost:3001/detailsearch", params).then((res) => {
+      console.log(res.data);
       this.formatCourses(res.data);
     });
   }
@@ -187,10 +191,8 @@ class ProgramDetailView extends Component {
   render() {
     const {photos} = this.state;
     return (
-      <div>
-        <div style={{textAlign: 'center'}}>
-          <h1>{this.props.name}</h1>
-        </div>
+      <div style={{textAlign: 'center'}}>
+        <h1>{this.props.name}</h1>
         {/*<Gallery photos={
           [
             {
@@ -203,9 +205,18 @@ class ProgramDetailView extends Component {
             }
           ]
         } />;*/}
-        <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
+        <p style={{display: 'inline'}}> Search by: </p>
+        <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+          <Select autoWidth={true} value={this.state.searchBy}
+            onChange = { (event) =>
+              this.setState({searchBy : event.target.value})}>
+            <MenuItem value='department'> Department </MenuItem>
+            <MenuItem value='core'> Core designation </MenuItem>
+          </Select>
+        </div>
+        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
           <DropdownTextField
-            placeholder = "Enter a department"
+            placeholder = {this.state.searchBy === 'department' ? "Enter a department" : "Enter a core designation"}
             id = "departments"
             onChange = { (selectedOption) => {
               let newFilter = {value: selectedOption.value, label: selectedOption.label};
@@ -224,9 +235,7 @@ class ProgramDetailView extends Component {
             options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
-        <div style={{float: 'right', marginRight: '100px'}}>
-        </div>
-        <div style={{marginLeft: '100px'}}>
+        <div>
           {this.state.subjectFilters.map(filter => {
             return (
               <Chip style={{marginRight: '10px', marginTop: '10px'}}
@@ -278,7 +287,7 @@ class ProgramDetailView extends Component {
           </Table>
         </div><br/>
         {this.state.courseList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '100px'}}>
+        <p style={{fontSize: '13px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
         <Snackbar message={this.state.message}

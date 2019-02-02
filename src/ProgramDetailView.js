@@ -33,7 +33,8 @@ class ProgramDetailView extends Component {
       courseList : [], // Courses matching a user's search
       showMessage : false,
       message: '',
-      showLogInPrompt: false
+      showLogInPrompt: false,
+      photos: []
     }
 
     this.getAllCourses();
@@ -49,6 +50,8 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
   }
+
+
 
   // Remove filter from list of filters and add back to subjects dropdown
   handleDeleteFilter = filter => () => {
@@ -104,9 +107,10 @@ class ProgramDetailView extends Component {
   getCourses() {
     let params = {
       "program": this.props.name,
-      "subjects": this.state.listOfFilters.map((filter) => filter.value)
+      "subjects": this.state.listOfFilters.map((filter) => filter.value),
+      "core": []
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbyprogramsubject", params).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
       this.formatCourses(res.data);
     });
   }
@@ -121,7 +125,7 @@ class ProgramDetailView extends Component {
       }
       axios.post("https://zagsabroad-backend.herokuapp.com/savecourse", params).then((res) => {
         if(res.data.code === "ER_DUP_ENTRY") {
-          this.setState({showMessage: true, message: "Course already added to My Account"});
+          this.setState({showMessage: true, message: "Course already added.  See My Account"});
         } else if(res.data.errno) {
           this.setState({showMessage: true, message: "Error saving course"});
         } else {
@@ -140,6 +144,7 @@ class ProgramDetailView extends Component {
   }
 
   render() {
+    const {photos} =  this.state;
     return (
       <div>
         <div style={{textAlign: 'center'}}>

@@ -191,7 +191,7 @@ class ProgramDetailView extends Component {
         <div style={{textAlign: 'center'}}>
           <h1>{this.props.name}</h1>
         </div>
-        <Gallery photos={
+        {/*<Gallery photos={
           [
             {
               src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg',
@@ -202,7 +202,7 @@ class ProgramDetailView extends Component {
               ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg')
             }
           ]
-        } />;
+        } />;*/}
         <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
           <DropdownTextField
             placeholder = "Enter a department"

@@ -168,7 +168,7 @@ class MainPage extends Component {
       "subjects": this.state.subjectFilters.map((filter) => filter.value),
       "core": this.state.coreFilters.map((filter) => filter.label)
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbysubjectcore", filters).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/mainsearch", filters).then((res) => {
       this.formatPrograms(res.data);
     });
   }

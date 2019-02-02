@@ -180,13 +180,12 @@ class ProgramDetailView extends Component {
     }
   }
 
-
   handleSize(image) {
     console.log(image.offsetWidth, image.offsetHeight)
   }
 
   render() {
-    const {photos} =  this.state;
+    const {photos} = this.state;
     return (
       <div>
         <div style={{textAlign: 'center'}}>

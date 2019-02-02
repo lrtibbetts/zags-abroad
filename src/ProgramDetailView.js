@@ -134,6 +134,8 @@ class ProgramDetailView extends Component {
   render() {
     const {photos} =  this.state;
     return (
+      <div classname="slider">
+      </div>
       <div>
         <div style={{textAlign: 'center'}}>
           <h1>{this.props.name}</h1>

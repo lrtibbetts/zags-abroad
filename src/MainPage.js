@@ -182,7 +182,7 @@ class MainPage extends Component {
             onChange = { (event) =>
               this.setState({searchBy : event.target.value})}>
             <MenuItem value='department'> Department </MenuItem>
-            <MenuItem value='core'> Core designation </MenuItem>
+            <MenuItem value='core'> Core Designation </MenuItem>
           </Select>
         </div>
         <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>

@@ -228,15 +228,15 @@ class MainPage extends Component {
             );
           })}
         </div>
-        <div style={{marginTop: '20px', display: 'inline-block', textAlign: 'justify'}}>
+        <br/>
+        <div style={{display: 'inline-block', textAlign: 'justify', float: 'right', marginRight: '20px'}}>
           <MapView programs={this.state.programList.map((program) => program.programName)}/>
         </div>
-        <h2> Available Programs: </h2>
-        {this.state.loading ? <div id="loading">
-          <CircularProgress variant="indeterminate"/> </div>: null}
-        {(this.state.subjectFilters.length + this.state.coreFilters.length) > 0 && this.state.programList.length === 0
-          && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
-        <div style={{marginLeft:'10%', marginRight: '10%'}}>
+        <div style={{display: 'inline-block', float: 'left', width: '55%', marginLeft: '20px'}}>
+          {this.state.loading ? <div id="loading">
+            <CircularProgress variant="indeterminate"/> </div>: null}
+          {(this.state.subjectFilters.length + this.state.coreFilters.length) > 0 && this.state.programList.length === 0
+            && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
           {this.state.programList.map(program => {
             return (
               <ExpansionPanel key={program.programName}>
@@ -275,7 +275,7 @@ class MainPage extends Component {
           })}
         </div><br/>
         {this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px'}}>
+        <p style={{fontSize: '13px', display: 'inline-block', float: 'left', marginLeft: '20px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
       </div>

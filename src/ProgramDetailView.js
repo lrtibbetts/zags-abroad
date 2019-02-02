@@ -17,7 +17,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
 
-
 const buttonStyle = {
   margin: '5px'
 };
@@ -95,15 +94,21 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses});
   }
 
-
+  // No filters, Pull all courses in program
+  getAllCourses() {
+    axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
+      this.formatCourses(res.data);
+    });
+  }
 
   // Filters applied, pull matching courses in program
   getCourses() {
     let params = {
       "program": this.props.name,
-      "subjects": this.state.listOfFilters.map((filter) => filter.value)
+      "subjects": this.state.listOfFilters.map((filter) => filter.value),
+      "core": []
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/filterbyprogramsubject", params).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
       this.formatCourses(res.data);
     });
   }

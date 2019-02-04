@@ -57,7 +57,7 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
-    axios.get("https://zagsabroad-backend.herokuapp.com/programcore").then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/programcore", {"program": this.props.name}).then((res) => {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let coreName = res.data[i].core_name.trim(); // Remove any white space
@@ -152,7 +152,7 @@ class ProgramDetailView extends Component {
     });
   }
 
-  //get all of the photos from a specific program
+  // Get all of the photos from a specific program
   getAllPhotos() {
     let program = {
       "program": this.props.name

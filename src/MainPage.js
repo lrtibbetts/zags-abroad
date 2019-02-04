@@ -17,6 +17,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import MapView from "./MapView.js";
+import "./MainPage.css"
 
 class MainPage extends Component {
   constructor(props) {
@@ -185,7 +186,7 @@ class MainPage extends Component {
             <MenuItem value='core'> Core designation </MenuItem>
           </Select>
         </div>
-        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
+        <div className="searchBar">
           <DropdownTextField
             placeholder = {this.state.searchBy === 'department' ? "E.g. Computer Science" : "E.g. Global Studies"}
             id = "departments"
@@ -229,10 +230,10 @@ class MainPage extends Component {
           })}
         </div>
         <br/>
-        <div style={{display: 'inline-block', textAlign: 'justify', float: 'right', marginRight: '20px'}}>
+        <div className="map">
           <MapView programs={this.state.programList.map((program) => program.programName)}/>
         </div>
-        <div style={{display: 'inline-block', float: 'left', width: '55%', marginLeft: '20px'}}>
+        <div className="list">
           {this.state.loading ? <div id="loading">
             <CircularProgress variant="indeterminate"/> </div>: null}
           {(this.state.subjectFilters.length + this.state.coreFilters.length) > 0 && this.state.programList.length === 0
@@ -273,9 +274,9 @@ class MainPage extends Component {
               </ExpansionPanel>
             );
           })}
-        </div><br/>
+        </div>
         {this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px', display: 'inline-block', float: 'left', marginLeft: '20px'}}>
+        <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
       </div>

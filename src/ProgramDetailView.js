@@ -46,9 +46,6 @@ class ProgramDetailView extends Component {
 
     this.getAllCourses();
     this.getAllPhotos();
-      loading: true,
-      searchBy: 'department'
-    }
 
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];

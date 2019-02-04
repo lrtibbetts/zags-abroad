@@ -32,11 +32,13 @@ class ProgramDetailView extends Component {
       showMessage : false,
       message: '',
       showLogInPrompt: false,
-      photos: []
+      photos: [],
+      currentIndex: 0,
+      translateValue: 0
     }
 
     this.getAllCourses();
-
+    this.getAllPhotos();
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -48,8 +50,6 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
   }
-
-
 
   // Remove filter from list of filters and add back to subjects dropdown
   handleDeleteFilter = filter => () => {
@@ -101,6 +101,18 @@ class ProgramDetailView extends Component {
     });
   }
 
+  //get all of the photos from a specific program
+  getAllPhotos() {
+    let program = {
+      "program": this.props.name
+    }
+    axios.get("http://localhost:3001/programPhotos", program).then((res) => {
+      console.log(this.props.name);
+      console.log(res.data)
+      console.log(program)
+    })
+  }
+
   // Filters applied, pull matching courses in program
   getCourses() {
     let params = {
@@ -139,8 +151,6 @@ class ProgramDetailView extends Component {
   render() {
     const {photos} =  this.state;
     return (
-      <div classname="slider">
-      </div>
       <div>
         <div style={{textAlign: 'center'}}>
           <h1>{this.props.name}</h1>

@@ -2,18 +2,8 @@ import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import CourseEquivalencyPage from './CourseEquivalencyPage.js'
 import { Redirect } from "react-router-dom";
-
-// This function allows us to manipulate the spacing of the tab bar
-function TabContainer(props) {
-  return (
-    <Typography>
-      {props.children}
-    </Typography>
-  );
-}
 
 class AdminPage extends Component {
   constructor(props) {
@@ -42,16 +32,19 @@ class AdminPage extends Component {
               <Tab label="Admin Accounts" />
             </Tabs>
           </AppBar>
-          {value === 0 && <TabContainer><h1> Course Equivalencies </h1>
-            <CourseEquivalencyPage cookies = {this.props.cookies}/>
-          </TabContainer>}
-          {value === 1 && <TabContainer>
+          {value === 0 &&
+            <div>
+              <h1> Course Equivalencies </h1>
+              <CourseEquivalencyPage cookies = {this.props.cookies}/>
+            </div>}
+          {value === 1 &&
+            <div>
               <h1>Programs</h1><p> Manage study abroad program information here</p>
-            </TabContainer>}
-          {value === 2 && <TabContainer><h1>Program Reviews</h1>
-            <p> Approve program reviews submitted by students here</p></TabContainer>}
-          {value === 3 && <TabContainer><h1>Admin Accounts</h1>
-            <p> Grant administrative access to other users here</p></TabContainer>}
+            </div>}
+          {value === 2 && <div><h1>Program Reviews</h1>
+            <p> Approve program reviews submitted by students here</p></div>}
+          {value === 3 && <div><h1>Admin Accounts</h1>
+            <p> Grant administrative access to other users here</p></div>}
         </div>
       );
     } else {

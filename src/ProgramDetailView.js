@@ -157,7 +157,7 @@ class ProgramDetailView extends Component {
     let program = {
       "program": this.props.name
     }
-    axios.get("https://zagsabroad-backend.herokuapp.com/programPhotos", program).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
       console.log(this.props.name);
       console.log(res.data)
       console.log(program)

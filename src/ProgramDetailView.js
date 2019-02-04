@@ -173,7 +173,6 @@ class ProgramDetailView extends Component {
       "core": this.state.coreFilters.map((filter) => filter.label)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
-      console.log(res.data);
       this.formatCourses(res.data);
     });
   }

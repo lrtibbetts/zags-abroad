@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -134,33 +133,24 @@ class DropdownTextField extends Component {
     };
 
     return (
-      <div>
-        <NoSsr>
-          <Select
-            controlShouldRenderValue={false}
-            classes={classes}
-            styles={selectStyles}
-            options={this.props.options}
-            components={components}
-            onChange={(selectedOption) => this.props.onChange(selectedOption)}
-            placeholder={this.props.placeholder}
-            textFieldProps={{
-              label: this.props.label,
-              required: this.props.required,
-              InputLabelProps: {
-                shrink: true,
-              },
-            }}
-          />
-        </NoSsr>
-      </div>
+      <Select
+        controlShouldRenderValue={false}
+        classes={classes}
+        styles={selectStyles}
+        options={this.props.options}
+        components={components}
+        onChange={(selectedOption) => this.props.onChange(selectedOption)}
+        placeholder={this.props.placeholder}
+        textFieldProps={{
+          label: this.props.label,
+          required: this.props.required,
+          InputLabelProps: {
+            shrink: true,
+          },
+        }}
+        />
     );
   }
 }
-
-DropdownTextField.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles, { withTheme: true })(DropdownTextField);

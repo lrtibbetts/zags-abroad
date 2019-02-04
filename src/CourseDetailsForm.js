@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
 import DropdownTextField from './DropdownTextField.js';
+import MultiDropdownTextField from './MultiDropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,
@@ -34,7 +35,7 @@ const smallDropdownStyle = {
 };
 
 const largeDropDownStyle = {
-  width: 300,
+  width: 325,
   display: 'inline-block',
   margin: '10px'
 };
@@ -52,7 +53,7 @@ class CourseDetailsForm extends Component {
       host_course_name: this.props.course[2],
       gu_course_number: this.props.course[3],
       gu_course_name: this.props.course[4],
-      core: this.props.course[5],
+      core: this.formatCore(this.props.course[5]),
       comments: this.props.course[6],
       signature_needed: this.props.course[7],
       approved_by: this.props.course[8],
@@ -61,10 +62,11 @@ class CourseDetailsForm extends Component {
       department: this.props.course[11]
     }
 
+    console.log(this.state.core);
+
     this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
     this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
     this.handleChangeProgram = this.handleChangeProgram.bind(this);
-    this.handleChangeCore = this.handleChangeCore.bind(this);
 
     // Get list of department codes for dropdown menu
     axios.get("https://zagsabroad-backend.herokuapp.com/departments").then((res) => {
@@ -100,6 +102,16 @@ class CourseDetailsForm extends Component {
     });
   }
 
+  formatCore(coreStr) {
+    let coreList = coreStr.split(',');
+    for(let i = 0; i < coreList.length; i++) {
+      let core = coreList[i].trim();
+      coreList[i] = {value: core, label: core};
+    }
+    coreList.pop(); // Remove empty string from end of array
+    return coreList;
+  }
+
   formIsValid() {
     // Check that all required fields are filled
     return (this.state.host_program && this.state.host_course_name && this.state.gu_course_number
@@ -119,9 +131,11 @@ class CourseDetailsForm extends Component {
     this.setState({host_program: selectedOption.value});
   }
 
-  handleChangeCore(selectedOption) {
-    this.setState({core: selectedOption.value});
-  }
+  handleChange = name => value => {
+    this.setState({
+      [name]: value,
+    });
+  };
 
   render() {
     return (
@@ -162,11 +176,11 @@ class CourseDetailsForm extends Component {
               onChange = { (event) =>
                 this.setState({gu_course_name : event.target.value})}/>
             <div style = {largeDropDownStyle}>
-              <DropdownTextField
+              <MultiDropdownTextField
                 label="Core Designation"
-                placeholder={this.state.core ? this.state.core : ""}
                 options={this.state.coreDesignations}
-                onChange={this.handleChangeCore}/>
+                value={this.state.core}
+                onChange={this.handleChange("core")}/>
             </div>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
@@ -208,7 +222,7 @@ class CourseDetailsForm extends Component {
                   disabled={!this.formIsValid()}
                   onClick = {(event) => {
                     let courseInfo = this.state;
-                    console.log(courseInfo);
+                    courseInfo.core = courseInfo.core.map(item => item.value).join(', ') + ",";
                     if(this.props.title === "Add Course Equivalency") {
                       axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
                         console.log(res.data);

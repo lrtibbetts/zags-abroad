@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
-import PropTypes from 'prop-types';
 
 const addButtonStyle = {
   margin: '10px'
@@ -17,7 +16,6 @@ class CourseEquivalencyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //value: 0,
       showAddForm: false,
       showEditForm: false,
       courses: [],
@@ -193,7 +191,6 @@ class CourseEquivalencyPage extends Component {
       };
       return (
         <div style={{textAlign: 'center'}}>
-
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
@@ -228,7 +225,6 @@ class CourseEquivalencyPage extends Component {
               onClick={(event) =>
                 this.setState({showMessage: false})}>
             <CloseIcon/> </IconButton>}/>
-
         </div>
       )
     } else {
@@ -239,8 +235,4 @@ class CourseEquivalencyPage extends Component {
   }
 }
 
-CourseEquivalencyPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default(CourseEquivalencyPage);
+export default CourseEquivalencyPage;

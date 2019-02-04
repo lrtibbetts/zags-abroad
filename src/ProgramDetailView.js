@@ -36,6 +36,8 @@ class ProgramDetailView extends Component {
       subjectFilters : [], // Filters applied by the user
       coreFilters: [],
       courseList : [], // Courses matching a user's search
+      searchBy: 'department',
+      loading: true,
       showMessage : false,
       message: '',
       showLogInPrompt: false,

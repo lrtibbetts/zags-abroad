@@ -40,19 +40,16 @@ class ProgramDetailView extends Component {
       message: '',
       showLogInPrompt: false,
       photos: [],
-<<<<<<< HEAD
       currentIndex: 0,
       translateValue: 0
     }
 
     this.getAllCourses();
     this.getAllPhotos();
-=======
       loading: true,
       searchBy: 'department'
     }
 
->>>>>>> 5c67c0f69b1806fa24ed5aa921646e658ab42ef9
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -63,8 +60,6 @@ class ProgramDetailView extends Component {
       }
       this.setState({subjects: subjectsToAdd});
     });
-<<<<<<< HEAD
-=======
 
     axios.get("https://zagsabroad-backend.herokuapp.com/core").then((res) => {
       let coreToAdd = [];
@@ -76,7 +71,6 @@ class ProgramDetailView extends Component {
       this.setState({core: coreToAdd},
           this.getAllCourses()); // Fetch all courses after state has changed
     });
->>>>>>> 5c67c0f69b1806fa24ed5aa921646e658ab42ef9
   }
 
   // Remove filter from list of filters and add back to subjects dropdown

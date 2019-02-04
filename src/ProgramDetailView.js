@@ -46,9 +46,6 @@ class ProgramDetailView extends Component {
       translateValue: 0
     }
 
-    this.getAllCourses();
-    this.getAllPhotos();
-
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -60,15 +57,18 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
-    axios.get("https://zagsabroad-backend.herokuapp.com/core").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/programcore").then((res) => {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let coreName = res.data[i].core_name.trim(); // Remove any white space
         let coreObj = {value: 'core', label: coreName};
         coreToAdd.push(coreObj);
       }
-      this.setState({core: coreToAdd},
-          this.getAllCourses()); // Fetch all courses after state has changed
+      this.setState({core: coreToAdd}, () => {
+        // Fetch all courses and photos AFTER state has changed
+        this.getAllCourses();
+        this.getAllPhotos();
+      });
     });
   }
 

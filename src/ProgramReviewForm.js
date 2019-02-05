@@ -258,7 +258,8 @@ class ProgramReviewForm extends Component {
           onClick = {(event) => {
             this.submit(event);
             let pics = this.state.accepted;
-            console.log(pics);
+            console.log("HI" + pics);
+
             this.handleUploadImages(pics);
           }}> Submit </Button>
         {this.state.formSubmitted ?

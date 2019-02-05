@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from "react-router-dom";
 import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
+var Carousel = require('react-responsive-carousel').Carousel;
 
 const buttonStyle = {
   margin: '5px'
@@ -43,6 +44,7 @@ class ProgramDetailView extends Component {
       translateValue: 0
     }
 
+    //getting all of the programs for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -54,6 +56,7 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
+    //getting all of the core for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programcore", {"program": this.props.name}).then((res) => {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -68,6 +71,7 @@ class ProgramDetailView extends Component {
       });
     });
   }
+
 
   // Populate table with relevant courses in list
   formatCourses(data) {
@@ -91,13 +95,20 @@ class ProgramDetailView extends Component {
 
   // Get all of the photos from a specific program
   getAllPhotos() {
+    this.setState({photos: [], loading: true})
     let program = {
       "program": this.props.name
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
-      console.log(this.props.name);
       console.log(res.data)
-      console.log(program)
+      let photoList = [];
+      for(var i = 0; i < res.data.length; i++) {
+        photoList.push(res.data[i])
+
+      }
+      this.setState({photos: photoList, loading: false})
+      console.log("Here are the photos")
+      console.log(this.state.photos)
     })
   }
 
@@ -149,23 +160,13 @@ class ProgramDetailView extends Component {
     });
   };
 
+
+
   render() {
     const {photos} = this.state;
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
-        {/*<Gallery photos={
-          [
-            {
-              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg',
-              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg'),
-            },
-            {
-              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg',
-              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg')
-            }
-          ]
-        } />;*/}
         <p style={{display: 'inline'}}> Search by: </p>
         <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
           <Select autoWidth={true} value={this.state.searchBy}

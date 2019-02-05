@@ -43,15 +43,6 @@ class ProgramDetailView extends Component {
       translateValue: 0
     }
 
-<<<<<<< HEAD
-    this.getAllCourses();
-
-    axios.get("https://zagsabroad-backend.herokuapp.com/coreSubjects", {"program": this.props.name}).then((res) => {
-      console.log("HIT CORE SUBJECTS");
-    })
-
-=======
->>>>>>> b00308332249ca4b6d93becdc31d9306cbd44af4
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {

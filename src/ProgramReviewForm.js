@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
 import Dropzone from 'react-dropzone';
 import classNames from 'classnames';
+import {DropzoneArea} from 'material-ui-dropzone';
 
 const textFieldStyle = {
   width: 500,
@@ -226,7 +227,12 @@ class ProgramReviewForm extends Component {
                           {
                             isDragActive ?
                               <p>Drop files here...</p> :
-                              <Button variant="contained">Upload</Button>
+                              <div style={{width: 500, display: 'inline-block'}}>
+                              <DropzoneArea
+                                acceptedFiles={["image/jpeg", "image/png"]}
+                                filesLimit={10}
+                                onChange={(accepted) => {this.setState({accepted})}}/>
+                                </div>
                           }
                         </div>
                       )

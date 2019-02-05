@@ -15,7 +15,7 @@ describe('Main Page', () => {
 
     it('should set subject list correctly', () => {
       mainPage.setState({subjects: ['true']})
-      expect(mainPage.find('#departments').props().options).toEqual(['true']);
+      expect(mainPage.find('#search').props().options).toEqual(['true']);
     });
 
 });

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Chip from '@material-ui/core/Chip';
-import CancelIcon from '@material-ui/icons/Cancel';
-import DropdownTextField from './DropdownTextField.js';
+import MultiDropdownTextField from './MultiDropdownTextField.js';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,7 +13,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from "react-router-dom";
+import Gallery from 'react-photo-gallery';
+import Dimensions from 'react-dimensions';
 
 const buttonStyle = {
   margin: '5px'
@@ -27,20 +30,28 @@ class ProgramDetailView extends Component {
 
     this.state = {
       subjects: [], // Subjects in dropdown menu
-      listOfFilters : [], // Filters applied by the user
+      core: [],
+      filters: [],
       courseList : [], // Courses matching a user's search
+      searchBy: 'department',
+      loading: true,
       showMessage : false,
       message: '',
       showLogInPrompt: false,
-      photos: []
+      photos: [],
+      currentIndex: 0,
+      translateValue: 0
     }
 
+<<<<<<< HEAD
     this.getAllCourses();
 
     axios.get("https://zagsabroad-backend.herokuapp.com/coreSubjects", {"program": this.props.name}).then((res) => {
       console.log("HIT CORE SUBJECTS");
     })
 
+=======
+>>>>>>> b00308332249ca4b6d93becdc31d9306cbd44af4
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -51,39 +62,20 @@ class ProgramDetailView extends Component {
       }
       this.setState({subjects: subjectsToAdd});
     });
-  }
 
-
-
-  // Remove filter from list of filters and add back to subjects dropdown
-  handleDeleteFilter = filter => () => {
-    var filters = this.state.listOfFilters;
-    for(var i = 0; i < filters.length; i++) {
-      if (filter.value === filters[i].value) {
-        filters.splice(i, 1);
-        this.setState({listOfFilters: filters});
+    axios.post("https://zagsabroad-backend.herokuapp.com/programcore", {"program": this.props.name}).then((res) => {
+      let coreToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let coreName = res.data[i].core_name.trim(); // Remove any white space
+        let coreObj = {value: "CORE: " + coreName, label: coreName};
+        coreToAdd.push(coreObj);
       }
-    }
-    filters.length > 0 ? this.getCourses() : this.getAllCourses();
-    for(var j = 0; j < this.state.subjects.length; j++) {
-      var subjects = this.state.subjects;
-      if(filter.value < subjects[j].value) {
-        subjects.splice(j, 0, filter); // Insert at j, remove 0 items
-        this.setState({subjects: subjects});
-        return;
-      }
-    }
-  }
-
-  // Remove subject from dropdown menu after it is selected
-  handleDeleteSubject(subject) {
-    for (var i = 0; i < this.state.subjects.length; i++) {
-      if (subject.value === this.state.subjects[i].value) {
-        let newSubjects = this.state.subjects;
-        newSubjects.splice(i, 1);
-        this.setState({subjects: newSubjects});
-      }
-    }
+      this.setState({core: coreToAdd}, () => {
+        // Fetch all courses and photos AFTER state has changed
+        this.getAllCourses();
+        this.getAllPhotos();
+      });
+    });
   }
 
   // Populate table with relevant courses in list
@@ -92,25 +84,39 @@ class ProgramDetailView extends Component {
     for(var i = 0; i < data.length; i++) {
       let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
         hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
-        : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id};
+        : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id, core: data[i].core};
       courses.push(newCourse);
     }
-    this.setState({courseList: courses});
+    this.setState({courseList: courses, loading: false});
   }
 
   // No filters, Pull all courses in program
   getAllCourses() {
+    this.setState({courseList: [], loading: true})
     axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
       this.formatCourses(res.data);
     });
   }
 
+  // Get all of the photos from a specific program
+  getAllPhotos() {
+    let program = {
+      "program": this.props.name
+    }
+    axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
+      console.log(this.props.name);
+      console.log(res.data)
+      console.log(program)
+    })
+  }
+
   // Filters applied, pull matching courses in program
   getCourses() {
+    this.setState({courseList: [], loading: true})
     let params = {
       "program": this.props.name,
-      "subjects": this.state.listOfFilters.map((filter) => filter.value),
-      "core": []
+      "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
+      "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
       this.formatCourses(res.data);
@@ -140,62 +146,72 @@ class ProgramDetailView extends Component {
     }
   }
 
+  handleSize(image) {
+    console.log(image.offsetWidth, image.offsetHeight)
+  }
+
+  handleChange = name => value => {
+    this.setState({
+      [name]: value,
+    }, () => {
+      (this.state.filters.length > 0) ? this.getCourses() : this.getAllCourses();
+    });
+  };
+
   render() {
-    const {photos} =  this.state;
+    const {photos} = this.state;
     return (
-      <div>
-        <div style={{textAlign: 'center'}}>
-          <h1>{this.props.name}</h1>
+      <div style={{textAlign: 'center'}}>
+        <h1>{this.props.name}</h1>
+        {/*<Gallery photos={
+          [
+            {
+              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg',
+              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg'),
+            },
+            {
+              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg',
+              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg')
+            }
+          ]
+        } />;*/}
+        <p style={{display: 'inline'}}> Search by: </p>
+        <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+          <Select autoWidth={true} value={this.state.searchBy}
+            onChange = { (event) =>
+              this.setState({searchBy : event.target.value})}>
+            <MenuItem value='department'> Department </MenuItem>
+            <MenuItem value='core'> Core designation </MenuItem>
+          </Select>
         </div>
-        <div style={{marginTop: '10px', marginLeft: '100px', width: '500px'}}>
-          <DropdownTextField
-            placeholder = "Enter a department"
-            id = "departments"
-            onChange = { (selectedOption) => {
-              let newFilter = {value: selectedOption.value, label: selectedOption.label};
-              let filters = this.state.listOfFilters;
-              filters.push(newFilter);
-              this.setState({listOfFilters: filters});
-              this.handleDeleteSubject(newFilter);
-              this.getCourses();
-            }}
-            options = {this.state.subjects}
+        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
+          <MultiDropdownTextField
+            value = { this.state.filters }
+            onChange = { this.handleChange("filters")}
+            options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
-        <div style={{float: 'right', marginRight: '100px'}}>
-        </div>
-        <div style={{marginLeft: '100px'}}>
-          {this.state.listOfFilters.map(filter => {
-            return (
-              <Chip style={{marginRight: '10px', marginTop: '10px'}}
-                key={filter.value}
-                onDelete={this.handleDeleteFilter(filter)}
-                deleteIcon={<CancelIcon/>}
-                label={filter.label}
-              />
-            );
-          })}
-        </div>
-        <h2 style={{marginLeft: '100px'}}> Available Courses: </h2>
-        {this.state.listOfFilters.length > 1 && this.state.courseList.length === 0 ?
-        <p style={{marginLeft: '100px'}}> No matching courses. Try removing a filter! </p> : null}
-        <div style={{marginLeft: '100px', marginRight: '100px'}}>
+        <div style={{marginLeft: '100px', marginRight: '100px', marginTop: '20px'}}>
+        {this.state.loading ? <div id="loading">
+          <CircularProgress variant="indeterminate"/> </div>: null}
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>GU Course</TableCell>
                 <TableCell>Host Course</TableCell>
                 <TableCell>Requires Signature</TableCell>
+                <TableCell>Core Designation</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.courseList.map((course) => {
+              {this.state.courseList.map((course, index) => {
                 return (
-                  <TableRow key={course.id}>
+                  <TableRow key={index}>
                     <TableCell>{course.guCourse}</TableCell>
                     <TableCell>{course.hostCourse}</TableCell>
                     <TableCell>{course.requiresSignature}</TableCell>
+                    <TableCell>{course.core}</TableCell>
                     <TableCell>{<IconButton onClick={(event) => this.saveCourse(course.id)}
                       color="primary"><AddIcon/></IconButton>}</TableCell>
                   </TableRow>
@@ -205,7 +221,7 @@ class ProgramDetailView extends Component {
           </Table>
         </div><br/>
         {this.state.courseList.length > 0 ?
-        <p style={{fontSize: '13px', marginLeft: '100px', marginRight: '100px'}}>
+        <p style={{fontSize: '13px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit
         for in the past, but you may be able to get other courses approved. </p> : null} <br/>
         <Snackbar message={this.state.message}

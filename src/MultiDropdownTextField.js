@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import NoSsr from '@material-ui/core/NoSsr';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   input: {
@@ -14,8 +19,21 @@ const styles = theme => ({
   noOptionsMessage: {
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
-  singleValue: {
-    fontSize: 16,
+  valueContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flex: 1,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  chip: {
+    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+  },
+  chipFocused: {
+    backgroundColor: emphasize(
+      theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+      0.08,
+    ),
   },
   placeholder: {
     position: 'absolute',
@@ -92,11 +110,21 @@ function Placeholder(props) {
   );
 }
 
-function SingleValue(props) {
+function ValueContainer(props) {
+  return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+}
+
+function MultiValue(props) {
   return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
-      {props.children}
-    </Typography>
+    <Chip
+      tabIndex={-1}
+      label={props.children}
+      className={classNames(props.selectProps.classes.chip, {
+        [props.selectProps.classes.chipFocused]: props.isFocused,
+      })}
+      onDelete={props.removeProps.onClick}
+      deleteIcon={<CancelIcon {...props.removeProps} />}
+    />
   );
 }
 
@@ -111,13 +139,14 @@ function Menu(props) {
 const components = {
   Control,
   Menu,
+  MultiValue,
   NoOptionsMessage,
   Option,
   Placeholder,
-  SingleValue
+  ValueContainer
 };
 
-class DropdownTextField extends Component {
+class MultiDropdownTextField extends Component {
   render() {
     const { classes, theme } = this.props;
 
@@ -132,24 +161,27 @@ class DropdownTextField extends Component {
     };
 
     return (
-      <Select
-        controlShouldRenderValue={false}
-        classes={classes}
-        styles={selectStyles}
-        options={this.props.options}
-        components={components}
-        onChange={(selectedOption) => this.props.onChange(selectedOption)}
-        placeholder={this.props.placeholder}
-        textFieldProps={{
-          label: this.props.label,
-          required: this.props.required,
-          InputLabelProps: {
-            shrink: true,
-          },
-        }}
-        />
+      <div>
+        <NoSsr>
+          <Select
+            classes={classes}
+            styles={selectStyles}
+            textFieldProps={{
+              label: this.props.label,
+              InputLabelProps: {
+                shrink: true,
+              },
+            }}
+            options={this.props.options}
+            value={this.props.value}
+            components={components}
+            onChange={(selectedOption) => this.props.onChange(selectedOption)}
+            isMulti
+          />
+        </NoSsr>
+      </div>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(DropdownTextField);
+export default withStyles(styles, { withTheme: true })(MultiDropdownTextField);

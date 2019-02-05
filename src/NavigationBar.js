@@ -15,7 +15,8 @@ const headerStyle = {
   color: 'black',
   textDecoration: 'none',
   display: 'inline-block',
-  paddingRight: '300px'
+  marginRight: '25%',
+  marginLeft: '10px'
 }
 
 class NavigationBar extends Component {
@@ -25,7 +26,7 @@ class NavigationBar extends Component {
     const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center', whiteSpace: 'nowrap'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <p style={{display: 'inline'}}> Already studied abroad? </p>
@@ -40,7 +41,7 @@ class NavigationBar extends Component {
       );
     } else {
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center', whiteSpace: 'nowrap'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           {!isAdmin ? <p style={{display: 'inline'}}> Already studied abroad? </p> : null}

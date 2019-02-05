@@ -1,0 +1,53 @@
+.list {
+  float: left;
+  width: 50%;
+  padding-left: 1%;
+  padding-top: 20px;
+}
+
+.map {
+  float: right;
+  text-align: justify;
+  padding-right: 1%;
+  padding-top: 20px;
+}
+.searchBar {
+  width: 45%;
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+@media screen and (max-width: 1080px) {
+  .list {
+    text-align: center;
+    width: 98%;
+    padding-top: 20px;
+  }
+  .map {
+    text-align: justify;
+    padding-right: 25%;
+    padding-bottom: 10px;
+    padding-top: 20px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .list {
+    text-align: center;
+    width: 98%;
+    padding-top: 20px;
+  }
+  .map {
+    text-align: justify;
+    padding-right: 1%;
+    padding-bottom: 10px;
+    padding-top: 20px;
+  }
+  .searchBar {
+    width: 80%;
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+}

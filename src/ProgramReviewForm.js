@@ -226,7 +226,13 @@ class ProgramReviewForm extends Component {
                           <input {...getInputProps()} />
                           {
                             isDragActive ?
-                              <p>Drop files here...</p> :
+                            <div style={{width: 500, display: 'inline-block'}}>
+                            <DropzoneArea
+                              acceptedFiles={["image/jpeg", "image/png"]}
+                              filesLimit={10}
+                              onChange={(accepted) => {this.setState({accepted})}}/>
+                              </div>
+                              :
                               <div style={{width: 500, display: 'inline-block'}}>
                               <DropzoneArea
                                 acceptedFiles={["image/jpeg", "image/png"]}

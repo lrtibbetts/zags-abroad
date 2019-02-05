@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Chip from '@material-ui/core/Chip';
-import CancelIcon from '@material-ui/icons/Cancel';
-import DropdownTextField from './DropdownTextField.js';
+import MultiDropdownTextField from './MultiDropdownTextField.js';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -33,8 +31,7 @@ class ProgramDetailView extends Component {
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
-      subjectFilters : [], // Filters applied by the user
-      coreFilters: [],
+      filters: [],
       courseList : [], // Courses matching a user's search
       searchBy: 'department',
       loading: true,
@@ -61,7 +58,7 @@ class ProgramDetailView extends Component {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         let coreName = res.data[i].core_name.trim(); // Remove any white space
-        let coreObj = {value: 'core', label: coreName};
+        let coreObj = {value: "CORE: " + coreName, label: coreName};
         coreToAdd.push(coreObj);
       }
       this.setState({core: coreToAdd}, () => {
@@ -70,66 +67,6 @@ class ProgramDetailView extends Component {
         this.getAllPhotos();
       });
     });
-  }
-
-  // Remove filter from list of filters and add back to subjects dropdown
-  handleDeleteFilter = filter => () => {
-    if(filter.value === 'core') {
-      var filters = this.state.coreFilters;
-      for(var i = 0; i < filters.length; i++) {
-        if (filter.label === filters[i].label) { // Compare unique core label, not value
-          filters.splice(i, 1);
-          this.setState({coreFilters: filters});
-        }
-      }
-      (filters.length + this.state.subjectFilters.length) > 0 ? this.getCourses() : this.getAllCourses();
-      for(var j = 0; j < this.state.core.length; j++) {
-        var core = this.state.core;
-        if(filter.label < core[j].label) {
-          core.splice(j, 0, filter); // Insert at j, remove 0 items
-          this.setState({core: core});
-          return;
-        }
-      }
-    } else {
-      filters = this.state.subjectFilters;
-      for(var k = 0; k < filters.length; k++) {
-        if (filter.value === filters[k].value) {
-          filters.splice(k, 1);
-          this.setState({subjectFilters: filters});
-        }
-      }
-      (filters.length + this.state.coreFilters.length) > 0 ? this.getCourses() : this.getAllCourses();
-      for(var m = 0; m < this.state.subjects.length; m++) {
-        var subjects = this.state.subjects;
-        if(filter.label < subjects[m].label) {
-          subjects.splice(m, 0, filter); // Insert at j, remove 0 items
-          this.setState({subjects: subjects});
-          return;
-        }
-      }
-    }
-  }
-
-  // Remove item from dropdown menu after it is selected
-  handleDeleteMenuItem(item) {
-    if(item.value === 'core') {
-      for (var i = 0; i < this.state.core.length; i++) {
-        if (item.label === this.state.core[i].label) { // Compare unique core label, not value
-          let newCore = this.state.core;
-          newCore.splice(i, 1);
-          this.setState({core: newCore});
-        }
-      }
-    } else {
-      for (var j = 0; j < this.state.subjects.length; j++) {
-        if (item.value === this.state.subjects[j].value) {
-          let newSubjects = this.state.subjects;
-          newSubjects.splice(j, 1);
-          this.setState({subjects: newSubjects});
-        }
-      }
-    }
   }
 
   // Populate table with relevant courses in list
@@ -169,8 +106,8 @@ class ProgramDetailView extends Component {
     this.setState({courseList: [], loading: true})
     let params = {
       "program": this.props.name,
-      "subjects": this.state.subjectFilters.map((filter) => filter.value),
-      "core": this.state.coreFilters.map((filter) => filter.label)
+      "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
+      "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/detailsearch", params).then((res) => {
       this.formatCourses(res.data);
@@ -204,6 +141,14 @@ class ProgramDetailView extends Component {
     console.log(image.offsetWidth, image.offsetHeight)
   }
 
+  handleChange = name => value => {
+    this.setState({
+      [name]: value,
+    }, () => {
+      (this.state.filters.length > 0) ? this.getCourses() : this.getAllCourses();
+    });
+  };
+
   render() {
     const {photos} = this.state;
     return (
@@ -231,47 +176,11 @@ class ProgramDetailView extends Component {
           </Select>
         </div>
         <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
-          <DropdownTextField
-            placeholder = {this.state.searchBy === 'department' ? "Enter a department" : "Enter a core designation"}
-            id = "departments"
-            onChange = { (selectedOption) => {
-              let newFilter = {value: selectedOption.value, label: selectedOption.label};
-              if(this.state.searchBy === 'department') {
-                let subjFilters = this.state.subjectFilters;
-                subjFilters.push(newFilter);
-                this.setState({subjectFilters: subjFilters})
-              } else {
-                let coreFilters = this.state.coreFilters;
-                coreFilters.push(newFilter);
-                this.setState({coreFilters: coreFilters})
-              }
-              this.handleDeleteMenuItem(newFilter);
-              this.getCourses();
-            }}
+          <MultiDropdownTextField
+            value = { this.state.filters }
+            onChange = { this.handleChange("filters")}
             options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
-        </div>
-        <div>
-          {this.state.subjectFilters.map(filter => {
-            return (
-              <Chip style={{marginRight: '10px', marginTop: '10px'}}
-                key={filter.value}
-                onDelete={this.handleDeleteFilter(filter)}
-                deleteIcon={<CancelIcon/>}
-                label={filter.label}
-              />
-            );
-          })}
-          {this.state.coreFilters.map(filter => {
-            return (
-              <Chip style={{marginRight: '10px', marginTop: '10px'}}
-                key={filter.label}
-                onDelete={this.handleDeleteFilter(filter)}
-                deleteIcon={<CancelIcon/>}
-                label={filter.label}
-              />
-            );
-          })}
         </div>
         <div style={{marginLeft: '100px', marginRight: '100px', marginTop: '20px'}}>
         {this.state.loading ? <div id="loading">

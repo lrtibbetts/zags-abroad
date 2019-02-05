@@ -136,6 +136,7 @@ render() {
         </div>
         <div className="searchBar">
           <MultiDropdownTextField
+            id = "search"
             value = { this.state.filters }
             onChange = { this.handleChange("filters")}
             options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>

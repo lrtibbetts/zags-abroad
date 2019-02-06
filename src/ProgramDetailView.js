@@ -216,16 +216,16 @@ class ProgramDetailView extends Component {
           </Select>
         </div>
         <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom',
-          zIndex: 1}}>
+          zIndex: 1, position: 'relative'}}>
           <MultiDropdownTextField
             value = { this.state.filters }
             onChange = { this.handleChange("filters")}
             options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
-        <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0}}>
+        <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
-          <MUIDataTable style={{zIndex: 0}}
+          <MUIDataTable
             columns = {this.state.columns}
             data = {this.state.courseList}
             options = {options}/>}

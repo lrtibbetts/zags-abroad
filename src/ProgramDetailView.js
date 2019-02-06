@@ -43,15 +43,6 @@ class ProgramDetailView extends Component {
       translateValue: 0
     }
 
-<<<<<<< HEAD
-    this.getAllCourses();
-
-    axios.get("https://zagsabroad-backend.herokuapp.com/coreSubjects", {"program": this.props.name}).then((res) => {
-      console.log("HIT CORE SUBJECTS");
-    })
-
-=======
->>>>>>> b00308332249ca4b6d93becdc31d9306cbd44af4
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -239,7 +230,8 @@ class ProgramDetailView extends Component {
               this.setState({showMessage: false})}>
           <CloseIcon/> </IconButton>}/>
           <Dialog id="dialog" open={this.state.showLogInPrompt}>
-            <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>
+            <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>lo['m
+            ;>Z']
             <div>
               <Button style={buttonStyle} variant="contained" component={Link} to="/login">
                 Log in

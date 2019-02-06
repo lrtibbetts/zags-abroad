@@ -53,7 +53,7 @@ class CourseDetailsForm extends Component {
       host_course_name: this.props.course[2],
       gu_course_number: this.props.course[3],
       gu_course_name: this.props.course[4],
-      core: this.formatCore(this.props.course[5]),
+      core: this.props.course[5] ? this.formatCore(this.props.course[5]) : [],
       comments: this.props.course[6],
       signature_needed: this.props.course[7],
       approved_by: this.props.course[8],

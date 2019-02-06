@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -19,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from "react-router-dom";
 import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
+import MUIDataTable from "mui-datatables";
 
 const buttonStyle = {
   margin: '5px'
@@ -40,9 +36,41 @@ class ProgramDetailView extends Component {
       showLogInPrompt: false,
       photos: [],
       currentIndex: 0,
-      translateValue: 0
+      translateValue: 0,
+      columns: [
+        {
+          name: "ID",
+          options: {
+            display: false
+          }
+        },
+        {
+          name: "Gonzaga Course"
+        },
+        {
+          name: "Host Course"
+        },
+        {
+          name: "Signature needed"
+        },
+        {
+          name: "Core Designation"
+        },
+        {
+          name: "",
+          options: {
+            customBodyRender: (value, tableMeta, updateValue) => {
+              return (
+                <IconButton onClick={(event) => this.saveCourse(value)}
+                  color="primary"><AddIcon/></IconButton>
+              );
+            },
+          }
+        }
+      ]
     }
 
+    //getting all of the programs for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -54,6 +82,7 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
+    //getting all of the core for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programcore", {"program": this.props.name}).then((res) => {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -73,9 +102,14 @@ class ProgramDetailView extends Component {
   formatCourses(data) {
     let courses = [];
     for(var i = 0; i < data.length; i++) {
-      let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
-        hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
-        : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id, core: data[i].core};
+      let newCourse = [];
+      newCourse.push(data[i].id);
+      newCourse.push(data[i].gu_course_number + (data[i].gu_course_name ? ": " + data[i].gu_course_name : ""));
+      newCourse.push(data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name :
+      data[i].host_course_name);
+      newCourse.push(data[i].signature_needed);
+      newCourse.push(data[i].core);
+      newCourse.push(data[i].id);
       courses.push(newCourse);
     }
     this.setState({courseList: courses, loading: false});
@@ -91,13 +125,20 @@ class ProgramDetailView extends Component {
 
   // Get all of the photos from a specific program
   getAllPhotos() {
+    this.setState({photos: [], loading: true})
     let program = {
       "program": this.props.name
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
-      console.log(this.props.name);
       console.log(res.data)
-      console.log(program)
+      let photoList = [];
+      for(var i = 0; i < res.data.length; i++) {
+        photoList.push(res.data[i])
+
+      }
+      this.setState({photos: photoList, loading: false})
+      console.log("Here are the photos")
+      console.log(this.state.photos)
     })
   }
 
@@ -150,22 +191,21 @@ class ProgramDetailView extends Component {
   };
 
   render() {
+    const options = {
+      print: false, // Remove print icon
+      filter: false,
+      search: false,
+      download: false,
+      viewColumns: false,
+      selectableRows: false,
+      rowsPerPage: 10, // Default to 10 rows per page
+      rowsPerPageOptions: [10, 20, 30],
+      responsive: "scroll"
+    };
     const {photos} = this.state;
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
-        {/*<Gallery photos={
-          [
-            {
-              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg',
-              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548782294/pymfdeenpur9vjyqfewc.jpg'),
-            },
-            {
-              src: 'https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg',
-              ref: this.handleSize('https://res.cloudinary.com/zagsabroad/image/upload/v1548372970/zlqliqgffizjnfqpaaqy.jpg')
-            }
-          ]
-        } />;*/}
         <p style={{display: 'inline'}}> Search by: </p>
         <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
           <Select autoWidth={true} value={this.state.searchBy}
@@ -175,41 +215,20 @@ class ProgramDetailView extends Component {
             <MenuItem value='core'> Core designation </MenuItem>
           </Select>
         </div>
-        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom'}}>
+        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom',
+          zIndex: 1, position: 'relative'}}>
           <MultiDropdownTextField
             value = { this.state.filters }
             onChange = { this.handleChange("filters")}
             options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
-        <div style={{marginLeft: '100px', marginRight: '100px', marginTop: '20px'}}>
-        {this.state.loading ? <div id="loading">
-          <CircularProgress variant="indeterminate"/> </div>: null}
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>GU Course</TableCell>
-                <TableCell>Host Course</TableCell>
-                <TableCell>Requires Signature</TableCell>
-                <TableCell>Core Designation</TableCell>
-                <TableCell> </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.courseList.map((course, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{course.guCourse}</TableCell>
-                    <TableCell>{course.hostCourse}</TableCell>
-                    <TableCell>{course.requiresSignature}</TableCell>
-                    <TableCell>{course.core}</TableCell>
-                    <TableCell>{<IconButton onClick={(event) => this.saveCourse(course.id)}
-                      color="primary"><AddIcon/></IconButton>}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+        <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
+          {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+          <MUIDataTable
+            columns = {this.state.columns}
+            data = {this.state.courseList}
+            options = {options}/>}
         </div><br/>
         {this.state.courseList.length > 0 ?
         <p style={{fontSize: '13px'}}>

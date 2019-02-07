@@ -90,7 +90,7 @@ class ProgramDetailView extends Component {
       });
     });
 
-    axios.post("http://localhost:3001/programsurveys", {"program": this.props.name}).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
       let surveysToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
         // let subjectName = res.data[i].subject_name.trim(); // Remove any white space

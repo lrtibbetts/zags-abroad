@@ -15,6 +15,10 @@ import { Link } from "react-router-dom";
 import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
 import MUIDataTable from "mui-datatables";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 
 const buttonStyle = {
   margin: '5px'
@@ -38,36 +42,25 @@ class ProgramDetailView extends Component {
       currentIndex: 0,
       translateValue: 0,
       columns: [
-        {
-          name: "ID",
-          options: {
-            display: false
-          }
-        },
-        {
-          name: "Gonzaga Course"
-        },
-        {
-          name: "Host Course"
-        },
-        {
-          name: "Signature needed"
-        },
-        {
-          name: "Core Designation"
-        },
-        {
-          name: "",
+        { name: "ID",
+          options: { display: false } },
+        { name: "Gonzaga Course" },
+        { name: "Host Course" },
+        { name: "Signature needed" },
+        { name: "Core Designation" },
+        { name: "",
           options: {
             customBodyRender: (value, tableMeta, updateValue) => {
               return (
                 <IconButton onClick={(event) => this.saveCourse(value)}
-                  color="primary"><AddIcon/></IconButton>
+                  color="primary"><AddIcon/>
+                </IconButton>
               );
             },
           }
         }
-      ]
+      ],
+      surveys: []
     }
 
     //getting all of the programs for the dropdown
@@ -95,6 +88,19 @@ class ProgramDetailView extends Component {
         this.getAllCourses();
         this.getAllPhotos();
       });
+    });
+
+    axios.post("http://localhost:3001/programsurveys", {"program": this.props.name}).then((res) => {
+      let surveysToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        // let subjectName = res.data[i].subject_name.trim(); // Remove any white space
+        // let subjectCode = res.data[i].subject_code.trim();
+        // let subjectObj = {value: subjectCode, label: subjectName};
+        // subjectsToAdd.push(subjectObj);
+        surveysToAdd.push(res.data[i]);
+      }
+      this.setState({surveys: surveysToAdd});
+      console.log(this.state.surveys);
     });
   }
 
@@ -265,6 +271,11 @@ class ProgramDetailView extends Component {
               </Button>
             </div>
           </Dialog>
+          <List>
+            <ListItem>
+              <ListItemText primary="Your mom" secondary="Kanye 2020" />
+            </ListItem>
+          </List>
       </div>
     );
   }

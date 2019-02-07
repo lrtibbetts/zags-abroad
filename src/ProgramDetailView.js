@@ -15,9 +15,7 @@ import { Link } from "react-router-dom";
 import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
 import MUIDataTable from "mui-datatables";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
 
 
 const buttonStyle = {
@@ -60,6 +58,13 @@ class ProgramDetailView extends Component {
           }
         }
       ],
+      surveyColumns: [
+        { name: "Name",
+          options: { display: false } },
+        { name: "Major" },
+        { name: "Year" },
+        { name: "Classes" },
+      ],
       surveys: []
     }
 
@@ -93,10 +98,18 @@ class ProgramDetailView extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
       let surveysToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
-        // let subjectName = res.data[i].subject_name.trim(); // Remove any white space
-        // let subjectCode = res.data[i].subject_code.trim();
-        // let subjectObj = {value: subjectCode, label: subjectName};
-        // subjectsToAdd.push(subjectObj);
+         let major = res.data[i].major.trim(); // Remove any white space
+         let email = ((res.data[i].email) ? res.data[i].email.trim() : ""); //
+         let name = ((res.data[i].name) ? res.data[i].name.trim() : ""); //
+         let program = res.data[i].program.trim();
+         let term = res.data[i].term.trim();
+         let year = res.data[i].year.trim();
+         let residence = ((res.data[i].residence) ? res.data[i].residence.trim() : ""); //
+         let trips = ((res.data[i].trips) ? res.data[i].trips.trim() : ""); //
+         let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : ""); //
+         let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : ""); //
+         let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : ""); //
+         let other = ((res.data[i].other) ? res.data[i].other.trim() : ""); //
         surveysToAdd.push(res.data[i]);
       }
       this.setState({surveys: surveysToAdd});
@@ -271,11 +284,6 @@ class ProgramDetailView extends Component {
               </Button>
             </div>
           </Dialog>
-          <List>
-            <ListItem>
-              <ListItemText primary="Your mom" secondary="Kanye 2020" />
-            </ListItem>
-          </List>
       </div>
     );
   }

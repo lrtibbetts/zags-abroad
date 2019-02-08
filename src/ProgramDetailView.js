@@ -16,11 +16,37 @@ import Gallery from 'react-photo-gallery';
 import Dimensions from 'react-dimensions';
 import MUIDataTable from "mui-datatables";
 
-
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 
 const buttonStyle = {
   margin: '5px'
 };
+
+function TabContainer({ children, dir }) {
+  return (
+    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
+      {children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+  dir: PropTypes.string.isRequired,
+};
+
+const styles = theme => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    width: 500,
+  }
+});
 
 class ProgramDetailView extends Component {
   constructor(props) {
@@ -65,7 +91,8 @@ class ProgramDetailView extends Component {
         { name: "Year" },
         { name: "Classes" },
       ],
-      surveys: []
+      surveys: [],
+      tabValue: 0
     }
 
     //getting all of the programs for the dropdown
@@ -209,6 +236,14 @@ class ProgramDetailView extends Component {
     });
   };
 
+  handleTabChange = (event, value) => {
+    this.setState({ value });
+  };
+
+  handleTabChangeIndex = index => {
+    this.setState({ value: index });
+  };
+
   render() {
     const options = {
       print: false, // Remove print icon
@@ -222,6 +257,8 @@ class ProgramDetailView extends Component {
       responsive: "scroll"
     };
     const {photos} = this.state;
+    const {classes, theme} = this.props;
+
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
@@ -284,9 +321,39 @@ class ProgramDetailView extends Component {
               </Button>
             </div>
           </Dialog>
+          <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
+            <AppBar position ="static" color="default">
+              <Tabs
+                value={this.state.value}
+                onChange={this.handleTabChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+              >
+                <Tab label="Residence"/>
+                <Tab label="Trips"/>
+                <Tab label="Classes"/>
+                <Tab label="Activities"/>
+                <Tab label="Staff"/>
+                <Tab label="Other"/>
+              </Tabs>
+            </AppBar>
+            <SwipeableViews
+              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+              index={this.state.value}
+              onChangeIndex={this.handleTabChangeIndex}
+            >
+              <TabContainer dir={theme.direction}>Residence</TabContainer>
+              <TabContainer dir={theme.direction}>Trips</TabContainer>
+              <TabContainer dir={theme.direction}>Classes</TabContainer>
+              <TabContainer dir={theme.direction}>Activiities</TabContainer>
+              <TabContainer dir={theme.direction}>Staff</TabContainer>
+              <TabContainer dir={theme.direction}>Other</TabContainer>
+            </SwipeableViews>
+          </div>
       </div>
     );
   }
 }
 
-export default ProgramDetailView;
+export default withStyles(styles, { withTheme: true })(ProgramDetailView);

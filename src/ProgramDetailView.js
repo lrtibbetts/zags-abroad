@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,10 +12,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Link } from "react-router-dom";
-import Gallery from 'react-photo-gallery';
-import Dimensions from 'react-dimensions';
 import MUIDataTable from "mui-datatables";
+import "./ProgramDetailView.css";
 
 const buttonStyle = {
   margin: '5px'
@@ -35,8 +34,6 @@ class ProgramDetailView extends Component {
       message: '',
       showLogInPrompt: false,
       photos: [],
-      currentIndex: 0,
-      translateValue: 0,
       columns: [
         {
           name: "ID",
@@ -125,20 +122,16 @@ class ProgramDetailView extends Component {
 
   // Get all of the photos from a specific program
   getAllPhotos() {
-    this.setState({photos: [], loading: true})
+    this.setState({photos: [], loading: true});
     let program = {
       "program": this.props.name
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
-      console.log(res.data)
       let photoList = [];
       for(var i = 0; i < res.data.length; i++) {
-        photoList.push(res.data[i])
-
+        photoList.push(res.data[i]);
       }
-      this.setState({photos: photoList, loading: false})
-      console.log("Here are the photos")
-      console.log(this.state.photos)
+      this.setState({photos: photoList, loading: false});
     })
   }
 
@@ -178,10 +171,6 @@ class ProgramDetailView extends Component {
     }
   }
 
-  handleSize(image) {
-    console.log(image.offsetWidth, image.offsetHeight)
-  }
-
   handleChange = name => value => {
     this.setState({
       [name]: value,
@@ -202,7 +191,6 @@ class ProgramDetailView extends Component {
       rowsPerPageOptions: [10, 20, 30],
       responsive: "scroll"
     };
-    const {photos} = this.state;
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
@@ -215,8 +203,7 @@ class ProgramDetailView extends Component {
             <MenuItem value='core'> Core designation </MenuItem>
           </Select>
         </div>
-        <div style={{marginLeft: '10px', width: '575px', display: 'inline-block', verticalAlign: 'bottom',
-          zIndex: 1, position: 'relative'}}>
+        <div className="search">
           <MultiDropdownTextField
             value = { this.state.filters }
             onChange = { this.handleChange("filters")}

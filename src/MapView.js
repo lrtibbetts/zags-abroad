@@ -60,7 +60,7 @@ class MapView extends Component {
   }
 
   renderMarker = (program) => {
-    if(this.state.programs.find((otherProgram) => otherProgram != program &&
+    if(this.state.programs.find((otherProgram) => otherProgram !== program &&
     otherProgram.lng === program.lng && otherProgram.lat === program.lat)) {
       // Multiple programs in same place. Offset current program slightly
       program.lng += 0.001;

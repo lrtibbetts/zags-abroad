@@ -6,8 +6,6 @@ import DropdownTextField from './DropdownTextField.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
-import Dropzone from 'react-dropzone';
-import classNames from 'classnames';
 import {DropzoneArea} from 'material-ui-dropzone';
 
 const textFieldStyle = {
@@ -36,7 +34,6 @@ class ProgramReviewForm extends Component {
       staff: '',
       other: '',
       formSubmitted: '',
-      accepted: [],
       photos: []
     }
 
@@ -53,8 +50,8 @@ class ProgramReviewForm extends Component {
 
   }
 
-//call on the survey table
-  submit(event) {
+  // Send survey to database
+  submitReview() {
     var accountInfo = {
       "major" : this.state.major,
       "program" : this.state.program,
@@ -70,49 +67,43 @@ class ProgramReviewForm extends Component {
       "staff" : this.state.staff,
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/submitsurvey", accountInfo).then((res) => {
-        console.log(res.data);
-        this.setState({formSubmitted: true});
+      this.setState({formSubmitted: true});
     });
   }
 
-//this is called in the onclick for the submit button
+  // Called in the onclick for the submit button
   handleUploadImages = images => {
-
-    // uploads is an array that would hold all the post methods for each image to be uploaded, then we'd use axios.all()
+    // uploads is an array that holds all the post methods for each image
     const uploads = images.map(image => {
-      // our formdata
       const formData = new FormData();
       formData.append("file", image);
-      formData.append("tags", this.state.program); // image tags - {Array} OPTIONAL
-      formData.append("upload_preset", "bdbcyhiw"); // preset name
+      formData.append("tags", this.state.program); // Image tags: Array, optional
+      formData.append("upload_preset", "bdbcyhiw"); // Preset name
       formData.append("api_key", "{447116233167845}"); // Cloudinary API key
 
-      // cloudinary upload URL
+      // Cloudinary upload URL
       return axios.post(
-        "https://api.cloudinary.com/v1_1/zagsabroad/image/upload",
-        formData,
-        { headers: { "X-Requested-With": "XMLHttpRequest" }})
-        .then(response => {
+        "https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData,
+        { headers: { "X-Requested-With": "XMLHttpRequest" }}).then(response => {
           var upload = {
             "program" : this.state.program,
-            "photos" : response.data.secure_url
+            "url" : response.data.secure_url,
+            "height" : response.data.height,
+            "width": response.data.width
           }
-          console.log("UPLOAD: " + upload)
+          console.log(response);
           axios.post("https://zagsabroad-backend.herokuapp.com/photos", upload).then((res) => {
-            console.log("SUCCESS")
-            console.log(res)
-          }
-          )
-        })
+            console.log(res.data);
+          });
+        });
     });
 
-    // perform concurrent image upload to cloudinary
+    // Perform concurrent image upload to cloudinary
     axios.all(uploads).then(() => {
       // ... after successful upload
       console.log('Images have all being uploaded')
     });
   }
-
 
   render() {
     return(
@@ -214,53 +205,18 @@ class ProgramReviewForm extends Component {
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
         <p>Please share some photos of your travels by clicking the button below! <br/> (Only PNG and JPEG files allowed)</p>
-        <Dropzone
-          accept = "image/png, image/jpeg"
-          onDrop={(accepted) => {this.setState({accepted})}}>
-                    {({getRootProps, getInputProps, isDragActive}) => {
-                      return (
-                        <div
-                          {...getRootProps()}
-                          className={classNames('dropzone', {'dropzone--isActive': isDragActive})}
-                        >
-                          <input {...getInputProps()} />
-                          {
-                            isDragActive ?
-                            <div style={{width: 500, display: 'inline-block'}}>
-                            <DropzoneArea
-                              acceptedFiles={["image/jpeg", "image/png"]}
-                              filesLimit={10}
-                              onChange={(accepted) => {this.setState({accepted})}}/>
-                              </div>
-                              :
-                              <div style={{width: 500, display: 'inline-block'}}>
-                              <DropzoneArea
-                                acceptedFiles={["image/jpeg", "image/png"]}
-                                filesLimit={10}
-                                onChange={(accepted) => {this.setState({accepted})}}/>
-                                </div>
-                          }
-                        </div>
-                      )
-                    }}
-        </Dropzone>
-        <aside>
-          <h4>Selected Files:</h4>
-          <ul style={{listStyleType: 'none'}}>
-            {
-              this.state.accepted.map(photo => <li key={photo.name}>{photo.name}</li>)
-            }
-          </ul>
-        </aside>
+        <div style={{width: '50%', display: 'inline-block'}}>
+          <DropzoneArea
+            acceptedFiles={["image/jpeg", "image/png"]}
+            filesLimit={10}
+            onChange={(photos) => {this.setState({photos: photos})}}/>
+        </div>
         <br/>
         <Button label="submit" variant="contained" style={{margin: '10px'}}
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.year)}
-          onClick = {(event) => {
-            this.submit(event);
-            let pics = this.state.accepted;
-            console.log("HI" + pics);
-
-            this.handleUploadImages(pics);
+          onClick = {() => {
+            this.submitReview();
+            this.handleUploadImages(this.state.photos);
           }}> Submit </Button>
         {this.state.formSubmitted ?
           <Dialog id="dialog" open={true}>

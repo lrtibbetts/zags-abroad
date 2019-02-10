@@ -17,15 +17,24 @@ const textFieldStyle = {
 class ProgramReviewForm extends Component {
   constructor(props) {
     super(props);
+    let thisYear = (new Date()).getFullYear();
+    let calendarYears = []
+    for(let year = 2000; year <= thisYear; year++) {
+      calendarYears.push({value: year, label: year});
+    }
     this.state = {
       programs: [],
       years: [{value:'Freshman', label:'Freshman'}, {value:'Sophomore', label:'Sophomore'},
        {value:'Junior', label:'Junior'}, {value:'Senior', label:'Senior'}],
+      calendarYears: calendarYears,
+      terms: [{value: 'Fall', label: 'Fall'}, {value: 'Spring', label: 'Spring'},
+      {value: 'Summer', label: 'Summer'}, {value: 'Full year', label: 'Full year'}],
       name: '',
       email: '',
       major: '',
       program: '',
       term: '',
+      calendarYear: '',
       year: '',
       residence: '',
       trips: '',
@@ -36,7 +45,6 @@ class ProgramReviewForm extends Component {
       formSubmitted: '',
       photos: []
     }
-
     // Get list of programs for dropdown menu
     axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
       let programsToAdd = [];
@@ -56,6 +64,7 @@ class ProgramReviewForm extends Component {
       "major" : this.state.major,
       "program" : this.state.program,
       "term" : this.state.term,
+      "calendar_year": this.state.calendarYear,
       "year" : this.state.year,
       "residence" : this.state.residence,
       "trips" : this.state.trips,
@@ -71,7 +80,7 @@ class ProgramReviewForm extends Component {
     });
   }
 
-  // Called in the onclick for the submit button
+  // Called in the onClick for the submit button
   handleUploadImages = images => {
     // uploads is an array that holds all the post methods for each image
     const uploads = images.map(image => {
@@ -131,26 +140,33 @@ class ProgramReviewForm extends Component {
               this.setState({program : selectedOption.value})}/>
         </div>
         <br/>
-        <div >
-          <TextField id = "term"
+        <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1}}>
+          <DropdownTextField
             required={true}
-            label="What term did you go abroad?"
-            placeholder="E.g. Fall 2017"
-            style ={textFieldStyle}
-            onChange={(event) =>
-              this.setState({term : event.target.value})}/>
+            label="When did you study abroad?"
+            placeholder={this.state.term ? this.state.term : ""}
+            options={this.state.terms}
+            onChange={(selectedOption) =>
+              this.setState({term : selectedOption.value})}/>
         </div>
-        <br/>
+        <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1,
+        verticalAlign: 'bottom'}}>
+          <DropdownTextField
+          required={true}
+          placeholder={this.state.calendarYear ? this.state.calendarYear : ""}
+          options={this.state.calendarYears}
+          onChange={(selectedOption) =>
+          this.setState({calendarYear : selectedOption.value})}/>
+        </div><br/>
         <div style={{width: 500, margin: '10px', display: 'inline-block', zIndex: 1}}>
           <DropdownTextField
             required={true}
-            label="What year did you study abroad?"
+            label="What year at Gonzaga did you study abroad?"
             placeholder={this.state.year ? this.state.year : ""}
             options={this.state.years}
             onChange={(selectedOption) =>
               this.setState({year : selectedOption.value})}/>
-        </div>
-        <br/>
+        </div><br/>
         <TextField id="residence" multiline={true} rows={10} style={textFieldStyle}
           label="Where did you stay while abroad? What was it like?"
           placeholder = "E.g. homestay, dormitory, etc."
@@ -204,16 +220,18 @@ class ProgramReviewForm extends Component {
             this.setState({other : event.target.value})}
           helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
         <br/>
-        <p>Please share some photos of your travels by clicking the button below! <br/> (Only PNG and JPEG files allowed)</p>
+        <p>Please share some photos from your time abroad! <br/> (Only PNG and JPEG files allowed)</p>
         <div style={{width: '50%', display: 'inline-block'}}>
           <DropzoneArea
             acceptedFiles={["image/jpeg", "image/png"]}
             filesLimit={10}
-            onChange={(photos) => {this.setState({photos: photos})}}/>
+            onChange={(photos) => {this.setState({photos: photos})}}
+            dropzoneText="Drag and drop an image or click here"/>
         </div>
         <br/>
         <Button label="submit" variant="contained" style={{margin: '10px'}}
-          disabled = {!(this.state.major && this.state.program && this.state.term && this.state.year)}
+          disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
+          && this.state.year)}
           onClick = {() => {
             this.submitReview();
             this.handleUploadImages(this.state.photos);

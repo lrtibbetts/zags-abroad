@@ -173,7 +173,7 @@ render() {
                             <TableRow key={index}>
                               <TableCell>{course.guCourse}</TableCell>
                               <TableCell>{course.hostCourse}</TableCell>
-                              <TableCell>{course.core}</TableCell>
+                              <TableCell>{course.core.substring(0, course.core.length - 1)}</TableCell>
                               <TableCell>{course.requiresSignature}</TableCell>
                             </TableRow>
                           );

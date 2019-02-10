@@ -11,7 +11,6 @@ class AdminPage extends Component {
     this.state = {
       value: 0
     }
-
   }
 
   handleChange = (event, value) => {

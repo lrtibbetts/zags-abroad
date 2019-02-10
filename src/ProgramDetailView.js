@@ -14,43 +14,15 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import MUIDataTable from "mui-datatables";
 import "./ProgramDetailView.css";
-
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import ReviewsDisplay from './ReviewsDisplay.js';
 
 const buttonStyle = {
   margin: '5px'
 };
 
-function TabContainer({ children, dir }) {
-  return (
-    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
-      {children}
-    </Typography>
-  );
-}
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired,
-};
-
-const styles = theme => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-  }
-});
-
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
@@ -77,19 +49,7 @@ class ProgramDetailView extends Component {
                   color="primary"><AddIcon/>
                 </IconButton>
               );
-            },
-          }
-        }
-      ],
-      surveyColumns: [
-        { name: "Name",
-          options: { display: false } },
-        { name: "Major" },
-        { name: "Year" },
-        { name: "Classes" },
-      ],
-      surveys: [],
-      tabValue: 0
+            }}}]
     }
 
     //getting all of the programs for the dropdown
@@ -117,27 +77,6 @@ class ProgramDetailView extends Component {
         this.getAllCourses();
         this.getAllPhotos();
       });
-    });
-
-    axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
-      let surveysToAdd = [];
-      for(let i = 0; i < res.data.length; i++) {
-         let major = res.data[i].major.trim(); // Remove any white space
-         let email = ((res.data[i].email) ? res.data[i].email.trim() : ""); //
-         let name = ((res.data[i].name) ? res.data[i].name.trim() : ""); //
-         let program = res.data[i].program.trim();
-         let term = res.data[i].term.trim();
-         let year = res.data[i].year.trim();
-         let residence = ((res.data[i].residence) ? res.data[i].residence.trim() : ""); //
-         let trips = ((res.data[i].trips) ? res.data[i].trips.trim() : ""); //
-         let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : ""); //
-         let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : ""); //
-         let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : ""); //
-         let other = ((res.data[i].other) ? res.data[i].other.trim() : ""); //
-        surveysToAdd.push(res.data[i]);
-      }
-      this.setState({surveys: surveysToAdd});
-      console.log(this.state.surveys);
     });
   }
 
@@ -225,14 +164,6 @@ class ProgramDetailView extends Component {
     });
   };
 
-  handleTabChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  handleTabChangeIndex = index => {
-    this.setState({ value: index });
-  };
-
   render() {
     const options = {
       print: false, // Remove print icon
@@ -245,12 +176,6 @@ class ProgramDetailView extends Component {
       rowsPerPageOptions: [10, 20, 30],
       responsive: "scroll"
     };
-<<<<<<< HEAD
-    const {photos} = this.state;
-    const {classes, theme} = this.props;
-
-=======
->>>>>>> 4357755ca4a7d9cf68826af3e6df41e75e97eb8a
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
@@ -296,8 +221,7 @@ class ProgramDetailView extends Component {
               this.setState({showMessage: false})}>
           <CloseIcon/> </IconButton>}/>
           <Dialog id="dialog" open={this.state.showLogInPrompt}>
-            <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>lo['m
-            ;>Z']
+            <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>
             <div>
               <Button style={buttonStyle} variant="contained" component={Link} to="/login">
                 Log in
@@ -312,39 +236,10 @@ class ProgramDetailView extends Component {
               </Button>
             </div>
           </Dialog>
-          <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
-            <AppBar position ="static" color="default">
-              <Tabs
-                value={this.state.value}
-                onChange={this.handleTabChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
-              >
-                <Tab label="Residence"/>
-                <Tab label="Trips"/>
-                <Tab label="Classes"/>
-                <Tab label="Activities"/>
-                <Tab label="Staff"/>
-                <Tab label="Other"/>
-              </Tabs>
-            </AppBar>
-            <SwipeableViews
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={this.state.value}
-              onChangeIndex={this.handleTabChangeIndex}
-            >
-              <TabContainer dir={theme.direction}>Residence</TabContainer>
-              <TabContainer dir={theme.direction}>Trips</TabContainer>
-              <TabContainer dir={theme.direction}>Classes</TabContainer>
-              <TabContainer dir={theme.direction}>Activiities</TabContainer>
-              <TabContainer dir={theme.direction}>Staff</TabContainer>
-              <TabContainer dir={theme.direction}>Other</TabContainer>
-            </SwipeableViews>
-          </div>
+          <ReviewsDisplay program={this.props.name}/><br/>
       </div>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(ProgramDetailView);
+export default ProgramDetailView;

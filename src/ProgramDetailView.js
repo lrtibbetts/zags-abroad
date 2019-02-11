@@ -197,6 +197,7 @@ class ProgramDetailView extends Component {
         <h1>{this.props.name}</h1>
         <div style={{textAlign: 'center', display: 'inline-block', paddingBottom: '20px'}}>
         {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+        (this.state.photos.length > 0 ?
           <Carousel
             showThumbs={false}
             dynamicHeight={true}
@@ -209,7 +210,7 @@ class ProgramDetailView extends Component {
                 </div>
               );
             })}
-          </Carousel>}
+          </Carousel> : null)}
         </div><br/>
         <p style={{display: 'inline'}}> Search by: </p>
         <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>

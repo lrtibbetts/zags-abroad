@@ -82,36 +82,25 @@ class ProgramReviewForm extends Component {
 
   // Called in the onClick for the submit button
   handleUploadImages = images => {
-    // uploads is an array that holds all the post methods for each image
-    const uploads = images.map(image => {
+    for(let i = 0; i < images.length; i++) {
       const formData = new FormData();
-      formData.append("file", image);
+      formData.append("file", images[i]);
       formData.append("tags", this.state.program); // Image tags: Array, optional
       formData.append("upload_preset", "bdbcyhiw"); // Preset name
       formData.append("api_key", "{447116233167845}"); // Cloudinary API key
 
-      // Cloudinary upload URL
-      return axios.post(
-        "https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData,
-        { headers: { "X-Requested-With": "XMLHttpRequest" }}).then(response => {
+      // Upload to Cloudinary, store info in database
+      axios.post("https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData).then(response => {
           var upload = {
-            "program" : this.state.program,
-            "url" : response.data.secure_url,
-            "height" : response.data.height,
-            "width": response.data.width
+            "program" : this.state.program, "url" : response.data.secure_url,
+            "height" : response.data.height, "width": response.data.width
           }
           console.log(response);
           axios.post("https://zagsabroad-backend.herokuapp.com/photos", upload).then((res) => {
             console.log(res.data);
           });
-        });
-    });
-
-    // Perform concurrent image upload to cloudinary
-    axios.all(uploads).then(() => {
-      // ... after successful upload
-      console.log('Images have all being uploaded')
-    });
+      });
+    }
   }
 
   render() {
@@ -224,9 +213,10 @@ class ProgramReviewForm extends Component {
         <div style={{width: '50%', display: 'inline-block'}}>
           <DropzoneArea
             acceptedFiles={["image/jpeg", "image/png"]}
-            filesLimit={10}
+            filesLimit={20}
             onChange={(photos) => {this.setState({photos: photos})}}
-            dropzoneText="Drag and drop an image or click here"/>
+            dropzoneText="Drag and drop an image or click here"
+            maxFileSize={5000000}/>
         </div>
         <br/>
         <Button label="submit" variant="contained" style={{margin: '10px'}}

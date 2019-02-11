@@ -22,7 +22,7 @@ class ReviewsDisplay extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
       let surveysToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
-         let major = res.data[i].major.trim();
+         /*let major = res.data[i].major.trim();
          let email = ((res.data[i].email) ? res.data[i].email.trim() : "");
          let name = ((res.data[i].name) ? res.data[i].name.trim() : "");
          let program = res.data[i].program.trim();
@@ -33,7 +33,7 @@ class ReviewsDisplay extends Component {
          let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : "");
          let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : "");
          let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : "");
-         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");
+         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");*/
         surveysToAdd.push(res.data[i]);
       }
       this.setState({surveys: surveysToAdd});

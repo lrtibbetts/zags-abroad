@@ -13,6 +13,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import MUIDataTable from "mui-datatables";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
 
@@ -52,7 +54,7 @@ class ProgramDetailView extends Component {
             }}}]
     }
 
-    //getting all of the programs for the dropdown
+    // Getting all of the programs for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
       let subjectsToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -64,7 +66,7 @@ class ProgramDetailView extends Component {
       this.setState({subjects: subjectsToAdd});
     });
 
-    //getting all of the core for the dropdown
+    // Getting all of the core designations for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programcore", {"program": this.props.name}).then((res) => {
       let coreToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
@@ -74,8 +76,8 @@ class ProgramDetailView extends Component {
       }
       this.setState({core: coreToAdd}, () => {
         // Fetch all courses and photos AFTER state has changed
-        this.getAllCourses();
         this.getAllPhotos();
+        this.getAllCourses();
       });
     });
   }
@@ -114,10 +116,22 @@ class ProgramDetailView extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/programphotos", program).then((res) => {
       let photoList = [];
       for(var i = 0; i < res.data.length; i++) {
-        photoList.push(res.data[i]);
+        let width = res.data[i].width;
+        let height = res.data[i].height;
+        if (width > height && width > 500) {
+          // Landscape image: calculate scaled width and height
+          let scaledHeight = (height / width) * 500;
+          photoList.push({url: res.data[i].url, height: scaledHeight, width: 500});
+        } else if (height > width && height > 400) {
+          // Portrait image: calculate scaled width and height
+          let scaledWidth = (width / height) * 400;
+          photoList.push({url: res.data[i].url, height: 400, width: scaledWidth});
+        } else {
+          photoList.push({url: res.data[i].url, height: res.data[i].height, width: res.data[i].width});
+        }
       }
       this.setState({photos: photoList, loading: false});
-    })
+    });
   }
 
   // Filters applied, pull matching courses in program
@@ -176,9 +190,27 @@ class ProgramDetailView extends Component {
       rowsPerPageOptions: [10, 20, 30],
       responsive: "scroll"
     };
+    const maxWidth = Math.max.apply(null, this.state.photos.map((photo) =>
+      parseInt(photo.width)));
     return (
       <div style={{textAlign: 'center'}}>
         <h1>{this.props.name}</h1>
+        <div style={{textAlign: 'center', display: 'inline-block', paddingBottom: '20px'}}>
+        {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+          <Carousel
+            showThumbs={false}
+            dynamicHeight={true}
+            width={maxWidth + 'px'}>
+            {this.state.photos.map((photo) => {
+              return(
+                <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                paddingRight: (maxWidth - photo.width) / 2}}>
+                  <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                </div>
+              );
+            })}
+          </Carousel>}
+        </div><br/>
         <p style={{display: 'inline'}}> Search by: </p>
         <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
           <Select autoWidth={true} value={this.state.searchBy}
@@ -196,7 +228,7 @@ class ProgramDetailView extends Component {
           />
         </div>
         <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
-          {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+          {this.state.loading ? null :
           <MUIDataTable
             columns = {this.state.columns}
             data = {this.state.courseList}

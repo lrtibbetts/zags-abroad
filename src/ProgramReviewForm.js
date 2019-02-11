@@ -223,6 +223,8 @@ class ProgramReviewForm extends Component {
         </div>
         <br/>
         <Button label="submit" variant="contained" style={{margin: '10px'}}
+          disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
+          && this.state.year)}
           onClick = {() => {
             this.submitReview();
           }}> Submit </Button>

@@ -92,10 +92,10 @@ class ProgramReviewForm extends Component {
       formData.append("api_key", "{447116233167845}"); // Cloudinary API key
       // Upload to Cloudinary, store info in database
       axios.post("https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData).then(response => {
+          let url = response.data.secure_url.replace('upload', 'upload/a_exif');
           var upload = {
-            "program" : this.state.program, "url" : response.data.secure_url,
-            "height" : response.data.height, "width": response.data.width,
-            "survey_id" : this.state.reviewId
+            "program" : this.state.program, "url" : url, "height" : response.data.height,
+            "width": response.data.width, "survey_id" : this.state.reviewId
           }
           console.log(response);
           axios.post("https://zagsabroad-backend.herokuapp.com/photos", upload).then((res) => {

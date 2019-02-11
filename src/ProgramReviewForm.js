@@ -42,6 +42,7 @@ class ProgramReviewForm extends Component {
       activities: '',
       staff: '',
       other: '',
+      reviewId: 0,
       formSubmitted: '',
       photos: []
     }
@@ -76,24 +77,25 @@ class ProgramReviewForm extends Component {
       "staff" : this.state.staff,
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/submitsurvey", accountInfo).then((res) => {
-      this.setState({formSubmitted: true});
+      this.setState({formSubmitted: true, reviewId: res.data.insertId}, () => {
+        this.handleUploadImages(this.state.photos);
+      });  // Upload images after review is submitted
     });
   }
 
-  // Called in the onClick for the submit button
+  // Called in submitReview() after review is submitted
   handleUploadImages = images => {
     for(let i = 0; i < images.length; i++) {
       const formData = new FormData();
       formData.append("file", images[i]);
-      formData.append("tags", this.state.program); // Image tags: Array, optional
       formData.append("upload_preset", "bdbcyhiw"); // Preset name
       formData.append("api_key", "{447116233167845}"); // Cloudinary API key
-
       // Upload to Cloudinary, store info in database
       axios.post("https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData).then(response => {
           var upload = {
             "program" : this.state.program, "url" : response.data.secure_url,
-            "height" : response.data.height, "width": response.data.width
+            "height" : response.data.height, "width": response.data.width,
+            "survey_id" : this.state.reviewId
           }
           console.log(response);
           axios.post("https://zagsabroad-backend.herokuapp.com/photos", upload).then((res) => {
@@ -220,11 +222,8 @@ class ProgramReviewForm extends Component {
         </div>
         <br/>
         <Button label="submit" variant="contained" style={{margin: '10px'}}
-          disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
-          && this.state.year)}
           onClick = {() => {
             this.submitReview();
-            this.handleUploadImages(this.state.photos);
           }}> Submit </Button>
         {this.state.formSubmitted ?
           <Dialog id="dialog" open={true}>

@@ -18,8 +18,8 @@ class ProgramReviewForm extends Component {
   constructor(props) {
     super(props);
     let thisYear = (new Date()).getFullYear();
-    let calendarYears = []
-    for(let year = 2000; year <= thisYear; year++) {
+    var calendarYears = []
+    for(let year = thisYear; year >= 2000; year--) {
       calendarYears.push({value: year, label: year});
     }
     this.state = {
@@ -216,6 +216,7 @@ class ProgramReviewForm extends Component {
             filesLimit={20}
             onChange={(photos) => {this.setState({photos: photos})}}
             dropzoneText="Drag and drop an image or click here"
+            showFileNamesInPreview={true}
             maxFileSize={5000000}/>
         </div>
         <br/>

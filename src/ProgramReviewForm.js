@@ -93,6 +93,7 @@ class ProgramReviewForm extends Component {
       // Upload to Cloudinary, store info in database
       axios.post("https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData).then(response => {
           let url = response.data.secure_url.replace('upload', 'upload/a_exif');
+          console.log(url);
           var upload = {
             "program" : this.state.program, "url" : url, "height" : response.data.height,
             "width": response.data.width, "survey_id" : this.state.reviewId

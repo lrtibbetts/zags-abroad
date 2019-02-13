@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Typography from "@material-ui/core/Typography";
+import SwipeableViews from 'react-swipeable-views';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import axios from 'axios';
 
 class ReviewsDisplay extends Component {
@@ -22,7 +27,7 @@ class ReviewsDisplay extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
       let surveysToAdd = [];
       for(let i = 0; i < res.data.length; i++) {
-         /*let major = res.data[i].major.trim();
+         let major = res.data[i].major.trim();
          let email = ((res.data[i].email) ? res.data[i].email.trim() : "");
          let name = ((res.data[i].name) ? res.data[i].name.trim() : "");
          let program = res.data[i].program.trim();
@@ -33,7 +38,7 @@ class ReviewsDisplay extends Component {
          let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : "");
          let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : "");
          let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : "");
-         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");*/
+         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");
         surveysToAdd.push(res.data[i]);
       }
       this.setState({surveys: surveysToAdd});
@@ -41,8 +46,20 @@ class ReviewsDisplay extends Component {
     });
   }
 
+  TabContainer({ children, dir }) {
+  return (
+    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
+      {children}
+    </Typography>
+  );
+}
+
   handleTabChange = (event, value) => {
     this.setState({tabValue: value});
+  };
+
+  handleTabChangeIndex = index => {
+    this.setState({tabValue: index});
   };
 
   render() {
@@ -62,6 +79,18 @@ class ReviewsDisplay extends Component {
             <Tab label="Staff"/>
             <Tab label="Other"/>
           </Tabs>
+          <SwipeableViews>
+            <TabContainer>
+              <List>
+                <ListItem>
+                  <ListItemText primary="Kristen" secondary="Welcome to this program" />
+                </ListItem>
+                <ListItem>
+                  <ListItemText primary="Kristen" secondary="Welcome to this program" />
+                </ListItem>
+              </List>
+            </TabContainer>
+          </SwipeableViews>
         </AppBar>
       </div>
     );

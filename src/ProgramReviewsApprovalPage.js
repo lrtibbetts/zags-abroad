@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
-// import Switch from '@material-ui/core/Switch';
+import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
 import './ProgramReviewsApprovalPage.css';
 
@@ -16,13 +16,22 @@ class ProgramReviewsApprovalPage extends Component {
 
   loadReviews() {
     axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
-      console.log(res.data);
-      this.setState({reviews: res.data});
+      let reviewsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let review = res.data[i];
+        let id = review.ID;
+        axios.post("https://zagsabroad-backend.herokuapp.com/surveyphotos", {survey_id: id}).then((res) => {
+          review['photos'] = res.data;
+          reviewsToAdd.push(review);
+          this.setState({reviews: reviewsToAdd});
+        });
+      }
     });
   }
 
   render() {
     const cookies = this.props.cookies;
+    console.log(this.state.reviews);
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', margin: '5%'}}>

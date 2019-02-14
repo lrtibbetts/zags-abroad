@@ -3,11 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import axios from 'axios';
-import { TabsContainer, TCProps, TabListData } from "react-tabs-container";
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
 
 function TabContainer(props) {
 return (
@@ -16,10 +12,6 @@ return (
     </Typography>
   );
 }
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 class ReviewsDisplay extends Component {
   constructor(props) {
@@ -58,7 +50,7 @@ class ReviewsDisplay extends Component {
       let otherToAdd = [];
 */
       for(let i = 0; i < res.data.length; i++) {
-         let major = res.data[i].major.trim();
+         /*let major = res.data[i].major.trim();
          let email = ((res.data[i].email) ? res.data[i].email.trim() : "");
          let name = ((res.data[i].name) ? res.data[i].name.trim() : "");
          let program = res.data[i].program.trim();
@@ -69,7 +61,7 @@ class ReviewsDisplay extends Component {
          let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : "");
          let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : "");
          let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : "");
-         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");
+         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");*/
 /*
          let majorObj = {value: major, label: major};
          let emailObj = {value: email, label: email};

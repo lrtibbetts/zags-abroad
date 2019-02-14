@@ -10,12 +10,11 @@ class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: 1
     }
   }
 
   handleChange = (event, value) => {
-    console.log(value);
     this.setState({value: value});
   }
 
@@ -28,8 +27,8 @@ class AdminPage extends Component {
           <AppBar position="static">
             <Tabs value={value} centered onChange={this.handleChange}>
               <Tab label="Course Equivalencies" />
-              <Tab label="Programs" />
               <Tab label="Program Reviews" />
+              <Tab label="Programs" />
               <Tab label="Admin Accounts" />
             </Tabs>
           </AppBar>
@@ -43,7 +42,7 @@ class AdminPage extends Component {
               <h1>Programs</h1>
               <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
-          {value === 2 && <div><h1>Program Reviews</h1>
+          {value === 2 && <div><h1>Programs</h1>
             <p> Approve program reviews submitted by students here</p></div>}
           {value === 3 && <div><h1>Admin Accounts</h1>
             <p> Grant administrative access to other users here</p></div>}

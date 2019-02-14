@@ -5,8 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import axios from 'axios';
 import { TabsContainer, TCProps, TabListData } from "react-tabs-container";
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+
 
 
 function TabContainer(props) {
@@ -17,9 +16,6 @@ return (
   );
 }
 
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 class ReviewsDisplay extends Component {
   constructor(props) {
@@ -32,7 +28,8 @@ class ReviewsDisplay extends Component {
         { name: "Year" },
         { name: "Classes" },
       ],
-      surveys: [{"residences": []},
+      surveys: [
+      {residences: []},
       {trips: []},
       {classes: []},
       {activities: []},
@@ -47,16 +44,9 @@ class ReviewsDisplay extends Component {
       tabValue: 0
     }
 
-    axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.name}).then((res) => {
+    axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.program}).then((res) => {
+      console.log(res.data);
       let surveysToAdd = [];
-
-/*      let residencesToAdd = [];
-      let tripsToAdd = [];
-      let classesToAdd = [];
-      let activitiesToAdd = [];
-      let staffToAdd = [];
-      let otherToAdd = [];
-*/
       for(let i = 0; i < res.data.length; i++) {
          let major = res.data[i].major.trim();
          let email = ((res.data[i].email) ? res.data[i].email.trim() : "");
@@ -70,41 +60,9 @@ class ReviewsDisplay extends Component {
          let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : "");
          let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : "");
          let other = ((res.data[i].other) ? res.data[i].other.trim() : "");
-/*
-         let majorObj = {value: major, label: major};
-         let emailObj = {value: email, label: email};
-         let nameObj = {value: name, label: name};
-         let programObj = {value: program, label: program};
-         let termObj = {value: term, label: term};
-         let yearObj = {value: year, label: year};
-         let residenceObj = {value: residence, label: residence};
-         let tripsObj = {value: trips, label: trips};
-         let classesObj = {value: classes, label: classes};
-         let activitiesObj = {value: activities, label: activities};
-         let staffObj = {value: staff, label: staff};
-         let otherObj = {value: other, label: other};
-*/
         surveysToAdd.push(res.data[i]);
-/*
-        residencesToAdd.push(residenceObj);
-        tripsToAdd.push(tripsObj);
-        classesToAdd.push(classesObj);
-        activitiesToAdd.push(activitiesObj);
-        staffToAdd.push(staffObj);
-        otherToAdd.push(otherObj);
-*/
       }
-      //this.setState({surveys: surveysToAdd});
-      this.setState({surveys: [{residences: ["r","k"]}, {trips: ["r","k"]}, {classes: ["r","k"]}, {activities: ["r","k"]}, {staff: ["r","k"]}, {other: ["r","k"]}]})
-      this.setState({residences: ["gl","ads"]});
-      this.setState({trips: ["there were lots of fun trips", "london, paris, maybe tokyo"]});
-      this.setState({classes: ["hard","eh"]});
-      this.setState({activities: ["volleyball","nafma"]});
-      this.setState({staff: ["they were ok","nice but hard"]});
-      this.setState({other: ["a;dlskfj","adasdfs"]});
-      console.log(this.state.surveys);
-      console.log(this.state.residences);
-      console.log(this.state.surveys.residences);
+      this.setState({surveys: surveysToAdd});
     });
   }
 
@@ -117,118 +75,83 @@ class ReviewsDisplay extends Component {
   render() {
     const { tabValue } = this.state;
     let residences;
-    let len = this.state.surveys.residences;
+    let len = this.state.surveys.filter(item => item.residence)
     if (len) {
-      residences = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.residences}</ul>
-           {
-            surv.residences.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      residences = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          residences.push(this.state.surveys[i].residence);
+        }
+      }
     } else {
       residences = "No residence reviews at this time!";
     }
 
     let trips;
-    len = this.state.surveys.trips;
+    len = this.state.surveys.filter(item => item.trips)
     if (len) {
-      trips = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.trips}</ul>
-           {
-            surv.trips.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      trips = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          trips.push(this.state.surveys[i].trips);
+        }
+      }
     } else {
       trips = "No trip reviews at this time!";
     }
 
     let classes;
-    len = this.state.surveys.classes;
+    len = this.state.surveys.filter(item => item.classes)
     if (len) {
-      classes = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.classes}</ul>
-           {
-            surv.classes.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      classes = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          classes.push(this.state.surveys[i].classes);
+        }
+      }
     } else {
       classes = "No class reviews at this time!";
     }
 
     let activities;
-    len = this.state.surveys.activities;
+    len = this.state.surveys.filter(item => item.activities)
     if (len) {
-      activities = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.activities}</ul>
-           {
-            surv.activities.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      activities = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          activities.push(this.state.surveys[i].activities);
+        }
+      }
     } else {
-      activities = "No activities reviews at this time!";
+      activities = "No activity reviews at this time!";
     }
 
     let staff;
-    len = this.state.surveys.staff;
+    len = this.state.surveys.filter(item => item.staff)
     if (len) {
-      staff = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.staff}</ul>
-           {
-            surv.staff.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      staff = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          staff.push(this.state.surveys[i].staff);
+        }
+      }
     } else {
       staff = "No staff reviews at this time!";
     }
 
     let other;
-    len = this.state.surveys.other;
+    len = this.state.surveys.filter(item => item.other)
     if (len) {
-      other = len.map((surv) => {
-        return (
-          <div key={surv}>
-            <ul >{surv.other}</ul>
-           {
-            surv.other.map((subitem) => {
-              return (<li key={subitem}>{subitem}</li>)
-            })
-           }
-          </div>
-        )
-       })
+      other = [];
+      for (var i = 0; i < 200; i++){
+        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
+          other.push(this.state.surveys[i].other);
+        }
+      }
     } else {
       other = "No other reviews at this time!";
     }
+
 
 
     return (
@@ -248,12 +171,53 @@ class ReviewsDisplay extends Component {
             <Tab label="Other"/>
           </Tabs>
         </AppBar>
-        {tabValue === 0 && <TabContainer>{<div>{residences}</div>}</TabContainer>}
-        {tabValue === 1 && <TabContainer>{<div>{trips}</div>}</TabContainer>}
-        {tabValue === 2 && <TabContainer>{<div>{classes}</div>}</TabContainer>}
-        {tabValue === 3 && <TabContainer>{<div>{activities}</div>}</TabContainer>}
-        {tabValue === 4 && <TabContainer>{<div>{staff}</div>}</TabContainer>}
-        {tabValue === 5 && <TabContainer>{<div>{other}</div>}</TabContainer>}
+          {tabValue === 0 && <TabContainer>{<div>{
+            <div>
+              {residences.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
+
+          {tabValue === 1 && <TabContainer>{<div>{
+            <div>
+              {trips.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
+
+          {tabValue === 2 && <TabContainer>{<div>{
+            <div>
+              {classes.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
+
+          {tabValue === 3 && <TabContainer>{<div>{
+            <div>
+              {activities.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
+
+          {tabValue === 4 && <TabContainer>{<div>{
+            <div>
+              {staff.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
+
+          {tabValue === 5 && <TabContainer>{<div>{
+            <div>
+              {other.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </div>
+          }</div>}</TabContainer>}
       </div>
     );
   }

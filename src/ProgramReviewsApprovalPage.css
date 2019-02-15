@@ -1,9 +1,9 @@
-p {
+.reviews p {
     text-align: left;
     padding: 3px;
     margin: 5px;
 }
 
-img {
+.reviews img {
   padding: 10px;
 }

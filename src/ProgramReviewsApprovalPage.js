@@ -56,7 +56,7 @@ class ProgramReviewsApprovalPage extends Component {
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
           {this.state.reviews.map((review, index) => {
             return (
-              <div key={index}>
+              <div className="reviews" key={index}>
                 <Paper>
                   <p> <b>Name:</b> {review.name} &nbsp;&nbsp; <b>Email:</b> {review.email}</p>
                   <p> <b>Major:</b> {review.major} &nbsp;&nbsp; <b>Year:</b> {review.year}</p>

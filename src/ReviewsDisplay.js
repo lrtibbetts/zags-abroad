@@ -5,8 +5,6 @@ import Tab from '@material-ui/core/Tab';
 import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 
-
-
 function TabContainer(props) {
 return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -14,7 +12,6 @@ return (
     </Typography>
   );
 }
-
 
 class ReviewsDisplay extends Component {
   constructor(props) {
@@ -44,32 +41,13 @@ class ReviewsDisplay extends Component {
     }
 
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.program}).then((res) => {
-      console.log(res.data);
-      let surveysToAdd = [];
-      for(let i = 0; i < res.data.length; i++) {
-         let major = res.data[i].major.trim();
-         let email = ((res.data[i].email) ? res.data[i].email.trim() : "");
-         let name = ((res.data[i].name) ? res.data[i].name.trim() : "");
-         let program = res.data[i].program.trim();
-         let term = res.data[i].term.trim();
-         let year = res.data[i].year.trim();
-         let residence = ((res.data[i].residence) ? res.data[i].residence.trim() : "");
-         let trips = ((res.data[i].trips) ? res.data[i].trips.trim() : "");
-         let classes = ((res.data[i].classes) ? res.data[i].classes.trim() : "");
-         let activities = ((res.data[i].activities) ? res.data[i].activities.trim() : "");
-         let staff = ((res.data[i].staff) ? res.data[i].staff.trim() : "");
-         let other = ((res.data[i].other) ? res.data[i].other.trim() : "");
-        surveysToAdd.push(res.data[i]);
-      }
-      this.setState({surveys: surveysToAdd});
+      this.setState({surveys: res.data});
     });
   }
 
   handleTabChange = (event, value) => {
     this.setState({tabValue: value});
   };
-
-
 
   render() {
     const { tabValue } = this.state;

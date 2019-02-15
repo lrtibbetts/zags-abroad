@@ -5,6 +5,8 @@ import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
 import './ProgramReviewsApprovalPage.css';
 
+var _ = require('lodash'); // Provides the neat 'omit' function
+
 class ProgramReviewsApprovalPage extends Component {
   constructor(props) {
     super(props);
@@ -17,21 +19,27 @@ class ProgramReviewsApprovalPage extends Component {
   loadReviews() {
     axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
       let reviewsToAdd = [];
-      for(let i = 0; i < res.data.length; i++) {
+      let i = 0;
+      while(i < res.data.length) {
         let review = res.data[i];
+        let photos = [];
+        photos.push({url: review.url, width: review.width, height: review.height});
+        review['photos'] = photos;
+        review = _.omit(review, ['url', 'width', 'height', 'survey_id'])
         let id = review.ID;
-        axios.post("https://zagsabroad-backend.herokuapp.com/surveyphotos", {survey_id: id}).then((res) => {
-          review['photos'] = res.data;
-          reviewsToAdd.push(review);
-          this.setState({reviews: reviewsToAdd});
-        });
+        i++;
+        while(i < res.data.length && res.data[i].ID === id) {
+          photos.push({url: res.data[i].url, width: res.data[i].width, height: res.data[i].height});
+          i++;
+        }
+        reviewsToAdd.push(review);
       }
+      this.setState({reviews: reviewsToAdd});
     });
   }
 
   render() {
     const cookies = this.props.cookies;
-    console.log(this.state.reviews);
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', margin: '5%'}}>

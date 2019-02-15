@@ -68,7 +68,7 @@ class ProgramReviewsApprovalPage extends Component {
                   <p> <b>Staff:</b> {review.staff}</p>
                   <p> <b>Other:</b> {review.other}</p>
                   {review.photos.map(photo =>
-                    <img src={photo.url} width={photo.width} height={photo.height}></img>
+                    <img src={photo.url} width={photo.width} height={photo.height} alt=""></img>
                   )}
                 </Paper><br/>
               </div>

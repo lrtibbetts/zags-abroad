@@ -70,7 +70,9 @@ class MapView extends Component {
       <Marker
           key={program.host_program}
           longitude={program.lng}
-          latitude={program.lat}>
+          latitude={program.lat}
+          offsetTop={-15}
+          offsetLeft={-7}>
           <img src={MarkerImage} width={15} height={20} alt=""
           onClick={() => this.setState({popupInfo: program})}/>
       </Marker>

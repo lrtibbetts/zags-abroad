@@ -53,27 +53,54 @@ class ProgramReviewsApprovalPage extends Component {
     });
   }
 
+  savePhotos(photos) {
+    if(photos.length === 0) {
+      this.loadReviews();
+      return;
+    }
+
+    for(let j = 0; j < photos.length; j++) {
+      if(photos[j].approved) {
+        axios.post("https://zagsabroad-backend.herokuapp.com/approvephoto", {"url": photos[j].url}).then((res) => {
+          this.loadReviews();
+        });
+      } else {
+        axios.post("https://zagsabroad-backend.herokuapp.com/deletephoto", {"url": photos[j].url}).then((res) => {
+          this.loadReviews();
+        });
+      }
+    }
+  }
+
   saveChanges(review) {
     console.log(review);
-    // If review is approved, update 'approved' to 1 in the database. If not, delete it from the database
-    // Go through each photo and do the same thing
+    if(review.approved) {
+      axios.post("https://zagsabroad-backend.herokuapp.com/approvesurvey", {"id": review.ID}).then((res) => {
+        this.savePhotos(review.photos);
+      });
+    } else {
+      axios.post("https://zagsabroad-backend.herokuapp.com/deletesurvey", {"id": review.ID}).then((res) => {
+        this.savePhotos(review.photos);
+      });
+    }
   }
 
   render() {
+    console.log(this.state.reviews);
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
-          {this.state.reviews.map((review, index) => {
+          {this.state.reviews.map((review) => {
             return (
-              <div className="reviews" key={index}>
+              <div className="reviews" key={review.ID}>
                 <Paper>
                   <div style={{textAlign: 'left', marginLeft: '10px'}}>
                     <FormControlLabel
                       control={<Switch color="primary"> </Switch>}
                       label="Approve text"
-                      onChange={(event, checked) => {
-                        if(checked) {
+                      onChange={(event) => {
+                        if(event.target.checked) {
                           review['approved'] = true;
                         } else {
                           review['approved'] = false;
@@ -91,13 +118,13 @@ class ProgramReviewsApprovalPage extends Component {
                   <p> <b>Staff:</b> {review.staff}</p>
                   <p> <b>Other:</b> {review.other}</p>
                   {review.photos.length > 0 ? <h3> Photos: </h3> : null}
-                  {review.photos.map((photo, index) =>
-                    <div className="photo" key={index}>
+                  {review.photos.map((photo) =>
+                    <div className="photo" key={photo.url}>
                       <FormControlLabel
-                        control={<Switch color="primary"> </Switch>}
+                        control={<Switch color="primary"></Switch>}
                         label="Approve"
-                        onChange={(event, checked) => {
-                          if(checked) {
+                        onChange={(event) => {
+                          if(event.target.checked) {
                             photo['approved'] = true;
                           } else {
                             photo['approved'] = false;

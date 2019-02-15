@@ -5,6 +5,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './ProgramReviewsApprovalPage.css';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
@@ -13,7 +14,9 @@ class ProgramReviewsApprovalPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviews: []
+      reviews: [],
+      loading: true,
+      submitting: false
     }
     this.loadReviews();
   }
@@ -49,7 +52,7 @@ class ProgramReviewsApprovalPage extends Component {
         review = _.omit(review, ['url', 'width', 'height', 'survey_id']);
         reviewsToAdd.push(review);
       }
-      this.setState({reviews: reviewsToAdd});
+      this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
     });
   }
 
@@ -73,6 +76,7 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   saveChanges(review) {
+    this.setState({submitting: true, loading: true, reviews: []})
     if(review.approved) {
       axios.post("https://zagsabroad-backend.herokuapp.com/approvesurvey", {"id": review.ID}).then((res) => {
         this.savePhotos(review.photos);
@@ -142,6 +146,9 @@ class ProgramReviewsApprovalPage extends Component {
               </div>
             );
           })}
+          {(this.state.reviews.length === 0 && !this.state.loading) ? <p> No reviews to approve at this time! </p> : null}
+          {this.state.submitting ? <p> Saving changes... </p> : null}
+          {this.state.loading ? <CircularProgress variant="indeterminate"/> : null}
         </div>
       );
     } else {

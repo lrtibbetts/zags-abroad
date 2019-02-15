@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import './ProgramReviewsApprovalPage.css';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
@@ -52,6 +53,12 @@ class ProgramReviewsApprovalPage extends Component {
     });
   }
 
+  saveChanges(review) {
+    console.log(review);
+    // If review is approved, update 'approved' to 1 in the database. If not, delete it from the database
+    // Go through each photo and do the same thing
+  }
+
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
@@ -64,7 +71,14 @@ class ProgramReviewsApprovalPage extends Component {
                   <div style={{textAlign: 'left', marginLeft: '10px'}}>
                     <FormControlLabel
                       control={<Switch color="primary"> </Switch>}
-                      label="Approve">
+                      label="Approve text"
+                      onChange={(event, checked) => {
+                        if(checked) {
+                          review['approved'] = true;
+                        } else {
+                          review['approved'] = false;
+                        }
+                      }}>
                     </FormControlLabel>
                   </div>
                   <p> <b>Name:</b> {review.name} &nbsp;&nbsp; <b>Email:</b> {review.email}</p>
@@ -81,11 +95,24 @@ class ProgramReviewsApprovalPage extends Component {
                     <div className="photo" key={index}>
                       <FormControlLabel
                         control={<Switch color="primary"> </Switch>}
-                        label="Approve">
+                        label="Approve"
+                        onChange={(event, checked) => {
+                          if(checked) {
+                            photo['approved'] = true;
+                          } else {
+                            photo['approved'] = false;
+                          }
+                        }}>
                       </FormControlLabel> <br/>
                       <img src={photo.url} width={photo.width} height={photo.height} alt=""></img>
                     </div>
-                  )}
+                  )}<br/>
+                  <div style={{paddingBottom: '15px'}}>
+                    <Button variant="contained"
+                      onClick = {(event) =>
+                        this.saveChanges(review)}>
+                      Save </Button>
+                  </div>
                 </Paper><br/>
               </div>
             );

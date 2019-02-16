@@ -1,17 +1,11 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import axios from 'axios';
-import Typography from '@material-ui/core/Typography';
-
-function TabContainer(props) {
-return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 class ReviewsDisplay extends Component {
   constructor(props) {
@@ -24,25 +18,23 @@ class ReviewsDisplay extends Component {
         { name: "Year" },
         { name: "Classes" },
       ],
-      surveys: [
-      {residences: []},
-      {trips: []},
-      {classes: []},
-      {activities: []},
-      {staff: []},
-      {other: []}],
-      residences: [],
-      trips: [],
-      classes: [],
-      activities: [],
-      staff: [],
-      other: [],
+      surveys: [],
       tabValue: 0
     }
 
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.program}).then((res) => {
-      this.setState({surveys: res.data});
+      let surveysToAdd = res.data;
+      this.setState({surveys: surveysToAdd});
+      console.log(this.state.surveys)
     });
+  }
+
+  // Create profile using name, major, term and year of user who submitted survey
+  surveyProfile(survey) {
+    let profileStr = (survey.name === "") ? "Anonymous" : survey.name;
+    profileStr += "\n" + survey.major + ", " + survey.major;
+    profileStr += "\n" + survey.term + survey.calendar_year;
+    return profileStr;
   }
 
   handleTabChange = (event, value) => {
@@ -51,86 +43,6 @@ class ReviewsDisplay extends Component {
 
   render() {
     const { tabValue } = this.state;
-    let residences;
-    let len = this.state.surveys.filter(item => item.residence)
-    if (len) {
-      residences = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          residences.push(this.state.surveys[i].residence);
-        }
-      }
-    } else {
-      residences = "No residence reviews at this time!";
-    }
-
-    let trips;
-    len = this.state.surveys.filter(item => item.trips)
-    if (len) {
-      trips = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          trips.push(this.state.surveys[i].trips);
-        }
-      }
-    } else {
-      trips = "No trip reviews at this time!";
-    }
-
-    let classes;
-    len = this.state.surveys.filter(item => item.classes)
-    if (len) {
-      classes = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          classes.push(this.state.surveys[i].classes);
-        }
-      }
-    } else {
-      classes = "No class reviews at this time!";
-    }
-
-    let activities;
-    len = this.state.surveys.filter(item => item.activities)
-    if (len) {
-      activities = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          activities.push(this.state.surveys[i].activities);
-        }
-      }
-    } else {
-      activities = "No activity reviews at this time!";
-    }
-
-    let staff;
-    len = this.state.surveys.filter(item => item.staff)
-    if (len) {
-      staff = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          staff.push(this.state.surveys[i].staff);
-        }
-      }
-    } else {
-      staff = "No staff reviews at this time!";
-    }
-
-    let other;
-    len = this.state.surveys.filter(item => item.other)
-    if (len) {
-      other = [];
-      for (var i = 0; i < 200; i++){
-        if (this.state.surveys[i] && this.state.surveys[i] !== ""){
-          other.push(this.state.surveys[i].other);
-        }
-      }
-    } else {
-      other = "No other reviews at this time!";
-    }
-
-
-
     return (
       <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px'}}>
         <AppBar position ="static" color="default">
@@ -148,53 +60,78 @@ class ReviewsDisplay extends Component {
             <Tab label="Other"/>
           </Tabs>
         </AppBar>
-          {tabValue === 0 && <TabContainer>{<div>{
-            <div>
-              {residences.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
-
-          {tabValue === 1 && <TabContainer>{<div>{
-            <div>
-              {trips.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
-
-          {tabValue === 2 && <TabContainer>{<div>{
-            <div>
-              {classes.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
-
-          {tabValue === 3 && <TabContainer>{<div>{
-            <div>
-              {activities.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
-
-          {tabValue === 4 && <TabContainer>{<div>{
-            <div>
-              {staff.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
-
-          {tabValue === 5 && <TabContainer>{<div>{
-            <div>
-              {other.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </div>
-          }</div>}</TabContainer>}
+        {tabValue === 0 &&
+          this.state.surveys.map((residenceSurvey, index) => {
+            return(
+              <div className="residence" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={residenceSurvey.name} secondary={residenceSurvey.residence} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
+        {tabValue === 1 &&
+          this.state.surveys.map((tripSurvey, index) => {
+            return(
+              <div className="trips" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={tripSurvey.name} secondary={tripSurvey.trips} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
+        {tabValue === 2 &&
+          this.state.surveys.map((classSurvey, index) => {
+            return(
+              <div className="classes" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={classSurvey.name} secondary={classSurvey.classes} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
+        {tabValue === 3 &&
+          this.state.surveys.map((activitySurvey, index) => {
+            return(
+              <div className="activities" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={activitySurvey.name} secondary={activitySurvey.activities} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
+        {tabValue === 4 &&
+          this.state.surveys.map((staffSurvey, index) => {
+            return(
+              <div className="staff" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={staffSurvey.name} secondary={staffSurvey.staff} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
+        {tabValue === 5 &&
+          this.state.surveys.map((otherSurvey, index) => {
+            return(
+              <div className="other" key={index}>
+              <List>
+                <ListItem>
+                  <ListItemText primary={otherSurvey.name} secondary={otherSurvey.other} />
+                </ListItem>
+              </List>
+              </div>
+            )
+          })}
       </div>
     );
   }

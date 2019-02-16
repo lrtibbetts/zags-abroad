@@ -40,10 +40,16 @@ class AdminPage extends Component {
             <div>
               <h1>Programs</h1><p> Manage study abroad program information here</p>
             </div>}
-          {value === 2 && <div><h1>Program Reviews</h1>
-            <p> Approve program reviews submitted by students here</p></div>}
-          {value === 3 && <div><h1>Admin Accounts</h1>
-            <p> Grant administrative access to other users here</p></div>}
+          {value === 2 &&
+            <div>
+              <h1>Program Reviews</h1>
+              <p> Approve program reviews submitted by students here</p>
+            </div>}
+          {value === 3 &&
+            <div>
+              <h1>Admin Accounts</h1>
+              <p> Grant administrative access to other users here</p>
+            </div>}
         </div>
       );
     } else {

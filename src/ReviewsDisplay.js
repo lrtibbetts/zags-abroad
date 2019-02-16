@@ -29,7 +29,7 @@ class ReviewsDisplay extends Component {
     });
   }
 
-  // Create profile using name, major, term and year of user who submitted survey
+  // Create profile using name, major, term and year of user who submitted survey 
   surveyProfile(survey) {
     let profileStr = (survey.name === "") ? "Anonymous" : survey.name;
     profileStr += "\n" + survey.major + ", " + survey.major;

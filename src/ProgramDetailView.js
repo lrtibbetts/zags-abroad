@@ -39,10 +39,6 @@ class ProgramDetailView extends Component {
       columns: [
         { name: "ID",
           options: { display: false } },
-        { name: "Gonzaga Course" },
-        { name: "Host Course" },
-        { name: "Signature needed" },
-        { name: "Core Designation" },
         { name: "",
           options: {
             customBodyRender: (value, tableMeta, updateValue) => {
@@ -51,7 +47,11 @@ class ProgramDetailView extends Component {
                   color="primary"><AddIcon/>
                 </IconButton>
               );
-            }}}]
+            }}},
+        { name: "Gonzaga Course" },
+        { name: "Host Course" },
+        { name: "Signature needed" },
+        { name: "Core Designation" }]
     }
 
     // Getting all of the programs for the dropdown
@@ -88,12 +88,12 @@ class ProgramDetailView extends Component {
     for(var i = 0; i < data.length; i++) {
       let newCourse = [];
       newCourse.push(data[i].id);
+      newCourse.push("");
       newCourse.push(data[i].gu_course_number + (data[i].gu_course_name ? ": " + data[i].gu_course_name : ""));
       newCourse.push(data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name :
       data[i].host_course_name);
       newCourse.push(data[i].signature_needed);
       newCourse.push(data[i].core);
-      newCourse.push(data[i].id);
       courses.push(newCourse);
     }
     this.setState({courseList: courses, loading: false});
@@ -193,9 +193,9 @@ class ProgramDetailView extends Component {
     const maxWidth = Math.max.apply(null, this.state.photos.map((photo) =>
       parseInt(photo.width)));
     return (
-      <div style={{textAlign: 'center'}}>
+      <div className="detail">
         <h1>{this.props.name}</h1>
-        <div style={{textAlign: 'center', display: 'inline-block', paddingBottom: '20px'}}>
+        <div className="photos">
         {this.state.loading ? <CircularProgress variant="indeterminate"/> :
         (this.state.photos.length > 0 ?
           <Carousel
@@ -211,9 +211,9 @@ class ProgramDetailView extends Component {
               );
             })}
           </Carousel> : null)}
-        </div><br/>
-        <p style={{display: 'inline'}}> Search by: </p>
-        <div style={{marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+        </div>
+        <p className="label"> Search by: </p>
+        <div className="select">
           <Select autoWidth={true} value={this.state.searchBy}
             onChange = { (event) =>
               this.setState({searchBy : event.target.value})}>
@@ -223,22 +223,22 @@ class ProgramDetailView extends Component {
         </div>
         <div className="search">
           <MultiDropdownTextField
-            value = { this.state.filters }
-            onChange = { this.handleChange("filters")}
-            options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
+              value = { this.state.filters }
+              onChange = { this.handleChange("filters")}
+              options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
           />
         </div>
-        <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px', zIndex: 0, position: 'relative'}}>
+        <div className="list">
           {this.state.loading ? null :
           <MUIDataTable
             columns = {this.state.columns}
             data = {this.state.courseList}
-            options = {options}/>}
-        </div><br/>
-        {this.state.courseList.length > 0 ?
-        <p style={{fontSize: '13px'}}>
-        <b>Note:</b> This list is based on courses GU students have gotten credit
-        for in the past, but you may be able to get other courses approved. </p> : null} <br/>
+            options = {options}/>}<br/>
+          {this.state.courseList.length > 0 ?
+          <p style={{fontSize: '13px'}}>
+          <b>Note:</b> This list is based on courses GU students have gotten credit
+          for in the past, but you may be able to get other courses approved. </p> : null}
+        </div>
         <Snackbar message={this.state.message}
           anchorOrigin={{
             vertical: 'top',

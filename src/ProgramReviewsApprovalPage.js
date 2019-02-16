@@ -73,7 +73,6 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   saveChanges(review) {
-    console.log(review);
     if(review.approved) {
       axios.post("https://zagsabroad-backend.herokuapp.com/approvesurvey", {"id": review.ID}).then((res) => {
         this.savePhotos(review.photos);
@@ -86,7 +85,6 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
-    console.log(this.state.reviews);
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (

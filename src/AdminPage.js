@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CourseEquivalencyPage from './CourseEquivalencyPage.js'
+import CourseEquivalencyPage from './CourseEquivalencyPage.js';
+import ProgramReviewsApprovalPage from './ProgramReviewsApprovalPage.js';
 import { Redirect } from "react-router-dom";
 
 class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: 1
     }
   }
 
   handleChange = (event, value) => {
-    this.setState({value});
+    this.setState({value: value});
   }
 
   render() {
@@ -26,8 +27,8 @@ class AdminPage extends Component {
           <AppBar position="static">
             <Tabs value={value} centered onChange={this.handleChange}>
               <Tab label="Course Equivalencies" />
-              <Tab label="Programs" />
               <Tab label="Program Reviews" />
+              <Tab label="Programs" />
               <Tab label="Admin Accounts" />
             </Tabs>
           </AppBar>
@@ -38,8 +39,10 @@ class AdminPage extends Component {
             </div>}
           {value === 1 &&
             <div>
-              <h1>Programs</h1><p> Manage study abroad program information here</p>
+              <h1>Program Reviews</h1>
+              <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
+<<<<<<< HEAD
           {value === 2 &&
             <div>
               <h1>Program Reviews</h1>
@@ -50,6 +53,12 @@ class AdminPage extends Component {
               <h1>Admin Accounts</h1>
               <p> Grant administrative access to other users here</p>
             </div>}
+=======
+          {value === 2 && <div><h1>Programs</h1>
+            <p> Manage program details here </p></div>}
+          {value === 3 && <div><h1>Admin Accounts</h1>
+            <p> Grant administrative access to other users here</p></div>}
+>>>>>>> a38ef0fbfcf0cdac20c7322cc2ab15a0e904f977
         </div>
       );
     } else {

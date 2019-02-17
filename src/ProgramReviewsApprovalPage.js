@@ -189,7 +189,7 @@ class ProgramReviewsApprovalPage extends Component {
             >
             </Snackbar>
              : null}
-          {this.state.loading ? <CircularProgress variant="indeterminate"/> : null}
+          {this.state.loading ? <p>placeholder </p>: null}
         </div>
       );
     } else {

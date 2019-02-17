@@ -43,7 +43,6 @@ class AdminPage extends Component {
               <h1>Program Reviews</h1>
               <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
-<<<<<<< HEAD
           {value === 2 && <div><h1>Programs</h1>
             <p> Manage program details here </p></div>}
           {value === 3 && <div><h1>Admin Accounts</h1>
@@ -51,18 +50,6 @@ class AdminPage extends Component {
             <p> <b> THIS PAGE IS NOT FINISHED </b> </p>
             <AdminApprovalPage cookies = {this.props.cookies} />
           </div>}
-=======
-          {value === 2 &&
-            <div>
-              <h1>Program Reviews</h1>
-              <p> Approve program reviews submitted by students here</p>
-            </div>}
-          {value === 3 &&
-            <div>
-              <h1>Admin Accounts</h1>
-              <p> Grant administrative access to other users here</p>
-            </div>}
->>>>>>> dc765e0fe77d394dd86837935955599e49582850
         </div>
       );
     } else {

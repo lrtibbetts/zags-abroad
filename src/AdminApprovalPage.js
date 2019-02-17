@@ -23,7 +23,7 @@ class AdminApprovalPage extends Component {
   }
 
   loadAccounts() {
-    axios.get("http://localhost:3001/adminaccounts").then ((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/adminaccounts").then ((res) => {
       let accountsToAdd = [];
       let i = 0;
       while (i < res.data.length) {
@@ -38,11 +38,11 @@ class AdminApprovalPage extends Component {
   saveChanges(account) {
     this.setState({submitting: true, loading: true, possibleAdmins: []})
     if(account.is_admin) {
-      axios.post("http://localhost:3001/approveadmin", {"email": account.email}).then((res) => {
+      axios.post("https://zagsabroad-backend.herokuapp.com/approveadmin", {"email": account.email}).then((res) => {
         console.log(res);
       })
     } else {
-      axios.post("http://localhost:3001/rejectadmin", {"email": account.email}).then((res) => {
+      axios.post("https://zagsabroad-backend.herokuapp.com/rejectadmin", {"email": account.email}).then((res) => {
         console.log(res);
       })
     }

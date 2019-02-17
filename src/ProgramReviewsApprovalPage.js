@@ -9,6 +9,7 @@ import './ProgramReviewsApprovalPage.css';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
 
@@ -91,6 +92,7 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   saveChanges(review) {
+    this.setState({submitting: true, loading: true, reviews: []});
     if(review.approved) {
       axios.post("https://zagsabroad-backend.herokuapp.com/approvesurvey", {"id": review.ID}).then((res) => {
         this.savePhotos(review.photos);

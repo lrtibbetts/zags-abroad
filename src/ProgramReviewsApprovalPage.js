@@ -7,6 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import './ProgramReviewsApprovalPage.css';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
 
@@ -16,9 +19,19 @@ class ProgramReviewsApprovalPage extends Component {
     this.state = {
       reviews: [],
       loading: true,
-      submitting: false
+      submitting: false,
+      showMessage: false,
+      message: ''
     }
+    this.displayMessage = this.displayMessage.bind(this);
     this.loadReviews();
+  }
+
+  displayMessage(message) {
+    this.setState({
+      showMessage: true,
+      message: message
+    })
   }
 
   loadReviews() {
@@ -53,6 +66,7 @@ class ProgramReviewsApprovalPage extends Component {
         reviewsToAdd.push(review);
       }
       this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
+      console.log(reviewsToAdd);
     });
   }
 
@@ -66,10 +80,12 @@ class ProgramReviewsApprovalPage extends Component {
       if(photos[j].approved) {
         axios.post("https://zagsabroad-backend.herokuapp.com/approvephoto", {"url": photos[j].url}).then((res) => {
           this.loadReviews();
+          this.displayMessage("Photos have been approved!")
         });
       } else {
         axios.post("https://zagsabroad-backend.herokuapp.com/deletephoto", {"url": photos[j].url}).then((res) => {
           this.loadReviews();
+          this.displayMessage("Photos have been rejected!")
         });
       }
     }
@@ -89,6 +105,7 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
+    console.log("BRUUUHHH" + this.state.reviews);
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (
@@ -138,8 +155,10 @@ class ProgramReviewsApprovalPage extends Component {
                   )}<br/>
                   <div style={{paddingBottom: '15px'}}>
                     <Button variant="contained"
-                      onClick = {(event) =>
-                        this.saveChanges(review)}>
+                      onClick = {(event) => {
+                        this.setState({open: true})
+                        this.saveChanges(review)
+                      }}>
                       Save </Button>
                   </div>
                 </Paper><br/>
@@ -147,7 +166,29 @@ class ProgramReviewsApprovalPage extends Component {
             );
           })}
           {(this.state.reviews.length === 0 && !this.state.loading) ? <p> No reviews to approve at this time! </p> : null}
-          {this.state.submitting ? <p> Saving changes... </p> : null}
+          {this.state.submitting ?
+            <Snackbar
+              message="Successfully saved changes!"
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              open={this.state.open}
+              autoHideDuration={4000}
+              action={[
+                <IconButton
+                  key="close"
+                  aria-label="Close"
+                  color="inherit"
+                  onClick={(event) => this.setState({open: false})}
+                >
+                  <CloseIcon />
+                </IconButton>,
+              ]}
+              onClose={(event) => this.setState({ open: false })}
+            >
+            </Snackbar>
+             : null}
           {this.state.loading ? <CircularProgress variant="indeterminate"/> : null}
         </div>
       );

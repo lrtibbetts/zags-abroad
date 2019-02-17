@@ -32,8 +32,8 @@ class ReviewsDisplay extends Component {
   // Create profile using name, major, term and year of user who submitted survey
   surveyProfile(survey) {
     let profileStr = (survey.name === "") ? "Anonymous" : survey.name;
-    profileStr += "\n" + survey.major + ", " + survey.major;
-    profileStr += "\n" + survey.term + survey.calendar_year;
+    profileStr += "\n" + survey.year + " " + survey.major;
+    profileStr += "\n" + survey.term + " " + survey.calendar_year;
     return profileStr;
   }
 
@@ -66,19 +66,21 @@ class ReviewsDisplay extends Component {
               <div className="residence" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={residenceSurvey.name} secondary={residenceSurvey.residence} />
+                  {this.surveyProfile(residenceSurvey)}
+                  <ListItemText primary={this.profileStr} secondary={residenceSurvey.residence} />
                 </ListItem>
               </List>
               </div>
             )
-          })} 
+          })}
         {tabValue === 1 &&
           this.state.surveys.map((tripSurvey, index) => {
             return(
               <div className="trips" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={tripSurvey.name} secondary={tripSurvey.trips} />
+                  {this.surveyProfile(tripSurvey)}
+                  <ListItemText primary={this.profileStr} secondary={tripSurvey.trips} />
                 </ListItem>
               </List>
               </div>
@@ -90,7 +92,8 @@ class ReviewsDisplay extends Component {
               <div className="classes" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={classSurvey.name} secondary={classSurvey.classes} />
+                  {this.surveyProfile(classSurvey)}
+                  <ListItemText primary={this.profileStr} secondary={classSurvey.classes} />
                 </ListItem>
               </List>
               </div>
@@ -102,7 +105,8 @@ class ReviewsDisplay extends Component {
               <div className="activities" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={activitySurvey.name} secondary={activitySurvey.activities} />
+                  {this.surveyProfile(activitySurvey)}
+                  <ListItemText primary={this.profileStr} secondary={activitySurvey.activities} />
                 </ListItem>
               </List>
               </div>
@@ -114,7 +118,8 @@ class ReviewsDisplay extends Component {
               <div className="staff" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={staffSurvey.name} secondary={staffSurvey.staff} />
+                  {this.surveyProfile(staffSurvey)}
+                  <ListItemText primary={this.profileStr} secondary={staffSurvey.staff} />
                 </ListItem>
               </List>
               </div>
@@ -126,7 +131,8 @@ class ReviewsDisplay extends Component {
               <div className="other" key={index}>
               <List>
                 <ListItem>
-                  <ListItemText primary={otherSurvey.name} secondary={otherSurvey.other} />
+                  {this.surveyProfile(otherSurvey)}
+                  <ListItemText primary={this.profileStr} secondary={otherSurvey.other} />
                 </ListItem>
               </List>
               </div>

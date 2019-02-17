@@ -4,6 +4,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CourseEquivalencyPage from './CourseEquivalencyPage.js';
 import ProgramReviewsApprovalPage from './ProgramReviewsApprovalPage.js';
+import AdminApprovalPage from './AdminApprovalPage.js';
 import { Redirect } from "react-router-dom";
 
 class AdminPage extends Component {
@@ -42,16 +43,13 @@ class AdminPage extends Component {
               <h1>Program Reviews</h1>
               <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
-          {value === 2 &&
-            <div>
-              <h1>Program Reviews</h1>
-              <p> Approve program reviews submitted by students here</p>
-            </div>}
-          {value === 3 &&
-            <div>
-              <h1>Admin Accounts</h1>
-              <p> Grant administrative access to other users here</p>
-            </div>}
+          {value === 2 && <div><h1>Programs</h1>
+            <p> Manage program details here </p></div>}
+          {value === 3 && <div><h1>Admin Accounts</h1>
+            <p> Grant administrative access to other users here</p>
+            <p> <b> THIS PAGE IS NOT FINISHED </b> </p>
+            <AdminApprovalPage cookies = {this.props.cookies} />
+          </div>}
         </div>
       );
     } else {

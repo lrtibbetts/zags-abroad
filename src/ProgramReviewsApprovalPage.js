@@ -5,7 +5,6 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import './ProgramReviewsApprovalPage.css';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -92,7 +91,6 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   saveChanges(review) {
-    this.setState({submitting: true, loading: true, reviews: []})
     if(review.approved) {
       axios.post("https://zagsabroad-backend.herokuapp.com/approvesurvey", {"id": review.ID}).then((res) => {
         this.savePhotos(review.photos);

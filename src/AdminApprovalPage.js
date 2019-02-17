@@ -5,9 +5,6 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './ProgramReviewsApprovalPage.css';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 class AdminApprovalPage extends Component {

@@ -160,13 +160,34 @@ class ProgramReviewsApprovalPage extends Component {
                         this.saveChanges(review)
                       }}>
                       Save </Button>
+                      <Snackbar
+                        message="Successfully saved changes!"
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                        open={this.state.open}
+                        autoHideDuration={3000}
+                        action={[
+                          <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            onClick={(event) => this.setState({open: false})}
+                          >
+                            <CloseIcon />
+                          </IconButton>,
+                        ]}
+                        onClose={(event) => this.setState({ open: false })}
+                      >
+                      </Snackbar>
                   </div>
                 </Paper><br/>
               </div>
             );
           })}
           {(this.state.reviews.length === 0 && !this.state.loading) ? <p> No reviews to approve at this time! </p> : null}
-          {this.state.submitting ?
+          {this.state.submitting && this.state.reviews.length === 0 ?
             <Snackbar
               message="Successfully saved changes!"
               anchorOrigin={{
@@ -174,7 +195,7 @@ class ProgramReviewsApprovalPage extends Component {
                 horizontal: 'center',
               }}
               open={this.state.open}
-              autoHideDuration={4000}
+              autoHideDuration={3000}
               action={[
                 <IconButton
                   key="close"
@@ -189,7 +210,7 @@ class ProgramReviewsApprovalPage extends Component {
             >
             </Snackbar>
              : null}
-          {this.state.loading ? <p>placeholder </p>: null}
+          {this.state.loading ? <CircularProgress variant="indeterminate"/>: null}
         </div>
       );
     } else {

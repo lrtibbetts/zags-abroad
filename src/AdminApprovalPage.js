@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './ProgramReviewsApprovalPage.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+
 class AdminApprovalPage extends Component {
   constructor(props) {
     super(props);
@@ -14,10 +15,15 @@ class AdminApprovalPage extends Component {
       possibleAdmins: [],
       submitting: false,
       loading: false,
-      open: false
+      open: false,
+      check: false,
     }
     this.loadAccounts();
   }
+
+  handleChange = name => event => {
+   this.setState({ [name]: event.target.checked });
+  };
 
   loadAccounts() {
     axios.get("https://zagsabroad-backend.herokuapp.com/adminaccounts").then ((res) => {
@@ -44,7 +50,6 @@ class AdminApprovalPage extends Component {
       })
     }
     this.loadAccounts();
-    this.setState({open: true})
   }
 
   render() {
@@ -53,24 +58,25 @@ class AdminApprovalPage extends Component {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
           {this.state.possibleAdmins.map((account) => {
-            console.log("AHHHHH");
-            console.log(account);
+            let check = account.approved.is_admin;
+            if (check === 1) {
+              this.state.check = true
+            } else {
+              this.state.check = false
+            }
             return (
               <div className="reviews" key={account.email}>
                 <Paper>
                   <div style= {{textAlign: 'right', marginLeft: '10px'}}>
                     <FormControlLabel
-                      control={<Switch color="primary"> </Switch>}
+                      control={
+                        <Switch
+                        color="primary"
+                        checked = {this.state.check}
+                        onChange={this.handleChange(account.email)}
+                        > </Switch>}
                       label="Grant Access"
-                      onChange={(event) => {
-                        if(event.target.checked) {
-                          account['is_admin'] = true;
-                          //this.saveChanges(account);
-                        } else {
-                          account['is_admin'] = false;
-                          //this.saveChanges(account);
-                        }
-                      }}>
+                      >
                       </FormControlLabel>
                       <p> <b>Name: </b> {account.first}  {account.last} &nbsp;&nbsp; <b> Email: </b> {account.email}</p>
                   </div>

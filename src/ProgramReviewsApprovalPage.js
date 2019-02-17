@@ -111,6 +111,7 @@ class ProgramReviewsApprovalPage extends Component {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
           {this.state.reviews.map((review) => {
+            console.log("HEYOIJFOIWE")
             return (
               <div className="reviews" key={review.ID}>
                 <Paper>
@@ -120,9 +121,13 @@ class ProgramReviewsApprovalPage extends Component {
                       label="Approve text"
                       onChange={(event) => {
                         if(event.target.checked) {
+
                           review['approved'] = true;
+                          console.log(review['approved'])
                         } else {
+                        
                           review['approved'] = false;
+                          console.log(review['approved'])
                         }
                       }}>
                     </FormControlLabel>

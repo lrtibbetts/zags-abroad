@@ -71,9 +71,7 @@ class ReviewsDisplay extends Component {
                     {residenceSurvey.term + " " + residenceSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={residenceSurvey.residence} />
-                </ListItem>
+                <ListItem><ListItemText secondary={residenceSurvey.residence} /></ListItem>
               </List>
               </div>
             )
@@ -91,9 +89,7 @@ class ReviewsDisplay extends Component {
                     {tripSurvey.term + " " + tripSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={tripSurvey.trips} />
-                </ListItem>
+                <ListItem><ListItemText secondary={tripSurvey.trips} /></ListItem>
               </List>
               </div>
             )
@@ -111,9 +107,7 @@ class ReviewsDisplay extends Component {
                     {classSurvey.term + " " + classSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={classSurvey.classes} />
-                </ListItem>
+                <ListItem><ListItemText secondary={classSurvey.classes} /></ListItem>
               </List>
               </div>
             )
@@ -131,9 +125,7 @@ class ReviewsDisplay extends Component {
                     {activitySurvey.term + " " + activitySurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={activitySurvey.activities} />
-                </ListItem>
+                <ListItem><ListItemText secondary={activitySurvey.activities} /></ListItem>
               </List>
               </div>
             )
@@ -151,9 +143,7 @@ class ReviewsDisplay extends Component {
                     {staffSurvey.term + " " + staffSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={staffSurvey.staff} />
-                </ListItem>
+                <ListItem><ListItemText secondary={staffSurvey.staff} /></ListItem>
               </List>
               </div>
             )
@@ -171,9 +161,7 @@ class ReviewsDisplay extends Component {
                     {otherSurvey.term + " " + otherSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem>
-                  <ListItemText secondary={otherSurvey.other} />
-                </ListItem>
+                <ListItem><ListItemText secondary={otherSurvey.other} /></ListItem>
               </List>
               </div>
             )

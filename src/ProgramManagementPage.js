@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
-import CourseDetailsForm from './CourseDetailsForm.js';
+import ProgramDetailsForm from './ProgramDetailsForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -12,7 +12,7 @@ const addButtonStyle = {
   margin: '10px'
 };
 
-class CourseEquivalencyPage extends Component {
+class ProgramManagementPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,116 +24,64 @@ class CourseEquivalencyPage extends Component {
       editingCourse: [], // Array with details of course being edited
       showMessage: false,
       message: '',
+      //location = city
+      //program name = host_program
+      //app link == application_link
+      //host url = host_url
+      //prog type = program_type
       columns: [
         {
-          name: "Program",
+          name: "Program Name",
         },
         {
-          name: "Host Course Number",
-          options: {
-            filter: false
-          }
+          name: "Location",
         },
         {
-          name: "Host Course Name",
-          options: {
-            filter: false
-          }
+          name: "Program Type",
         },
         {
-          name: "GU Course Number",
-          options: {
-            filter: false
-          }
+          name: "Application link",
         },
         {
-          name: "GU Course Name",
-          options: {
-            filter: false
-          }
-        },
-        {
-          name: "Core",
-          options: {
-            display: false
-          }
-        },
-        {
-          name: "Comments",
-          options: {
-            display: false,
-            filter: false
-          }
-        },
-        {
-          name: "Signature needed",
-          options: {
-            display: false,
-            filter: false
-          }
-        },
-        {
-          name: "Approved by",
-          options: {
-            display: false,
-            filter: false
-          }
-        },
-        {
-          name: "Approval date",
-          options: {
-            display: false,
-            filter: false
-          }
-        },
-        {
-          name: "Approved until",
-          options: {
-            display: false,
-            filter: false
-          }
-        },
-        {
-          name: "Department",
-          options: {
-            display: false
-          }
+          name: "Host URL",
         }
       ]
     }
 
     // Bind 'this' context to helper functions
     this.loadCourses = this.loadCourses.bind(this);
-    this.deleteRows = this.deleteRows.bind(this);
+    //this.deleteRows = this.deleteRows.bind(this);
     this.toggleAddForm = this.toggleAddForm.bind(this);
     this.populateEditForm = this.populateEditForm.bind(this);
     this.hideEditForm = this.hideEditForm.bind(this);
     this.displayMessage = this.displayMessage.bind(this);
 
-    this.loadCourses();
+    //this.loadCourses();
   }
 
   loadCourses() {
-    axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
       // Convert array of objects to 2D array
-      const coursesToAdd = [];
-      const idsToAdd = [];
-      for(let i = 0; i < res.data.length; i++) {
-        let equivalency = [];
-        for(var field in res.data[0]) {
-          if(field === "id") {
-            idsToAdd.push(res.data[i][field]);
-          } else {
-            equivalency.push(res.data[i][field]); // Access each field in the row object
-          }
-        }
-        coursesToAdd.push(equivalency);
-      }
-      this.setState({courses : coursesToAdd, ids: idsToAdd});
+      const programsToAdd = res.data;
+      // const idsToAdd = [];
+      // for(let i = 0; i < res.data.length; i++) {
+      //   let equivalency = [];
+      //   for(var field in res.data[0]) {
+      //     if(field === "id") {
+      //       idsToAdd.push(res.data[i][field]);
+      //     } else {
+      //       equivalency.push(res.data[i][field]); // Access each field in the row object
+      //     }
+      //   }
+      //
+      //  programsToAdd.push(equivalency);
+      //}
+      this.setState({courses : programsToAdd});
+      console.log(programsToAdd);
     });
   }
 
-  deleteRows(rowsToDelete) {
+  /*deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
       const id = this.state.ids[index];
@@ -148,7 +96,7 @@ class CourseEquivalencyPage extends Component {
         }
       });
     }
-  }
+  }*/
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
@@ -178,9 +126,8 @@ class CourseEquivalencyPage extends Component {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       const options = {
-        filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
-        downloadOptions: {filename: "Program Information.csv"}, // Custom file name
+        downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
@@ -194,23 +141,23 @@ class CourseEquivalencyPage extends Component {
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
-            Add
+            Add Program
           </Button>
           <MUIDataTable
             columns = {this.state.columns}
             data = {this.state.courses}
             options = {options}/>
-          {this.state.showAddForm === true ? <CourseDetailsForm
+          {this.state.showAddForm === true ? <ProgramDetailsForm
             course={[]} // Adding a new course, so pass an empty array
             displayMessage={this.displayMessage}
             onClose={this.toggleAddForm}
-            title="Add Course Equivalency"/> : null}
-          {this.state.showEditForm === true ? <CourseDetailsForm
-            courseId={this.state.editingCourseId}
-            course={this.state.editingCourse}
+            title="Add Program"/> : null}
+          {this.state.showEditForm === true ? <ProgramDetailsForm
+            //courseId={this.state.editingCourseId}
+            //course={this.state.editingCourse}
             displayMessage={this.displayMessage}
             onClose={this.hideEditForm}
-            title="Edit Course Equivalency"/> : null}
+            title="Edit Program"/> : null}
           <Snackbar message={this.state.message}
             anchorOrigin={{
               vertical: 'top',
@@ -235,4 +182,4 @@ class CourseEquivalencyPage extends Component {
   }
 }
 
-export default CourseEquivalencyPage;
+export default ProgramManagementPage;

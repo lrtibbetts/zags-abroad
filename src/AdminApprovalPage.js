@@ -19,10 +19,17 @@ class AdminApprovalPage extends Component {
       check: false,
     }
     this.loadAccounts();
+    this.loadDefaults = this.loadDefaults.bind(this);
+  }
+
+  loadDefaults(account) {
+    if(account.approved.is_admin === 0) {
+      this.state.
+    }
   }
 
   handleChange = name => event => {
-   this.setState({ [name]: event.target.checked });
+    this.setState({ [name]: event.target.checked });
   };
 
   loadAccounts() {
@@ -72,10 +79,10 @@ class AdminApprovalPage extends Component {
                       control={
                         <Switch
                         color="primary"
-                        checked = {this.state.check}
-                        onChange={this.handleChange(account.email)}
-                        > </Switch>}
+                        checked={this.state.check}
+                        ></Switch>}
                       label="Grant Access"
+
                       >
                       </FormControlLabel>
                       <p> <b>Name: </b> {account.first}  {account.last} &nbsp;&nbsp; <b> Email: </b> {account.email}</p>

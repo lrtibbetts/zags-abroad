@@ -32,8 +32,6 @@ class ReviewsDisplay extends Component {
   // Create profile using name, major, term and year of user who submitted survey
   surveyProfile(survey) {
     let profileStr = (survey.name === "") ? "Anonymous" : survey.name;
-    profileStr += "\n" + survey.major + ", " + survey.major;
-    profileStr += "\n" + survey.term + survey.calendar_year;
     return profileStr;
   }
 
@@ -64,9 +62,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((residenceSurvey, index) => {
             return(
               <div className="residence" key={index}>
-              <List>
+              {this.surveyProfile(residenceSurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {residenceSurvey.major}<br/>
+                    {residenceSurvey.term + " " + residenceSurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={residenceSurvey.name} secondary={residenceSurvey.residence} />
+                  <ListItemText secondary={residenceSurvey.residence} />
                 </ListItem>
               </List>
               </div>
@@ -76,9 +82,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((tripSurvey, index) => {
             return(
               <div className="trips" key={index}>
-              <List>
+              {this.surveyProfile(tripSurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {tripSurvey.major}<br/>
+                    {tripSurvey.term + " " + tripSurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={tripSurvey.name} secondary={tripSurvey.trips} />
+                  <ListItemText secondary={tripSurvey.trips} />
                 </ListItem>
               </List>
               </div>
@@ -88,9 +102,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((classSurvey, index) => {
             return(
               <div className="classes" key={index}>
-              <List>
+              {this.surveyProfile(classSurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {classSurvey.major}<br/>
+                    {classSurvey.term + " " + classSurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={classSurvey.name} secondary={classSurvey.classes} />
+                  <ListItemText secondary={classSurvey.classes} />
                 </ListItem>
               </List>
               </div>
@@ -100,9 +122,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((activitySurvey, index) => {
             return(
               <div className="activities" key={index}>
-              <List>
+              {this.surveyProfile(activitySurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {activitySurvey.major}<br/>
+                    {activitySurvey.term + " " + activitySurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={activitySurvey.name} secondary={activitySurvey.activities} />
+                  <ListItemText secondary={activitySurvey.activities} />
                 </ListItem>
               </List>
               </div>
@@ -112,9 +142,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((staffSurvey, index) => {
             return(
               <div className="staff" key={index}>
-              <List>
+              {this.surveyProfile(staffSurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {staffSurvey.major}<br/>
+                    {staffSurvey.term + " " + staffSurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={staffSurvey.name} secondary={staffSurvey.staff} />
+                  <ListItemText secondary={staffSurvey.staff} />
                 </ListItem>
               </List>
               </div>
@@ -124,9 +162,17 @@ class ReviewsDisplay extends Component {
           this.state.surveys.map((otherSurvey, index) => {
             return(
               <div className="other" key={index}>
-              <List>
+              {this.surveyProfile(otherSurvey)}
+              <List
+                subheader={
+                  <div>
+                    {this.profileStr}
+                    {otherSurvey.major}<br/>
+                    {otherSurvey.term + " " + otherSurvey.calendar_year}
+                  </div>
+                }>
                 <ListItem>
-                  <ListItemText primary={otherSurvey.name} secondary={otherSurvey.other} />
+                  <ListItemText secondary={otherSurvey.other} />
                 </ListItem>
               </List>
               </div>

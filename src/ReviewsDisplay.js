@@ -59,7 +59,8 @@ class ReviewsDisplay extends Component {
           </Tabs>
         </AppBar>
         {tabValue === 0 &&
-          this.state.surveys.map((residenceSurvey, index) => {
+          this.state.surveys.map((residenceSurvey, index) =>
+          {if (residenceSurvey.residence !== "") {
             return(
               <div className="residence" key={index}>
               {this.surveyProfile(residenceSurvey)}
@@ -71,13 +72,14 @@ class ReviewsDisplay extends Component {
                     {residenceSurvey.term + " " + residenceSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={residenceSurvey.residence} /></ListItem>
+                <ListItem><ListItemText secondary={residenceSurvey.residence}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
         {tabValue === 1 &&
-          this.state.surveys.map((tripSurvey, index) => {
+          this.state.surveys.map((tripSurvey, index) =>
+          {if (tripSurvey.trips !== "") {
             return(
               <div className="trips" key={index}>
               {this.surveyProfile(tripSurvey)}
@@ -89,13 +91,14 @@ class ReviewsDisplay extends Component {
                     {tripSurvey.term + " " + tripSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={tripSurvey.trips} /></ListItem>
+                <ListItem><ListItemText secondary={tripSurvey.trips}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
         {tabValue === 2 &&
-          this.state.surveys.map((classSurvey, index) => {
+          this.state.surveys.map((classSurvey, index) =>
+          {if (classSurvey.classes !== "") {
             return(
               <div className="classes" key={index}>
               {this.surveyProfile(classSurvey)}
@@ -107,13 +110,14 @@ class ReviewsDisplay extends Component {
                     {classSurvey.term + " " + classSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={classSurvey.classes} /></ListItem>
+                <ListItem><ListItemText secondary={classSurvey.classes}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
         {tabValue === 3 &&
-          this.state.surveys.map((activitySurvey, index) => {
+          this.state.surveys.map((activitySurvey, index) =>
+          {if (activitySurvey.activities !== "") {
             return(
               <div className="activities" key={index}>
               {this.surveyProfile(activitySurvey)}
@@ -125,13 +129,14 @@ class ReviewsDisplay extends Component {
                     {activitySurvey.term + " " + activitySurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={activitySurvey.activities} /></ListItem>
+                <ListItem><ListItemText secondary={activitySurvey.activities}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
         {tabValue === 4 &&
-          this.state.surveys.map((staffSurvey, index) => {
+          this.state.surveys.map((staffSurvey, index) =>
+          {if (staffSurvey.staff !== "") {
             return(
               <div className="staff" key={index}>
               {this.surveyProfile(staffSurvey)}
@@ -143,13 +148,14 @@ class ReviewsDisplay extends Component {
                     {staffSurvey.term + " " + staffSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={staffSurvey.staff} /></ListItem>
+                <ListItem><ListItemText secondary={staffSurvey.staff}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
         {tabValue === 5 &&
-          this.state.surveys.map((otherSurvey, index) => {
+          this.state.surveys.map((otherSurvey, index) =>
+          {if (otherSurvey.other !== "") {
             return(
               <div className="other" key={index}>
               {this.surveyProfile(otherSurvey)}
@@ -161,11 +167,11 @@ class ReviewsDisplay extends Component {
                     {otherSurvey.term + " " + otherSurvey.calendar_year}
                   </div>
                 }>
-                <ListItem><ListItemText secondary={otherSurvey.other} /></ListItem>
+                <ListItem><ListItemText secondary={otherSurvey.other}/></ListItem>
               </List>
               </div>
             )
-          })}
+          }})}
       </div>
     );
   }

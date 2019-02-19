@@ -35,7 +35,11 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   loadReviews() {
+    if(this.state.submitting) {
+      this.displayMessage("Changes have been saved");
+    }
     axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
+      console.log(res);
       let reviewsToAdd = [];
       let i = 0;
       while(i < res.data.length) {
@@ -80,12 +84,10 @@ class ProgramReviewsApprovalPage extends Component {
       if(photos[j].approved) {
         axios.post("https://zagsabroad-backend.herokuapp.com/approvephoto", {"url": photos[j].url}).then((res) => {
           this.loadReviews();
-          this.displayMessage("Photos have been approved!")
         });
       } else {
         axios.post("https://zagsabroad-backend.herokuapp.com/deletephoto", {"url": photos[j].url}).then((res) => {
           this.loadReviews();
-          this.displayMessage("Photos have been rejected!")
         });
       }
     }
@@ -105,13 +107,12 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
-    console.log("BRUUUHHH" + this.state.reviews);
+    console.log(this.state.reviews)
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
           {this.state.reviews.map((review) => {
-            console.log("HEYOIJFOIWE")
             return (
               <div className="reviews" key={review.ID}>
                 <Paper>
@@ -125,7 +126,7 @@ class ProgramReviewsApprovalPage extends Component {
                           review['approved'] = true;
                           console.log(review['approved'])
                         } else {
-                        
+
                           review['approved'] = false;
                           console.log(review['approved'])
                         }
@@ -134,7 +135,7 @@ class ProgramReviewsApprovalPage extends Component {
                   </div>
                   <p> <b>Name:</b> {review.name} &nbsp;&nbsp; <b>Email:</b> {review.email}</p>
                   <p> <b>Major:</b> {review.major} &nbsp;&nbsp; <b>Year:</b> {review.year}</p>
-                  <p> <b>Program :</b> {review.program} &nbsp;&nbsp; <b>Term:</b> {review.term}, {review.calendar_year}</p>
+                  <p> <b>Program:</b> {review.program} &nbsp;&nbsp; <b>Term:</b> {review.term}, {review.calendar_year}</p>
                   <p> <b>Residence:</b> {review.residence}</p>
                   <p> <b>Trips:</b> {review.trips}</p>
                   <p> <b>Classes:</b> {review.classes}</p>

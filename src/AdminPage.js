@@ -12,7 +12,7 @@ class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 1
+      value: 3
     }
   }
 

@@ -35,7 +35,7 @@ class ProgramReviewsApprovalPage extends Component {
     if(this.state.submitting) {
       this.displayMessage("Changes have been saved!");
     }
-    axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/unapprovedsurveys").then((res) => {
       let reviewsToAdd = [];
       let i = 0;
       while(i < res.data.length) {

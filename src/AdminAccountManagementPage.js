@@ -26,7 +26,7 @@ class AdminAccountManagementPage extends Component {
   }
 
   loadAccounts() {
-    axios.get("https://zagsabroad-backend.herokuapp.com/adminaccounts").then ((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/accounts").then ((res) => {
       let accountsToAdd = [];
       for(var i = 0; i < res.data.length; i++) {
         let account = {first: res.data[i].first_name, last: res.data[i].last_name, email: res.data[i].email, isAdmin: res.data[i].is_admin};
@@ -38,12 +38,12 @@ class AdminAccountManagementPage extends Component {
 
   saveChanges(account, event) {
     if(event.target.checked) {
-      axios.post("https://zagsabroad-backend.herokuapp.com/approveadmin", {"email": account.email}).then((res) => {
+      axios.post("https://zagsabroad-backend.herokuapp.com/grantaccess", {"email": account.email}).then((res) => {
         this.displayMessage(account.email + " has been given admin access");
         this.loadAccounts();
       })
     } else {
-      axios.post("https://zagsabroad-backend.herokuapp.com/rejectadmin", {"email": account.email}).then((res) => {
+      axios.post("https://zagsabroad-backend.herokuapp.com/removeaccess", {"email": account.email}).then((res) => {
         this.displayMessage("Admin access has been removed for " + account.email);
         this.loadAccounts();
       })

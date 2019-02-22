@@ -28,18 +28,14 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   displayMessage(message) {
-    this.setState({
-      showMessage: true,
-      message: message
-    })
+    this.setState({showMessage: true, message: message});
   }
 
   loadReviews() {
     if(this.state.submitting) {
-      this.displayMessage("Changes have been saved");
+      this.displayMessage("Changes have been saved!");
     }
     axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
-      console.log(res);
       let reviewsToAdd = [];
       let i = 0;
       while(i < res.data.length) {
@@ -83,11 +79,17 @@ class ProgramReviewsApprovalPage extends Component {
     for(let j = 0; j < photos.length; j++) {
       if(photos[j].approved) {
         axios.post("https://zagsabroad-backend.herokuapp.com/approvephoto", {"url": photos[j].url}).then((res) => {
-          this.loadReviews();
+          if(j === photos.length - 1) {
+            // Reload reviews after last photo is approved
+            this.loadReviews();
+          }
         });
       } else {
         axios.post("https://zagsabroad-backend.herokuapp.com/deletephoto", {"url": photos[j].url}).then((res) => {
-          this.loadReviews();
+          if(j === photos.length - 1) {
+            // Reload reviews after last photo is deleted
+            this.loadReviews();
+          }
         });
       }
     }
@@ -107,7 +109,6 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
-    console.log(this.state.reviews)
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (
@@ -166,57 +167,31 @@ class ProgramReviewsApprovalPage extends Component {
                         this.saveChanges(review)
                       }}>
                       Save </Button>
-                      <Snackbar
-                        message="Successfully saved changes!"
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                        open={this.state.open}
-                        autoHideDuration={3000}
-                        action={[
-                          <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            onClick={(event) => this.setState({open: false})}
-                          >
-                            <CloseIcon />
-                          </IconButton>,
-                        ]}
-                        onClose={(event) => this.setState({ open: false })}
-                      >
-                      </Snackbar>
                   </div>
                 </Paper><br/>
               </div>
             );
           })}
           {(this.state.reviews.length === 0 && !this.state.loading) ? <p> No reviews to approve at this time! </p> : null}
-          {this.state.submitting && this.state.reviews.length === 0 ?
-            <Snackbar
-              message="Successfully saved changes!"
+          <Snackbar
+              message={this.state.message}
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              open={this.state.open}
+              open={this.state.showMessage}
               autoHideDuration={3000}
               action={[
                 <IconButton
                   key="close"
                   aria-label="Close"
                   color="inherit"
-                  onClick={(event) => this.setState({open: false})}
-                >
-                  <CloseIcon />
+                  onClick={(event) => this.setState({showMessage: false})}>
+                  <CloseIcon/>
                 </IconButton>,
-              ]}
-              onClose={(event) => this.setState({ open: false })}
-            >
+              ]}>
             </Snackbar>
-             : null}
-          {this.state.loading ? <CircularProgress variant="indeterminate"/>: null}
+            {this.state.loading ? <CircularProgress variant="indeterminate"/> : null}
         </div>
       );
     } else {

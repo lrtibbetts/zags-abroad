@@ -4,11 +4,10 @@ import { Redirect } from "react-router-dom";
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import './ProgramReviewsApprovalPage.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-class AdminApprovalPage extends Component {
+class AdminAccountManagementPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,4 +96,4 @@ class AdminApprovalPage extends Component {
   }
 }
 
-export default AdminApprovalPage;
+export default AdminAccountManagementPage

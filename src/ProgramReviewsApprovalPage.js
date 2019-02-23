@@ -51,13 +51,13 @@ class ProgramReviewsApprovalPage extends Component {
           if (width > height && width > 400) {
             // Landscape image: calculate scaled width and height
             let scaledHeight = (height / width) * 400;
-            photos.push({url: data[i].url, height: scaledHeight, width: 400});
+            photos.push({url: data[i].url, height: scaledHeight, width: 400, approved: data[i].approved});
           } else if (height > width && height > 350) {
             // Portrait image: calculate scaled width and height
             let scaledWidth = (width / height) * 350;
-            photos.push({url: data[i].url, height: 350, width: scaledWidth});
+            photos.push({url: data[i].url, height: 350, width: scaledWidth, approved: data[i].approved});
           } else {
-            photos.push({url: data[i].url, height: data[i].height, width: data[i].width});
+            photos.push({url: data[i].url, height: data[i].height, width: data[i].width, approved: data[i].approved});
           }
         }
         i++;
@@ -167,6 +167,7 @@ class ProgramReviewsApprovalPage extends Component {
                     <FormControlLabel
                       control={<Switch color="primary"> </Switch>}
                       label="Approve text"
+                      checked={review.approved}
                       onChange={(event) => {
                         if(event.target.checked) {
                           review['approved'] = true;
@@ -191,6 +192,7 @@ class ProgramReviewsApprovalPage extends Component {
                       <FormControlLabel
                         control={<Switch color="primary"></Switch>}
                         label="Approve"
+                        checked={photo.approved}
                         onChange={(event) => {
                           if(event.target.checked) {
                             photo['approved'] = true;

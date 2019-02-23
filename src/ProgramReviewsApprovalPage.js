@@ -165,13 +165,15 @@ class ProgramReviewsApprovalPage extends Component {
                 <Paper>
                   <div style={{textAlign: 'left', marginLeft: '10px'}}>
                     <FormControlLabel
-                      control={<Switch color="primary"> </Switch>}
+                      control={<Switch color="primary" checked={review.approved}> </Switch>}
                       label="Approve text"
                       onChange={(event) => {
                         if(event.target.checked) {
-                          review['approved'] = true;
+                          review.approved = true;
+                          this.forceUpdate();
                         } else {
-                          review['approved'] = false;
+                          review.approved = false;
+                          this.forceUpdate();
                         }
                       }}>
                     </FormControlLabel>
@@ -189,13 +191,15 @@ class ProgramReviewsApprovalPage extends Component {
                   {review.photos.map((photo) =>
                     <div className="photo" key={photo.url}>
                       <FormControlLabel
-                        control={<Switch color="primary"></Switch>}
+                        control={<Switch color="primary" checked={photo.approved}></Switch>}
                         label="Approve"
                         onChange={(event) => {
                           if(event.target.checked) {
-                            photo['approved'] = true;
+                            photo.approved = true;
+                            this.forceUpdate();
                           } else {
-                            photo['approved'] = false;
+                            photo.approved = false;
+                            this.forceUpdate();
                           }
                         }}>
                       </FormControlLabel> <br/>

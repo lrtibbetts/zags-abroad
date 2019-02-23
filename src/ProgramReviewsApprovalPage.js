@@ -10,6 +10,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
 
@@ -18,12 +20,15 @@ class ProgramReviewsApprovalPage extends Component {
     super(props);
     this.state = {
       reviews: [],
+      showUnapproved: true, // Only show unapproved reviews by default
+      showApproved: false,
       loading: true,
       submitting: false,
       showMessage: false,
       message: ''
     }
     this.displayMessage = this.displayMessage.bind(this);
+    this.loadReviews = this.loadReviews.bind(this);
     this.loadReviews();
   }
 
@@ -31,43 +36,59 @@ class ProgramReviewsApprovalPage extends Component {
     this.setState({showMessage: true, message: message});
   }
 
+  formatReviews(data) {
+    let reviewsToAdd = [];
+    let i = 0;
+    while(i < data.length) {
+      let review = data[i];
+      let photos = [];
+      let id = review.ID;
+      while(i < data.length && data[i].ID === id) {
+        // Add any corresponding photos to review object
+        if(data[i].url !== null) {
+          let width = data[i].width;
+          let height = data[i].height;
+          if (width > height && width > 400) {
+            // Landscape image: calculate scaled width and height
+            let scaledHeight = (height / width) * 400;
+            photos.push({url: data[i].url, height: scaledHeight, width: 400});
+          } else if (height > width && height > 350) {
+            // Portrait image: calculate scaled width and height
+            let scaledWidth = (width / height) * 350;
+            photos.push({url: data[i].url, height: 350, width: scaledWidth});
+          } else {
+            photos.push({url: data[i].url, height: data[i].height, width: data[i].width});
+          }
+        }
+        i++;
+      }
+      review['photos'] = photos;
+      review = _.omit(review, ['url', 'width', 'height', 'survey_id']);
+      reviewsToAdd.push(review);
+    }
+    this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
+  }
+
   loadReviews() {
     if(this.state.submitting) {
       this.displayMessage("Changes have been saved!");
     }
-    axios.get("https://zagsabroad-backend.herokuapp.com/unapprovedsurveys").then((res) => {
-      let reviewsToAdd = [];
-      let i = 0;
-      while(i < res.data.length) {
-        let review = res.data[i];
-        let photos = [];
-        let id = review.ID;
-        while(i < res.data.length && res.data[i].ID === id) {
-          // Add any corresponding photos to review object
-          if(res.data[i].url !== null) {
-            let width = res.data[i].width;
-            let height = res.data[i].height;
-            if (width > height && width > 400) {
-              // Landscape image: calculate scaled width and height
-              let scaledHeight = (height / width) * 400;
-              photos.push({url: res.data[i].url, height: scaledHeight, width: 400});
-            } else if (height > width && height > 350) {
-              // Portrait image: calculate scaled width and height
-              let scaledWidth = (width / height) * 350;
-              photos.push({url: res.data[i].url, height: 350, width: scaledWidth});
-            } else {
-              photos.push({url: res.data[i].url, height: res.data[i].height, width: res.data[i].width});
-            }
-          }
-          i++;
-        }
-        review['photos'] = photos;
-        review = _.omit(review, ['url', 'width', 'height', 'survey_id']);
-        reviewsToAdd.push(review);
-      }
-      this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
-      console.log(reviewsToAdd);
-    });
+    if(this.state.showUnapproved === true && this.state.showApproved === true) {
+      // Show all reviews
+      axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else if(this.state.showApproved === true) {
+      axios.get("https://zagsabroad-backend.herokuapp.com/approvedsurveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else if(this.state.showUnapproved === true){
+      axios.get("https://zagsabroad-backend.herokuapp.com/unapprovedsurveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else {
+      this.setState({reviews: []})
+    }
   }
 
   savePhotos(photos) {
@@ -113,6 +134,31 @@ class ProgramReviewsApprovalPage extends Component {
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
+          <div>
+            <FormGroup row>
+              <p> View: &nbsp; </p>
+              <FormControlLabel
+                control={
+                <Checkbox
+                  checked={this.state.showUnapproved}
+                  onChange={(event) => {
+                    this.setState({showUnapproved: event.target.checked}, () => this.loadReviews());
+                  }}
+                />}
+                label="Unapproved"
+              />
+              <FormControlLabel
+                control={
+                <Checkbox
+                  checked={this.state.showApproved}
+                  onChange={(event) =>  {
+                    this.setState({showApproved: event.target.checked}, () => this.loadReviews());
+                  }}
+                />}
+                label="Approved"
+              />
+            </FormGroup>
+          </div>
           {this.state.reviews.map((review) => {
             return (
               <div className="reviews" key={review.ID}>
@@ -123,13 +169,9 @@ class ProgramReviewsApprovalPage extends Component {
                       label="Approve text"
                       onChange={(event) => {
                         if(event.target.checked) {
-
                           review['approved'] = true;
-                          console.log(review['approved'])
                         } else {
-
                           review['approved'] = false;
-                          console.log(review['approved'])
                         }
                       }}>
                     </FormControlLabel>

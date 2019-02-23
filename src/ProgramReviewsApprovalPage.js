@@ -167,7 +167,6 @@ class ProgramReviewsApprovalPage extends Component {
                     <FormControlLabel
                       control={<Switch color="primary"> </Switch>}
                       label="Approve text"
-                      checked={review.approved}
                       onChange={(event) => {
                         if(event.target.checked) {
                           review['approved'] = true;
@@ -192,7 +191,6 @@ class ProgramReviewsApprovalPage extends Component {
                       <FormControlLabel
                         control={<Switch color="primary"></Switch>}
                         label="Approve"
-                        checked={photo.approved}
                         onChange={(event) => {
                           if(event.target.checked) {
                             photo['approved'] = true;

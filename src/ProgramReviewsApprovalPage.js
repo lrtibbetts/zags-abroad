@@ -133,6 +133,7 @@ class ProgramReviewsApprovalPage extends Component {
                       }}>
                     </FormControlLabel>
                   </div>
+                  <p style= {{textAlign: 'right', marginRight: '10px'}}> <i> Submitted: </i> {review.timestamp}</p>
                   <p> <b>Name:</b> {review.name} &nbsp;&nbsp; <b>Email:</b> {review.email}</p>
                   <p> <b>Major:</b> {review.major} &nbsp;&nbsp; <b>Year:</b> {review.year}</p>
                   <p> <b>Program:</b> {review.program} &nbsp;&nbsp; <b>Term:</b> {review.term}, {review.calendar_year}</p>

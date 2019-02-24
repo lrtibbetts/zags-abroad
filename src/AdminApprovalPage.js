@@ -19,14 +19,9 @@ class AdminApprovalPage extends Component {
       check: false,
     }
     this.loadAccounts();
-    this.loadDefaults = this.loadDefaults.bind(this);
   }
 
-  loadDefaults(account) {
-    if(account.approved.is_admin === 0) {
-      this.state.
-    }
-  }
+
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });

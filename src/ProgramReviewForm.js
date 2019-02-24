@@ -123,10 +123,7 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
-        <Button variant="contained"
-        onClick = {(event) => {
-          console.log(this.getTime());
-        }}> Get Time </Button>
+        
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>

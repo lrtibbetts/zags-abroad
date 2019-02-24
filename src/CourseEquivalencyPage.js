@@ -66,28 +66,28 @@ class CourseEquivalencyPage extends Component {
           }
         },
         {
-          name: "Signature needed",
+          name: "Signature Needed",
           options: {
             display: false,
             filter: false
           }
         },
         {
-          name: "Approved by",
+          name: "Approved By",
           options: {
             display: false,
             filter: false
           }
         },
         {
-          name: "Approval date",
+          name: "Approval Date",
           options: {
             display: false,
             filter: false
           }
         },
         {
-          name: "Approved until",
+          name: "Approved Until",
           options: {
             display: false,
             filter: false
@@ -129,6 +129,8 @@ class CourseEquivalencyPage extends Component {
         }
         coursesToAdd.push(equivalency);
       }
+      console.log(coursesToAdd);
+      console.log(idsToAdd);
       this.setState({courses : coursesToAdd, ids: idsToAdd});
     });
   }
@@ -180,7 +182,7 @@ class CourseEquivalencyPage extends Component {
       const options = {
         filterType: "multiselect", // Apply multiple filters via dropdown menus
         print: false, // Remove print icon
-        downloadOptions: {filename: "Program Information.csv"}, // Custom file name
+        downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,

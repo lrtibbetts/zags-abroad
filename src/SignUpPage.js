@@ -57,6 +57,7 @@ class SignUpPage extends Component {
     });
   }
 
+
   formIsValid() {
     // Check that no fields are empty and there are no errors (email or password)
     return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
@@ -69,7 +70,7 @@ class SignUpPage extends Component {
         <h1> Sign Up </h1>
         <TextField style = {textFieldStyle}
           id = "firstName"
-          label = "First Name"
+          label = "First Name"                  
           onChange = { (event) =>
             this.setState({firstName : event.target.value})}/>
         <br/>

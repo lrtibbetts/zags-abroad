@@ -39,6 +39,27 @@ class ReviewsDisplay extends Component {
     this.setState({tabValue: value});
   };
 
+/*
+{tabValue === 5 &&
+this.state.surveys.map((otherSurvey, index) =>
+{if (otherSurvey.other !== "") {
+  return(
+    <div className="other" key={index}>
+    {this.surveyProfile(otherSurvey)}
+    <List
+      subheader={
+        <div>
+          {this.profileStr}
+          {otherSurvey.major}<br/>
+          {otherSurvey.term + " " + otherSurvey.calendar_year}
+        </div>
+      }>
+      <ListItem><ListItemText secondary={otherSurvey.other}/></ListItem>
+    </List>
+    </div>
+  )
+}})}
+*/
   render() {
     const { tabValue } = this.state;
     return (
@@ -55,7 +76,6 @@ class ReviewsDisplay extends Component {
             <Tab label="Classes"/>
             <Tab label="Activities"/>
             <Tab label="Staff"/>
-            <Tab label="Other"/>
           </Tabs>
         </AppBar>
         {tabValue === 0 &&
@@ -149,25 +169,6 @@ class ReviewsDisplay extends Component {
                   </div>
                 }>
                 <ListItem><ListItemText secondary={staffSurvey.staff}/></ListItem>
-              </List>
-              </div>
-            )
-          }})}
-        {tabValue === 5 &&
-          this.state.surveys.map((otherSurvey, index) =>
-          {if (otherSurvey.other !== "") {
-            return(
-              <div className="other" key={index}>
-              {this.surveyProfile(otherSurvey)}
-              <List
-                subheader={
-                  <div>
-                    {this.profileStr}
-                    {otherSurvey.major}<br/>
-                    {otherSurvey.term + " " + otherSurvey.calendar_year}
-                  </div>
-                }>
-                <ListItem><ListItemText secondary={otherSurvey.other}/></ListItem>
               </List>
               </div>
             )

@@ -12,7 +12,7 @@ class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 1
+      value: 2
     }
   }
 
@@ -45,7 +45,6 @@ class AdminPage extends Component {
               <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
           {value === 2 && <div><h1>Programs</h1>
-            <p> Manage program details here </p>
             <ProgramManagementPage cookies = {this.props.cookies}/>
           </div>}
           {value === 3 && <div><h1>Admin Accounts</h1>

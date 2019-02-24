@@ -9,6 +9,7 @@
     "lodash": "^4.17.11",
     "material-ui-dropzone": "^2.3.2",
     "mui-datatables": "^2.0.0-beta-54",
+    "nodejs-nodemailer-outlook": "^1.0.8",
     "react": "^16.8.2",
     "react-cookie": "^3.0.8",
     "react-dom": "^16.8.2",

@@ -37,8 +37,6 @@ class ProgramDetailView extends Component {
       showLogInPrompt: false,
       photos: [],
       columns: [
-        { name: "ID",
-          options: { display: false } },
         { name: "",
           options: {
             customBodyRender: (value, tableMeta, updateValue) => {
@@ -88,7 +86,6 @@ class ProgramDetailView extends Component {
     for(var i = 0; i < data.length; i++) {
       let newCourse = [];
       newCourse.push(data[i].id);
-      newCourse.push("");
       newCourse.push(data[i].gu_course_number + (data[i].gu_course_name ? ": " + data[i].gu_course_name : ""));
       newCourse.push(data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name :
       data[i].host_course_name);

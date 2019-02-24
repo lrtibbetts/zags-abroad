@@ -196,7 +196,7 @@ class CourseEquivalencyPage extends Component {
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
-            Add
+            Add Course Equivalency
           </Button>
           <MUIDataTable
             columns = {this.state.columns}

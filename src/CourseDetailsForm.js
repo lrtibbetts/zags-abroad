@@ -159,19 +159,19 @@ class CourseDetailsForm extends Component {
                 options={this.state.departments}
                 onChange={this.handleChangeDepartment}/>
             </div>
-            <TextField style={smallTextFieldStyle} label = "Host course number"
+            <TextField style={smallTextFieldStyle} label = "Host Course Number"
               defaultValue = {this.state.host_course_number}
               onChange = { (event) =>
                 this.setState({host_course_number : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Host course name"
+            <TextField required style={largeTextFieldStyle} label = "Host Course Name"
               defaultValue = {this.state.host_course_name}
               onChange = { (event) =>
                 this.setState({host_course_name : event.target.value})}/>
-            <TextField required style={smallTextFieldStyle} label = "GU course number"
+            <TextField required style={smallTextFieldStyle} label = "GU Course Number"
               defaultValue = {this.state.gu_course_number}
               onChange = { (event) =>
                 this.setState({gu_course_number : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "GU course name"
+            <TextField required style={largeTextFieldStyle} label = "GU Course Name"
               defaultValue = {this.state.gu_course_name}
               onChange = { (event) =>
                 this.setState({gu_course_name : event.target.value})}/>
@@ -185,7 +185,7 @@ class CourseDetailsForm extends Component {
             <div style = {smallDropdownStyle}>
               <DropdownTextField
                 required={true}
-                label="Signature needed"
+                label="Signature Needed"
                 placeholder={this.state.signature_needed ? this.state.signature_needed : ""}
                 options={[{value: "YES", label: "YES"},
                           {value: "NO", label: "NO"}]}
@@ -195,11 +195,11 @@ class CourseDetailsForm extends Component {
               defaultValue = {this.state.comments}
               onChange = { (event) =>
                 this.setState({comments : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Approved by"
+            <TextField required style={largeTextFieldStyle} label = "Approved By"
               defaultValue = {this.state.approved_by}
               onChange = { (event) =>
                 this.setState({approved_by : event.target.value})}/>
-            <TextField required style={smallTextFieldStyle} label = "Approval date"
+            <TextField required style={smallTextFieldStyle} label = "Approval Date"
               type = "date"
               InputLabelProps={{
                 shrink: true,
@@ -207,7 +207,7 @@ class CourseDetailsForm extends Component {
               defaultValue = {this.state.approval_date}
               onChange = { (event) =>
                 this.setState({approval_date : event.target.value})}/>
-            <TextField style={smallTextFieldStyle} label = "Approved until"
+            <TextField style={smallTextFieldStyle} label = "Approved Until"
               type = "date"
               InputLabelProps={{
                 shrink: true,

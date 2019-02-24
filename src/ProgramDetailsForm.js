@@ -8,9 +8,6 @@ import axios from 'axios';
 import DropdownTextField from './DropdownTextField.js';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 
-
-//dropdown text field for Program Type isn't appearing
-
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'
@@ -43,27 +40,21 @@ const largeDropDownStyle = {
   margin: '10px'
 };
 
-// Make department field required
 class ProgramDetailsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //in state will be there this.props.program[1] or [2] etc will
-      //give us host_program, host_url, and such things
-      programs: [],
-      host_program: [
-        //stuff about program goes here
-    ],
-      host_url: [],
-      city: [],
-      application_link: [],
-      program_type: [],
-      program_types: ["semester", "faculty", "idk"]
+      host_program: this.props.program[0],
+      program_types: this.props.program[1],
+      host_url: this.props.program[2],
+      application_link: this.props.program[3],
+      city: this.props.program[4],
+      lat: 0.0,
+      lng: 0.0
     }
 
-    this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
+    this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
   }
-
 
   formIsValid() {
     // Check that all required fields are filled
@@ -71,8 +62,8 @@ class ProgramDetailsForm extends Component {
     this.state.application_link && this.state.program_type);
   }
 
-  handleChangeSignatureNeeded(selectedOption) {
-    this.setState({signature_needed: selectedOption.value});
+  handleChangeProgramType(selectedOption) {
+    this.setState({program_type: selectedOption.value});
   }
 
   handleChange = name => value => {
@@ -85,56 +76,57 @@ class ProgramDetailsForm extends Component {
     return (
       <div>
         <Dialog open={true} onClose={this.props.onClose} scroll='body'>
+          <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
           <div>
-            <TextField style={smallTextFieldStyle} label = "Host Program Name"
+            <TextField style={largeTextFieldStyle} label = "Host Program Name"
               defaultValue = {this.state.host_program}
               onChange = { (event) =>
-                this.setState({host_course_number : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Host Program URL"
-              defaultValue = {this.state.host_url}
-              onChange = { (event) =>
-                this.setState({host_course_name : event.target.value})}/>
-            <TextField required style={smallTextFieldStyle} label = "Location"
-              defaultValue = {this.state.city}
-              onChange = { (event) =>
-                this.setState({gu_course_number : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Application link"
-              defaultValue = {this.state.application_link}
-              onChange = { (event) =>
-                this.setState({gu_course_name : event.target.value})}/>
+                this.setState({host_program : event.target.value})}/>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
                 required={true}
                 label="Program Type"
-                options={[{value: "faculty", label: "faculty"},
-                          {value: "idk", label: "idk"}]}
-                onChange={this.handleChangeSignatureNeeded}/>
-                </div>
+                placeholder={this.state.program_type ? this.state.program_type : ""}
+                options={[{value: "Semester", label: "Semester"},
+                          {value: "Faculty Led", label: "Faculty Led"}]}
+                onChange={this.handleChangeProgramType}/>
+            </div>
+            <TextField required style={largeTextFieldStyle} label = "Location"
+              defaultValue = {this.state.city}
+              onChange = { (event) =>
+                this.setState({city : event.target.value})}/>
+            <TextField required style={largeTextFieldStyle} label = "Host Institution Link"
+              defaultValue = {this.state.host_url}
+              onChange = { (event) =>
+                this.setState({host_url : event.target.value})}/>
+            <TextField required style={largeTextFieldStyle} label = "Application Link"
+              defaultValue = {this.state.application_link}
+              onChange = { (event) =>
+                this.setState({application_link : event.target.value})}/><br/>
             <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
               <span>
                 <Button variant="contained" style={buttonStyle}
                   disabled={!this.formIsValid()}
                   onClick = {(event) => {
-                    let courseInfo = this.state;
-                    courseInfo.core = courseInfo.core.map(item => item.value).join(', ') + ",";
-                    if(this.props.title === "Add Course Equivalency") {
-                      axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
+                    let programInfo = this.state;
+                    if(this.props.title === "Add Program") {
+                      axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
                         console.log(res.data);
                         if(res.data.errno) { // Error adding the course
-                          this.props.displayMessage("Error adding course");
+                          this.props.displayMessage("Error adding program");
                         } else { // No error, course added successfully
-                          this.props.displayMessage("Course added successfully");
+                          this.props.displayMessage("Program added successfully");
                         }
                         this.props.onClose();
                       });
-                    } else if(this.props.title === "Edit Course Equivalency") {
-                      courseInfo.id = this.props.courseId; // Add course id to courseInfo object
-                      axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
+                    } else if(this.props.title === "Edit Program") {
+                      programInfo.id = this.props.courseId; // Add course id to programInfo object
+                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
                         console.log(res.data);
                         if(res.data.errno) { // Error updating the course
-                          this.props.displayMessage("Error updating course");
+                          this.props.displayMessage("Error updating program");
                         } else { // No error, course updated successfully
-                          this.props.displayMessage("Course updated successfully");
+                          this.props.displayMessage("Program updated successfully");
                         }
                         this.props.onClose();
                       });

@@ -44,7 +44,8 @@ class ProgramReviewForm extends Component {
       other: '',
       reviewId: 0,
       formSubmitted: '',
-      photos: []
+      photos: [],
+      timestamp: '',
     }
     // Get list of programs for dropdown menu
     axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
@@ -75,12 +76,25 @@ class ProgramReviewForm extends Component {
       "name" : this.state.name,
       "email" : this.state.email,
       "staff" : this.state.staff,
+      "timestamp" : this.state.timestamp,
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/submitsurvey", accountInfo).then((res) => {
       this.setState({formSubmitted: true, reviewId: res.data.insertId}, () => {
         this.handleUploadImages(this.state.photos);
       });  // Upload images after review is submitted
     });
+  }
+
+  getTime() {
+    let date = new Date();
+    let hours = date.getHours();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    var minutes = date.getMinutes();
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear() + "\n" + hours + ":" + minutes + " " + ampm;
+    this.state.timestamp = strTime;
+    return strTime;
   }
 
   // Called in submitReview() after review is submitted
@@ -109,6 +123,7 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
+        
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>
@@ -227,6 +242,7 @@ class ProgramReviewForm extends Component {
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year)}
           onClick = {() => {
+            this.getTime();
             this.submitReview();
           }}> Submit </Button>
         {this.state.formSubmitted ?

@@ -70,7 +70,7 @@ class SignUpPage extends Component {
         <h1> Sign Up </h1>
         <TextField style = {textFieldStyle}
           id = "firstName"
-          label = "First Name"
+          label = "First Name"                  
           onChange = { (event) =>
             this.setState({firstName : event.target.value})}/>
         <br/>

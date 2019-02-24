@@ -18,10 +18,10 @@ class ProgramManagementPage extends Component {
     this.state = {
       showAddForm: false,
       showEditForm: false,
-      courses: [],
-      ids: [], // Array to store ids internally
-      editingCourseId: '', // Id of course being edited
-      editingCourse: [], // Array with details of course being edited
+      programs: [],
+      //ids: [], // Array to store ids internally
+      //editingProgramId: '', // Id of course being edited
+      editingProgram: [], // Array with details of course being edited
       showMessage: false,
       message: '',
       //location = city
@@ -32,58 +32,70 @@ class ProgramManagementPage extends Component {
       columns: [
         {
           name: "Program Name",
+          options: {
+            display: true
+          }
         },
         {
           name: "Location",
+          options: {
+            display: true
+          }
         },
         {
           name: "Program Type",
+          options: {
+            display: true
+          }
         },
         {
-          name: "Application link",
+          name: "Application Link",
+          options: {
+            display: true
+          }
         },
         {
           name: "Host URL",
+          options: {
+            display: true
+          }
         }
       ]
     }
 
+
     // Bind 'this' context to helper functions
-    this.loadCourses = this.loadCourses.bind(this);
+    this.loadPrograms = this.loadPrograms.bind(this);
     //this.deleteRows = this.deleteRows.bind(this);
     this.toggleAddForm = this.toggleAddForm.bind(this);
     this.populateEditForm = this.populateEditForm.bind(this);
     this.hideEditForm = this.hideEditForm.bind(this);
     this.displayMessage = this.displayMessage.bind(this);
 
-    //this.loadCourses();
+    this.loadPrograms();
   }
 
-  loadCourses() {
-    axios.get("https://zagsabroad-backend.herokuapp.com/programs").then((res) => {
+  loadPrograms() {
+    axios.get("https://zagsabroad-backend.herokuapp.com/adminprograms").then((res) => {
       // Convert array of objects to 2D array
-      const programsToAdd = res.data;
-      // const idsToAdd = [];
-      // for(let i = 0; i < res.data.length; i++) {
-      //   let equivalency = [];
-      //   for(var field in res.data[0]) {
-      //     if(field === "id") {
-      //       idsToAdd.push(res.data[i][field]);
-      //     } else {
-      //       equivalency.push(res.data[i][field]); // Access each field in the row object
-      //     }
-      //   }
-      //
-      //  programsToAdd.push(equivalency);
-      //}
-      this.setState({courses : programsToAdd});
+      const programsToAdd = [];
+      for(let i = 0; i < res.data.length; i++) {
+        let prog = [];
+        prog.push(res.data[i]["host_program"]);
+        prog.push(res.data[i]["city"]);
+        prog.push(res.data[i]["program_type"]);
+        prog.push(res.data[i]["application_link"]);
+        prog.push(res.data[i]["host_url"]);
+        programsToAdd.push(prog);
+      }
+      this.setState({programs : programsToAdd});
       console.log(programsToAdd);
     });
   }
 
   /*deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
-      const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
+      const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in programs array (parallel to ids array)
       const id = this.state.ids[index];
       var courseInfo = {
         id : id
@@ -100,18 +112,18 @@ class ProgramManagementPage extends Component {
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
-    this.loadCourses();
+    this.loadPrograms();
   }
 
   populateEditForm(rowData, rowMeta) {
     // Get course details for row clicked
     let id = this.state.ids[rowMeta.dataIndex]; // Get course id
-    this.setState({editingCourseId: id, editingCourse: rowData, showEditForm: true});
+    this.setState({editingProgramId: id, editingProgram: rowData, showEditForm: true});
   }
 
   hideEditForm() {
     this.setState({showEditForm : false});
-    this.loadCourses();
+    this.loadPrograms();
   }
 
   displayMessage(message) {
@@ -127,7 +139,7 @@ class ProgramManagementPage extends Component {
     if(cookies.get('role') === 'admin') {
       const options = {
         print: false, // Remove print icon
-        downloadOptions: {filename: "Course Equivalencies.csv"}, // Custom file name
+        downloadOptions: {filename: "Program Information.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
@@ -145,16 +157,16 @@ class ProgramManagementPage extends Component {
           </Button>
           <MUIDataTable
             columns = {this.state.columns}
-            data = {this.state.courses}
+            data = {this.state.programs}
             options = {options}/>
           {this.state.showAddForm === true ? <ProgramDetailsForm
-            course={[]} // Adding a new course, so pass an empty array
+            program={[]} // Adding a new course, so pass an empty array
             displayMessage={this.displayMessage}
             onClose={this.toggleAddForm}
             title="Add Program"/> : null}
           {this.state.showEditForm === true ? <ProgramDetailsForm
-            //courseId={this.state.editingCourseId}
-            //course={this.state.editingCourse}
+            //courseId={this.state.editingProgramId}
+            program={this.state.editingProgram}
             displayMessage={this.displayMessage}
             onClose={this.hideEditForm}
             title="Edit Program"/> : null}

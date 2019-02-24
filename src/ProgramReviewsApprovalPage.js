@@ -10,6 +10,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
 
 var _ = require('lodash'); // Provides the neat 'omit' function
 
@@ -18,56 +20,75 @@ class ProgramReviewsApprovalPage extends Component {
     super(props);
     this.state = {
       reviews: [],
+      showUnapproved: true, // Only show unapproved reviews by default
+      showApproved: false,
       loading: true,
       submitting: false,
       showMessage: false,
       message: ''
     }
     this.displayMessage = this.displayMessage.bind(this);
+    this.loadReviews = this.loadReviews.bind(this);
     this.loadReviews();
   }
 
   displayMessage(message) {
-    this.setState({
-      showMessage: true,
-      message: message
-    })
+    this.setState({showMessage: true, message: message});
+  }
+
+  formatReviews(data) {
+    let reviewsToAdd = [];
+    let i = 0;
+    while(i < data.length) {
+      let review = data[i];
+      let photos = [];
+      let id = review.ID;
+      while(i < data.length && data[i].ID === id) {
+        // Add any corresponding photos to review object
+        if(data[i].url !== null) {
+          let width = data[i].width;
+          let height = data[i].height;
+          if (width > height && width > 400) {
+            // Landscape image: calculate scaled width and height
+            let scaledHeight = (height / width) * 400;
+            photos.push({url: data[i].url, height: scaledHeight, width: 400, approved: data[i].approved});
+          } else if (height > width && height > 350) {
+            // Portrait image: calculate scaled width and height
+            let scaledWidth = (width / height) * 350;
+            photos.push({url: data[i].url, height: 350, width: scaledWidth, approved: data[i].approved});
+          } else {
+            photos.push({url: data[i].url, height: data[i].height, width: data[i].width, approved: data[i].approved});
+          }
+        }
+        i++;
+      }
+      review['photos'] = photos;
+      review = _.omit(review, ['url', 'width', 'height', 'survey_id']);
+      reviewsToAdd.push(review);
+    }
+    this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
   }
 
   loadReviews() {
-    axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
-      let reviewsToAdd = [];
-      let i = 0;
-      while(i < res.data.length) {
-        let review = res.data[i];
-        let photos = [];
-        let id = review.ID;
-        while(i < res.data.length && res.data[i].ID === id) {
-          // Add any corresponding photos to review object
-          if(res.data[i].url !== null) {
-            let width = res.data[i].width;
-            let height = res.data[i].height;
-            if (width > height && width > 400) {
-              // Landscape image: calculate scaled width and height
-              let scaledHeight = (height / width) * 400;
-              photos.push({url: res.data[i].url, height: scaledHeight, width: 400});
-            } else if (height > width && height > 350) {
-              // Portrait image: calculate scaled width and height
-              let scaledWidth = (width / height) * 350;
-              photos.push({url: res.data[i].url, height: 350, width: scaledWidth});
-            } else {
-              photos.push({url: res.data[i].url, height: res.data[i].height, width: res.data[i].width});
-            }
-          }
-          i++;
-        }
-        review['photos'] = photos;
-        review = _.omit(review, ['url', 'width', 'height', 'survey_id']);
-        reviewsToAdd.push(review);
-      }
-      this.setState({submitting: false, reviews: reviewsToAdd, loading: false});
-      console.log(reviewsToAdd);
-    });
+    if(this.state.submitting) {
+      this.displayMessage("Changes have been saved!");
+    }
+    if(this.state.showUnapproved === true && this.state.showApproved === true) {
+      // Show all reviews
+      axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else if(this.state.showApproved === true) {
+      axios.get("https://zagsabroad-backend.herokuapp.com/approvedsurveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else if(this.state.showUnapproved === true){
+      axios.get("https://zagsabroad-backend.herokuapp.com/unapprovedsurveys").then((res) => {
+        this.formatReviews(res.data);
+      });
+    } else {
+      this.setState({reviews: []})
+    }
   }
 
   savePhotos(photos) {
@@ -79,13 +100,17 @@ class ProgramReviewsApprovalPage extends Component {
     for(let j = 0; j < photos.length; j++) {
       if(photos[j].approved) {
         axios.post("https://zagsabroad-backend.herokuapp.com/approvephoto", {"url": photos[j].url}).then((res) => {
-          this.loadReviews();
-          this.displayMessage("Photos have been approved!")
+          if(j === photos.length - 1) {
+            // Reload reviews after last photo is approved
+            this.loadReviews();
+          }
         });
       } else {
         axios.post("https://zagsabroad-backend.herokuapp.com/deletephoto", {"url": photos[j].url}).then((res) => {
-          this.loadReviews();
-          this.displayMessage("Photos have been rejected!")
+          if(j === photos.length - 1) {
+            // Reload reviews after last photo is deleted
+            this.loadReviews();
+          }
         });
       }
     }
@@ -105,36 +130,57 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
-    console.log("BRUUUHHH" + this.state.reviews);
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
+          <div>
+            <FormGroup row>
+              <p> View: &nbsp; </p>
+              <FormControlLabel
+                control={
+                <Checkbox
+                  checked={this.state.showUnapproved}
+                  onChange={(event) => {
+                    this.setState({showUnapproved: event.target.checked}, () => this.loadReviews());
+                  }}
+                />}
+                label="Unapproved"
+              />
+              <FormControlLabel
+                control={
+                <Checkbox
+                  checked={this.state.showApproved}
+                  onChange={(event) =>  {
+                    this.setState({showApproved: event.target.checked}, () => this.loadReviews());
+                  }}
+                />}
+                label="Approved"
+              />
+            </FormGroup>
+          </div>
           {this.state.reviews.map((review) => {
-            console.log("HEYOIJFOIWE")
             return (
               <div className="reviews" key={review.ID}>
                 <Paper>
                   <div style={{textAlign: 'left', marginLeft: '10px'}}>
                     <FormControlLabel
-                      control={<Switch color="primary"> </Switch>}
+                      control={<Switch color="primary" checked={review.approved}> </Switch>}
                       label="Approve text"
                       onChange={(event) => {
                         if(event.target.checked) {
-
-                          review['approved'] = true;
-                          console.log(review['approved'])
+                          review.approved = true;
+                          this.forceUpdate();
                         } else {
-                        
-                          review['approved'] = false;
-                          console.log(review['approved'])
+                          review.approved = false;
+                          this.forceUpdate();
                         }
                       }}>
                     </FormControlLabel>
                   </div>
                   <p> <b>Name:</b> {review.name} &nbsp;&nbsp; <b>Email:</b> {review.email}</p>
                   <p> <b>Major:</b> {review.major} &nbsp;&nbsp; <b>Year:</b> {review.year}</p>
-                  <p> <b>Program :</b> {review.program} &nbsp;&nbsp; <b>Term:</b> {review.term}, {review.calendar_year}</p>
+                  <p> <b>Program:</b> {review.program} &nbsp;&nbsp; <b>Term:</b> {review.term}, {review.calendar_year}</p>
                   <p> <b>Residence:</b> {review.residence}</p>
                   <p> <b>Trips:</b> {review.trips}</p>
                   <p> <b>Classes:</b> {review.classes}</p>
@@ -145,13 +191,15 @@ class ProgramReviewsApprovalPage extends Component {
                   {review.photos.map((photo) =>
                     <div className="photo" key={photo.url}>
                       <FormControlLabel
-                        control={<Switch color="primary"></Switch>}
+                        control={<Switch color="primary" checked={photo.approved}></Switch>}
                         label="Approve"
                         onChange={(event) => {
                           if(event.target.checked) {
-                            photo['approved'] = true;
+                            photo.approved = true;
+                            this.forceUpdate();
                           } else {
-                            photo['approved'] = false;
+                            photo.approved = false;
+                            this.forceUpdate();
                           }
                         }}>
                       </FormControlLabel> <br/>
@@ -165,57 +213,31 @@ class ProgramReviewsApprovalPage extends Component {
                         this.saveChanges(review)
                       }}>
                       Save </Button>
-                      <Snackbar
-                        message="Successfully saved changes!"
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                        open={this.state.open}
-                        autoHideDuration={3000}
-                        action={[
-                          <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            onClick={(event) => this.setState({open: false})}
-                          >
-                            <CloseIcon />
-                          </IconButton>,
-                        ]}
-                        onClose={(event) => this.setState({ open: false })}
-                      >
-                      </Snackbar>
                   </div>
                 </Paper><br/>
               </div>
             );
           })}
           {(this.state.reviews.length === 0 && !this.state.loading) ? <p> No reviews to approve at this time! </p> : null}
-          {this.state.submitting && this.state.reviews.length === 0 ?
-            <Snackbar
-              message="Successfully saved changes!"
+          <Snackbar
+              message={this.state.message}
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              open={this.state.open}
+              open={this.state.showMessage}
               autoHideDuration={3000}
               action={[
                 <IconButton
                   key="close"
                   aria-label="Close"
                   color="inherit"
-                  onClick={(event) => this.setState({open: false})}
-                >
-                  <CloseIcon />
+                  onClick={(event) => this.setState({showMessage: false})}>
+                  <CloseIcon/>
                 </IconButton>,
-              ]}
-              onClose={(event) => this.setState({ open: false })}
-            >
+              ]}>
             </Snackbar>
-             : null}
-          {this.state.loading ? <CircularProgress variant="indeterminate"/>: null}
+            {this.state.loading ? <CircularProgress variant="indeterminate"/> : null}
         </div>
       );
     } else {

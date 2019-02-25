@@ -139,9 +139,7 @@ class CourseEquivalencyPage extends Component {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
       const id = this.state.ids[index];
-      var courseInfo = {
-        id : id
-      }
+      var courseInfo = { id : id }
       axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
         if(res.data.errno) { // Error deleting the course
           this.displayMessage("Error deleting course");
@@ -196,7 +194,7 @@ class CourseEquivalencyPage extends Component {
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
-            Add
+            Add Course Equivalency
           </Button>
           <MUIDataTable
             columns = {this.state.columns}

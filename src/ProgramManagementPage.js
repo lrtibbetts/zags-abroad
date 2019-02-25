@@ -19,16 +19,9 @@ class ProgramManagementPage extends Component {
       showAddForm: false,
       showEditForm: false,
       programs: [],
-      //ids: [], // Array to store ids internally
-      //editingProgramId: '', // Id of course being edited
-      editingProgram: [], // Array with details of course being edited
+      editingProgram: [], // Array with details of program being edited
       showMessage: false,
       message: '',
-      //location = city
-      //program name = host_program
-      //app link == application_link
-      //host url = host_url
-      //prog type = program_type
       columns: [
         {
           name: "Program Name",
@@ -55,7 +48,7 @@ class ProgramManagementPage extends Component {
           }
         },
         {
-          name: "Host URL",
+          name: "Host Institution Link",
           options: {
             display: true
           }
@@ -63,10 +56,9 @@ class ProgramManagementPage extends Component {
       ]
     }
 
-
     // Bind 'this' context to helper functions
     this.loadPrograms = this.loadPrograms.bind(this);
-    //this.deleteRows = this.deleteRows.bind(this);
+    this.deleteRows = this.deleteRows.bind(this);
     this.toggleAddForm = this.toggleAddForm.bind(this);
     this.populateEditForm = this.populateEditForm.bind(this);
     this.hideEditForm = this.hideEditForm.bind(this);
@@ -89,26 +81,23 @@ class ProgramManagementPage extends Component {
         programsToAdd.push(prog);
       }
       this.setState({programs : programsToAdd});
-      console.log(programsToAdd);
     });
   }
 
-  /*deleteRows(rowsToDelete) {
+  deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in programs array (parallel to ids array)
-      const id = this.state.ids[index];
-      var courseInfo = {
-        id : id
-      }
-      axios.post("https://zagsabroad-backend.herokuapp.com/deletecourse", courseInfo).then((res) => {
-        if(res.data.errno) { // Error deleting the course
-          this.displayMessage("Error deleting course");
+      const host_program = this.state.programs[index][0];
+      var programInfo = { host_program : host_program }
+      axios.post("https://zagsabroad-backend.herokuapp.com/deleteprogram", programInfo).then((res) => {
+        if(res.data.errno) { // Error deleting the program
+          this.displayMessage("Error deleting program");
         } else { // No error, course updated successfully
-          this.displayMessage("Course deleted successfully");
+          this.displayMessage(host_program + " deleted successfully");
         }
       });
     }
-  }*/
+  }
 
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
@@ -116,9 +105,8 @@ class ProgramManagementPage extends Component {
   }
 
   populateEditForm(rowData, rowMeta) {
-    // Get course details for row clicked
-    let id = this.state.ids[rowMeta.dataIndex]; // Get course id
-    this.setState({editingProgramId: id, editingProgram: rowData, showEditForm: true});
+    // Get program details for row clicked
+    this.setState({editingProgram: rowData, showEditForm: true});
   }
 
   hideEditForm() {
@@ -139,17 +127,19 @@ class ProgramManagementPage extends Component {
     if(cookies.get('role') === 'admin') {
       const options = {
         print: false, // Remove print icon
+        download: false,
+        viewColumns: false,
+        filter: false,
         downloadOptions: {filename: "Program Information.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
-        rowsPerPage: 20, // Default to 20 rows per page
-        rowsPerPageOptions: [20, 50, 100],
+        pagination: false,
         fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center', margin: '20px'}}>
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>
@@ -160,12 +150,11 @@ class ProgramManagementPage extends Component {
             data = {this.state.programs}
             options = {options}/>
           {this.state.showAddForm === true ? <ProgramDetailsForm
-            program={[]} // Adding a new course, so pass an empty array
+            program={[]} // Adding a new program, so pass an empty array
             displayMessage={this.displayMessage}
             onClose={this.toggleAddForm}
             title="Add Program"/> : null}
           {this.state.showEditForm === true ? <ProgramDetailsForm
-            //courseId={this.state.editingProgramId}
             program={this.state.editingProgram}
             displayMessage={this.displayMessage}
             onClose={this.hideEditForm}

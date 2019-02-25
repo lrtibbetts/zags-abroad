@@ -93,7 +93,7 @@ class ProgramReviewForm extends Component {
     var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear() + "\n" + hours + ":" + minutes + " " + ampm;
-    this.state.timestamp = strTime;
+    this.setState({timeStamp: strTime});
     return strTime;
   }
 

@@ -78,7 +78,7 @@ class ProgramManagementPage extends Component {
         prog.push(res.data[i]["program_type"]);
         prog.push(res.data[i]["application_link"]);
         prog.push(res.data[i]["host_url"]);
-        programsToAdd.push(prog); 
+        programsToAdd.push(prog);
       }
       this.setState({programs : programsToAdd});
     });
@@ -93,7 +93,7 @@ class ProgramManagementPage extends Component {
         if(res.data.errno) { // Error deleting the program
           this.displayMessage("Error deleting program");
         } else { // No error, course updated successfully
-          this.displayMessage(host_program + "program deleted successfully");
+          this.displayMessage(host_program + " deleted successfully");
         }
       });
     }

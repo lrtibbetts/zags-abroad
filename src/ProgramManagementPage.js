@@ -78,7 +78,7 @@ class ProgramManagementPage extends Component {
         prog.push(res.data[i]["program_type"]);
         prog.push(res.data[i]["application_link"]);
         prog.push(res.data[i]["host_url"]);
-        programsToAdd.push(prog);
+        programsToAdd.push(prog); 
       }
       this.setState({programs : programsToAdd});
     });

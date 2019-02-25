@@ -113,7 +113,7 @@ class ProgramDetailsForm extends Component {
                         } else { // No error, program updated successfully
                           this.props.displayMessage("Program updated successfully");
                         }
-                        this.props.onClose();
+                        this.props.onClose(); 
                       });
                     }
                   }}>

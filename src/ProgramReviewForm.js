@@ -62,6 +62,7 @@ class ProgramReviewForm extends Component {
 
   // Send survey to database
   submitReview() {
+    this.getTime()
     var accountInfo = {
       "major" : this.state.major,
       "program" : this.state.program,
@@ -90,10 +91,12 @@ class ProgramReviewForm extends Component {
     let hours = date.getHours();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
+    if(hours === 0) {
+      hours = 12;
+    }
     var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear() + "\n" + hours + ":" + minutes + " " + ampm;
-    this.setState({timeStamp: strTime});
     return strTime;
   }
 
@@ -233,9 +236,12 @@ class ProgramReviewForm extends Component {
         <Button label="submit" variant="contained" style={{margin: '10px'}}
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year)}
-          onClick = {() => {
-            console.log(this.getTime());
-            this.submitReview();
+          onClick = {(event) => {
+            var cal = this.getTime();
+            this.setState({timestamp: cal}, () => {
+              this.submitReview();
+              console.log(this.state);
+            });
           }}> Submit </Button>
         {this.state.formSubmitted ?
           <Dialog id="dialog" open={true}>

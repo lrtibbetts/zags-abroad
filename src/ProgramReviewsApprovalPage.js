@@ -132,6 +132,7 @@ class ProgramReviewsApprovalPage extends Component {
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
+
       return (
         <div style={{textAlign: 'center', marginLeft: '5%', marginRight: '5%'}}>
           <div>
@@ -160,6 +161,8 @@ class ProgramReviewsApprovalPage extends Component {
             </FormGroup>
           </div>
           {this.state.reviews.map((review) => {
+            console.log("YEEEETTT");
+            console.log(review);
             return (
               <div className="reviews" key={review.ID}>
                 <Paper>

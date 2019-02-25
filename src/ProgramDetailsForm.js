@@ -50,7 +50,8 @@ class ProgramDetailsForm extends Component {
       application_link: this.props.program[3],
       city: this.props.program[1],
       lat: 0.0,
-      lng: 0.0
+      lng: 0.0,
+      org_host_program: ""
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
@@ -81,7 +82,7 @@ class ProgramDetailsForm extends Component {
             <TextField style={largeTextFieldStyle} label = "Host Program Name"
               defaultValue = {this.state.host_program}
               onChange = { (event) =>
-                this.setState({host_program : event.target.value})}/>
+                this.setState({org_host_program: this.state.host_program, host_program : event.target.value})}/>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
                 required={true}
@@ -120,9 +121,9 @@ class ProgramDetailsForm extends Component {
                         this.props.onClose();
                       });
                     } else if(this.props.title === "Edit Program") {
-                      programInfo.org_host_program = this.props.host_program; // Store program name to programInfo object
+                      //programInfo.org_host_program = this.props.host_program; // Store program name to programInfo object
                       //console.log(programInfo.org_host_program);
-                      axios.post("http://localhost:3001/editprogram", programInfo).then((res) => {
+                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
                         console.log(res.data);
                         if(res.data.errno) { // Error updating the program
                           this.props.displayMessage("Error updating program");

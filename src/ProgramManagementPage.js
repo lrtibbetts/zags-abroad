@@ -88,15 +88,14 @@ class ProgramManagementPage extends Component {
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in programs array (parallel to ids array)
-      const id = this.state.ids[index];
-      var courseInfo = {
-        id : id
-      }
-      axios.post("https://zagsabroad-backend.herokuapp.com/deleteprogram", courseInfo).then((res) => {
-        if(res.data.errno) { // Error deleting the course
-          this.displayMessage("Error deleting course");
+      const host_program = this.state.programs[index].host_program;
+      console.log(host_program);
+      var programInfo = { host_program : host_program }
+      axios.post("https://zagsabroad-backend.herokuapp.com/deleteprogram", programInfo).then((res) => {
+        if(res.data.errno) { // Error deleting the program
+          this.displayMessage("Error deleting program");
         } else { // No error, course updated successfully
-          this.displayMessage("Course deleted successfully");
+          this.displayMessage("Program deleted successfully");
         }
       });
     }

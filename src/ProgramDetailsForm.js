@@ -13,10 +13,10 @@ const largeTextFieldStyle = {
   margin: '10px'
 };
 
-// const mediumTextFieldStyle = {
-//   width: 250,
-//   margin: '10px'
-// };
+const mediumTextFieldStyle = {
+  width: 250,
+  margin: '10px'
+};
 
 const smallTextFieldStyle = {
   width: 150,
@@ -34,21 +34,21 @@ const smallDropdownStyle = {
   marginTop: '6px'
 };
 
-// const largeDropDownStyle = {
-//   width: 325,
-//   display: 'inline-block',
-//   margin: '10px'
-// };
+const largeDropDownStyle = {
+  width: 325,
+  display: 'inline-block',
+  margin: '10px'
+};
 
 class ProgramDetailsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       host_program: this.props.program[0],
-      program_types: this.props.program[1],
-      host_url: this.props.program[2],
+      program_types: this.props.program[2],
+      host_url: this.props.program[4],
       application_link: this.props.program[3],
-      city: this.props.program[4],
+      city: this.props.program[1],
       lat: 0.0,
       lng: 0.0
     }
@@ -112,20 +112,21 @@ class ProgramDetailsForm extends Component {
                     if(this.props.title === "Add Program") {
                       axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
                         console.log(res.data);
-                        if(res.data.errno) { // Error adding the course
+                        if(res.data.errno) { // Error adding the program
                           this.props.displayMessage("Error adding program");
-                        } else { // No error, course added successfully
+                        } else { // No error, program added successfully
                           this.props.displayMessage("Program added successfully");
                         }
                         this.props.onClose();
                       });
                     } else if(this.props.title === "Edit Program") {
-                      programInfo.id = this.props.courseId; // Add course id to programInfo object
-                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
+                      programInfo.org_host_program = this.props.host_program; // Store program name to programInfo object
+                      //console.log(programInfo.org_host_program);
+                      axios.post("http://localhost:3001/editprogram", programInfo).then((res) => {
                         console.log(res.data);
-                        if(res.data.errno) { // Error updating the course
+                        if(res.data.errno) { // Error updating the program
                           this.props.displayMessage("Error updating program");
-                        } else { // No error, course updated successfully
+                        } else { // No error, program updated successfully
                           this.props.displayMessage("Program updated successfully");
                         }
                         this.props.onClose();

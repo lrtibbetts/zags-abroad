@@ -48,7 +48,7 @@ class ProgramManagementPage extends Component {
           }
         },
         {
-          name: "Host Institution",
+          name: "Host Institution Link",
           options: {
             display: true
           }

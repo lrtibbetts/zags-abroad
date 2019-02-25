@@ -39,31 +39,6 @@ class ReviewsDisplay extends Component {
     this.setState({tabValue: value});
   };
 
-/*
-{tabValue === 5 &&
-this.state.surveys.map((otherSurvey, index) =>
-{if (otherSurvey.other !== "") {
-  return(
-    <div className="other" key={index}>
-    {this.surveyProfile(otherSurvey)}
-    <List
-      subheader={
-        <div>
-          {this.profileStr}
-          {otherSurvey.major}<br/>
-          {otherSurvey.term + " " + otherSurvey.calendar_year}
-        </div>
-      }>
-      <ListItem><ListItemText secondary={otherSurvey.other}/></ListItem>
-    </List>
-    </div>
-  )
-}})}
-*/
-
-//EDIT FORMAT HERE
-// https://stackoverflow.com/questions/45014094/expected-to-return-a-value-at-the-end-of-arrow-function
-
   render() {
     const { tabValue } = this.state;
     return (
@@ -100,7 +75,7 @@ this.state.surveys.map((otherSurvey, index) =>
               </List>
               </div>
             )
-          }})}
+          } else { return null }})}
         {tabValue === 1 &&
           this.state.surveys.map((tripSurvey, index) =>
           {if (tripSurvey.trips !== "") {
@@ -119,7 +94,7 @@ this.state.surveys.map((otherSurvey, index) =>
               </List>
               </div>
             )
-          }})}
+          } else { return null }})}
         {tabValue === 2 &&
           this.state.surveys.map((classSurvey, index) =>
           {if (classSurvey.classes !== "") {
@@ -138,7 +113,7 @@ this.state.surveys.map((otherSurvey, index) =>
               </List>
               </div>
             )
-          }})}
+          } else { return null }})}
         {tabValue === 3 &&
           this.state.surveys.map((activitySurvey, index) =>
           {if (activitySurvey.activities !== "") {
@@ -157,7 +132,7 @@ this.state.surveys.map((otherSurvey, index) =>
               </List>
               </div>
             )
-          }})}
+          } else { return null }})}
         {tabValue === 4 &&
           this.state.surveys.map((staffSurvey, index) =>
           {if (staffSurvey.staff !== "") {
@@ -176,7 +151,7 @@ this.state.surveys.map((otherSurvey, index) =>
               </List>
               </div>
             )
-          }})}
+          } else { return null }})}
       </div>
     );
   }

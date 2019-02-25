@@ -93,7 +93,7 @@ class ProgramReviewForm extends Component {
     var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear() + "\n" + hours + ":" + minutes + " " + ampm;
-    this.state.timestamp = strTime;
+    this.setState({timeStamp: strTime});
     return strTime;
   }
 
@@ -123,7 +123,7 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
-        
+
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>

@@ -81,7 +81,6 @@ class ProgramManagementPage extends Component {
         programsToAdd.push(prog);
       }
       this.setState({programs : programsToAdd});
-      console.log(programsToAdd);
     });
   }
 
@@ -129,17 +128,19 @@ class ProgramManagementPage extends Component {
     if(cookies.get('role') === 'admin') {
       const options = {
         print: false, // Remove print icon
+        download: false,
+        viewColumns: false,
+        filter: false,
         downloadOptions: {filename: "Program Information.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
         onRowsDelete: this.deleteRows,
-        rowsPerPage: 20, // Default to 20 rows per page
-        rowsPerPageOptions: [20, 50, 100],
+        pagination: false,
         fixedHeader: false, // Headers will move if the user scrolls across the table
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center', margin: '20px'}}>
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>

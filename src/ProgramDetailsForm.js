@@ -6,20 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
 import DropdownTextField from './DropdownTextField.js';
-//import MultiDropdownTextField from './MultiDropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,
-  margin: '10px'
-};
-
-const mediumTextFieldStyle = {
-  width: 250,
-  margin: '10px'
-};
-
-const smallTextFieldStyle = {
-  width: 150,
   margin: '10px'
 };
 
@@ -32,12 +21,6 @@ const smallDropdownStyle = {
   display: 'inline-block',
   marginLeft: '10px',
   marginTop: '6px'
-};
-
-const largeDropDownStyle = {
-  width: 325,
-  display: 'inline-block',
-  margin: '10px'
 };
 
 class ProgramDetailsForm extends Component {

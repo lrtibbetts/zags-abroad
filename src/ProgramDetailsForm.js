@@ -28,13 +28,13 @@ class ProgramDetailsForm extends Component {
     super(props);
     this.state = {
       host_program: this.props.program[0],
-      program_types: this.props.program[2],
+      program_type: this.props.program[2],
       host_url: this.props.program[4],
       application_link: this.props.program[3],
       city: this.props.program[1],
       lat: 0.0,
       lng: 0.0,
-      org_host_program: ""
+      orig_host_program: this.props.program[0]
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
@@ -42,8 +42,7 @@ class ProgramDetailsForm extends Component {
 
   formIsValid() {
     // Check that all required fields are filled
-    return (this.state.host_program && this.state.host_url && this.state.city &&
-    this.state.application_link && this.state.program_type);
+    return (this.state.host_program && this.state.city && this.state.program_type);
   }
 
   handleChangeProgramType(selectedOption) {
@@ -62,28 +61,28 @@ class ProgramDetailsForm extends Component {
         <Dialog open={true} onClose={this.props.onClose} scroll='body'>
           <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
           <div>
-            <TextField style={largeTextFieldStyle} label = "Host Program Name"
+            <TextField required style={largeTextFieldStyle} label = "Host Program Name"
               defaultValue = {this.state.host_program}
               onChange = { (event) =>
-                this.setState({org_host_program: this.state.host_program, host_program : event.target.value})}/>
+                this.setState({host_program : event.target.value})}/>
             <div style = {smallDropdownStyle}>
               <DropdownTextField
                 required={true}
                 label="Program Type"
                 placeholder={this.state.program_type ? this.state.program_type : ""}
                 options={[{value: "Semester", label: "Semester"},
-                          {value: "Faculty Led", label: "Faculty Led"}]}
+                          {value: "Short Term", label: "Short Term"}]}
                 onChange={this.handleChangeProgramType}/>
             </div>
             <TextField required style={largeTextFieldStyle} label = "Location"
               defaultValue = {this.state.city}
               onChange = { (event) =>
                 this.setState({city : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Host Institution Link"
+            <TextField style={largeTextFieldStyle} label = "Host Institution Link"
               defaultValue = {this.state.host_url}
               onChange = { (event) =>
                 this.setState({host_url : event.target.value})}/>
-            <TextField required style={largeTextFieldStyle} label = "Application Link"
+            <TextField style={largeTextFieldStyle} label = "Application Link"
               defaultValue = {this.state.application_link}
               onChange = { (event) =>
                 this.setState({application_link : event.target.value})}/><br/>
@@ -104,16 +103,14 @@ class ProgramDetailsForm extends Component {
                         this.props.onClose();
                       });
                     } else if(this.props.title === "Edit Program") {
-                      //programInfo.org_host_program = this.props.host_program; // Store program name to programInfo object
-                      //console.log(programInfo.org_host_program);
-                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
+                      axios.post("http://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
                         console.log(res.data);
                         if(res.data.errno) { // Error updating the program
                           this.props.displayMessage("Error updating program");
                         } else { // No error, program updated successfully
                           this.props.displayMessage("Program updated successfully");
                         }
-                        this.props.onClose(); 
+                        this.props.onClose();
                       });
                     }
                   }}>

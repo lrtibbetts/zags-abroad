@@ -103,7 +103,7 @@ class ProgramDetailsForm extends Component {
                         this.props.onClose();
                       });
                     } else if(this.props.title === "Edit Program") {
-                      axios.post("http://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
+                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
                         console.log(res.data);
                         if(res.data.errno) { // Error updating the program
                           this.props.displayMessage("Error updating program");

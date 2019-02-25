@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
 
 const textFieldStyle = {
   width: 250,
@@ -33,6 +34,18 @@ class SignUpPage extends Component {
     }
   }
 
+  sendEmail(event) {
+
+    var accountInfo = {
+      "email" : this.state.email,
+      "first" : this.state.firstName,
+      "last" : this.state.lastName,
+    }
+    axios.post("http://localhost:3001/send", accountInfo).then((res) => {
+      console.log("sending email from frontend");
+    })
+  }
+
   makeAccount(event) {
     var accountInfo = {
       "email" : this.state.email,
@@ -57,7 +70,6 @@ class SignUpPage extends Component {
     });
   }
 
-
   formIsValid() {
     // Check that no fields are empty and there are no errors (email or password)
     return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
@@ -70,7 +82,7 @@ class SignUpPage extends Component {
         <h1> Sign Up </h1>
         <TextField style = {textFieldStyle}
           id = "firstName"
-          label = "First Name"                  
+          label = "First Name"
           onChange = { (event) =>
             this.setState({firstName : event.target.value})}/>
         <br/>
@@ -118,6 +130,12 @@ class SignUpPage extends Component {
               this.makeAccount(event)
             }}}/>
         <br/> <br/>
+        <Button variant="contained"
+        onClick= {(event) => {
+          console.log("clicked");
+          this.sendEmail();
+        }}> Send email </Button>
+
         <Button
           disabled = {!this.formIsValid()}
           onClick = {(event) =>

@@ -123,7 +123,7 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
-        
+
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>
@@ -219,14 +219,6 @@ class ProgramReviewForm extends Component {
             this.setState({staff : event.target.value})}
           helperText = {(1000 - this.state.staff.length) + ' characters remaining'}/>
         <br/>
-        <TextField id="other" multiline={true} rows={10} style={textFieldStyle}
-          label = "Is there anything else you would like to share?"
-          variant = "outlined"
-          inputProps={{maxLength: 1000}}
-          onChange = { (event) =>
-            this.setState({other : event.target.value})}
-          helperText = {(1000 - this.state.other.length) + ' characters remaining'}/>
-        <br/>
         <p>Please share some photos from your time abroad! <br/> (Only PNG and JPEG files allowed)</p>
         <div style={{width: '50%', display: 'inline-block'}}>
           <DropzoneArea
@@ -242,7 +234,7 @@ class ProgramReviewForm extends Component {
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year)}
           onClick = {() => {
-            this.getTime();
+            console.log(this.getTime());
             this.submitReview();
           }}> Submit </Button>
         {this.state.formSubmitted ?

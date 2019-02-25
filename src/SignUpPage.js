@@ -129,13 +129,13 @@ class SignUpPage extends Component {
               this.makeAccount(event)
             }}}/>
         <br/> <br/>
-        <Button variant="contained"
+        {/*<Button variant="contained"
         onClick= {(event) => {
           console.log("clicked");
           this.sendEmail();
-        }}> Send email </Button>
-
+        }}> Send email </Button>*/}
         <Button
+          variant="contained"
           disabled = {!this.formIsValid()}
           onClick = {(event) =>
             this.makeAccount(event)}>

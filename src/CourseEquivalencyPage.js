@@ -129,8 +129,6 @@ class CourseEquivalencyPage extends Component {
         }
         coursesToAdd.push(equivalency);
       }
-      console.log(coursesToAdd);
-      console.log(idsToAdd);
       this.setState({courses : coursesToAdd, ids: idsToAdd});
     });
   }

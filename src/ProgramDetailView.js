@@ -236,6 +236,10 @@ class ProgramDetailView extends Component {
           <b>Note:</b> This list is based on courses GU students have gotten credit
           for in the past, but you may be able to get other courses approved. </p> : null}
         </div>
+        <div className="header">
+          <h2> Program Reviews: </h2>
+        </div>
+        <ReviewsDisplay program={this.props.name}/><br/>
         <Snackbar message={this.state.message}
           anchorOrigin={{
             vertical: 'top',
@@ -266,7 +270,6 @@ class ProgramDetailView extends Component {
               </Button>
             </div>
           </Dialog>
-          <ReviewsDisplay program={this.props.name}/><br/>
       </div>
     );
   }

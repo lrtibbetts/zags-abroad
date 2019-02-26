@@ -61,7 +61,8 @@ class MainPage extends Component {
       let programName = data[i].host_program;
       let courses = [];
       while(i < data.length && data[i].host_program === programName) {
-        let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
+        let newCourse = {guCourse: (data[i].gu_course_name ? (data[i].gu_course_number + ": " + data[i].gu_course_name)
+          : data[i].gu_course_number),
           hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
           : data[i].host_course_name, requiresSignature: data[i].signature_needed, core: data[i].core};
         courses.push(newCourse);

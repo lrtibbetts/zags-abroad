@@ -41,7 +41,6 @@ class ProgramReviewForm extends Component {
       classes: '',
       activities: '',
       staff: '',
-      other: '',
       reviewId: 0,
       formSubmitted: '',
       photos: [],
@@ -73,7 +72,6 @@ class ProgramReviewForm extends Component {
       "trips" : this.state.trips,
       "classes" : this.state.classes,
       "activities" : this.state.activities,
-      "other" : this.state.other,
       "name" : this.state.name,
       "email" : this.state.email,
       "staff" : this.state.staff,
@@ -126,7 +124,6 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
-
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>
@@ -237,10 +234,9 @@ class ProgramReviewForm extends Component {
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year)}
           onClick = {(event) => {
-            var cal = this.getTime();
-            this.setState({timestamp: cal}, () => {
+            var time = this.getTime();
+            this.setState({timestamp: time}, () => {
               this.submitReview();
-              console.log(this.state);
             });
           }}> Submit </Button>
         {this.state.formSubmitted ?

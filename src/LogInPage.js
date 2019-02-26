@@ -78,7 +78,7 @@ class LogInPage extends Component {
           onClick = {(event) =>
             this.logIn(event)}> Log In </Button>
         {this.state.validUser === true ?
-          (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
+          (this.state.isAdmin === true ? <Redirect to="/admin"/> : window.history.back())
           : (this.state.wrongPassword) ? null :
           <Dialog id="dialog" open={this.state.showPrompt}>
             <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>

@@ -237,7 +237,7 @@ class ProgramDetailView extends Component {
           for in the past, but you may be able to get other courses approved. </p> : null}
         </div>
         <div className="header">
-          <h2> Program Reviews: </h2>
+          <h2> Program Reviews </h2>
         </div>
         <ReviewsDisplay program={this.props.name}/><br/>
         <Snackbar message={this.state.message}

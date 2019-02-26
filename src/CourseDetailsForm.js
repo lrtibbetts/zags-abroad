@@ -19,7 +19,7 @@ const mediumTextFieldStyle = {
 };
 
 const smallTextFieldStyle = {
-  width: 150,
+  width: 170,
   margin: '10px'
 };
 

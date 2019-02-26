@@ -15,7 +15,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import MapView from "./MapView.js";
-import "./MainPage.css"
+import "./MainPage.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 class MainPage extends Component {
   constructor(props) {
@@ -108,7 +109,6 @@ class MainPage extends Component {
       "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
       "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
     }
-    console.log(filters);
     axios.post("https://zagsabroad-backend.herokuapp.com/mainsearch", filters).then((res) => {
       this.formatPrograms(res.data);
     });
@@ -169,11 +169,12 @@ render() {
                       </TableHead>
                       <TableBody>
                         {program.courses.map((course, index) => {
+                          let core = course.core.trim();
                           return (
                             <TableRow key={index}>
                               <TableCell>{course.guCourse}</TableCell>
                               <TableCell>{course.hostCourse}</TableCell>
-                              <TableCell>{course.core.substring(0, course.core.length - 1)}</TableCell>
+                              <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
                               <TableCell>{course.requiresSignature}</TableCell>
                             </TableRow>
                           );

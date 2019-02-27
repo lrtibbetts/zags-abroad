@@ -144,6 +144,12 @@ render() {
         </div>
         <div className="map">
           <MapView programs={this.state.programList.map((program) => program.programName)}/>
+          {!this.state.loading ?
+          <div>
+            <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
+            <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
+            target = "_blank" rel="noopener noreferrer">Click here.</a>
+          </div> : null}
         </div>
         <div className="list">
           {this.state.loading ? <div id="loading">
@@ -188,12 +194,6 @@ render() {
             );
           })}
         </div>
-        {!this.state.loading ?
-        <div>
-          <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
-          <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-          target = "_blank" rel="noopener noreferrer">Click here.</a>
-        </div> : null}
         {this.state.programList.length > 0 ?
         <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>
         <b>Note:</b> This list is based on courses GU students have gotten credit

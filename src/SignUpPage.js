@@ -5,6 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const textFieldStyle = {
   width: 250,
@@ -29,19 +32,38 @@ class SignUpPage extends Component {
       passwordLengthError : false,
       emailError : false,
       accountCreated : false,
-      showPrompt : false
+      showPrompt : false,
+      snackbarOpen: false,
+      snackMessage: '',
+      buttonDisabled: false,
     }
   }
 
   sendEmail(event) {
-
+    this.setState({buttonDisabled: true});
     var accountInfo = {
       "email" : this.state.email,
       "first" : this.state.firstName,
       "last" : this.state.lastName,
+      "password": this.state.password
     }
-    axios.post("http://localhost:3001/send", accountInfo).then((res) => {
-      console.log("sending email from frontend");
+    axios.post("https://zagsabroad-backend.herokuapp.com/send", accountInfo).then((res) => {
+      if(res.data.sent === true) {
+        //setting label for the  snackbar
+        //making sure that the email was sent
+        this.setState({snackMessage: "Please check your email to continue! (Also check your junk mail!)"})
+        //pass info for verification
+      } else {
+        //change message
+        this.setState({snackMessage: "Something went wrong. Please wait a few minutes and try again!"})
+      }
+    })
+  }
+
+  verifyEmail(event) {
+    axios.get("https://zagsabroad-backend.herokuapp.com/verify").then((res) => {
+      console.log("response from frontend")
+      console.log(res);
     })
   }
 
@@ -71,9 +93,13 @@ class SignUpPage extends Component {
 
   formIsValid() {
     // Check that no fields are empty and there are no errors (email or password)
-    return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
-      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError)
+    this.setState({buttonDisabled: (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
+      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError)})
   }
+
+  handleClose = () => {
+    this.setState({snackbarOpen: false});
+  };
 
   render() {
     return (
@@ -128,21 +154,46 @@ class SignUpPage extends Component {
             if(this.formIsValid() && event.key === 'Enter') {
               this.makeAccount(event)
             }}}/>
-        <br/> <br/>
-        {/*<Button variant="contained"
-        onClick= {(event) => {
-          console.log("clicked");
-          this.sendEmail();
-        }}> Send email </Button>*/}
+        <br/>
+        <div>
         <Button
-          variant="contained"
-          disabled = {!this.formIsValid()}
-          onClick = {(event) =>
-            this.makeAccount(event)}>
-          Get Started
-        </Button>
+        variant="contained"
+        disabled={this.state.buttonDisabled}
+        onClick= {(event) => {
+          this.setState({snackbarOpen: true}, () => {
+            this.sendEmail();
+            this.makeAccount(event);
+            console.log("account made")
+          });
+        }}> Get started </Button>
+
+        </div>
+
         {this.state.accountCreated === true ?
-          <Redirect to="/"/> :
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={this.state.snackbarOpen}
+            autoHideDuration={4000}
+            onClose={this.handleClose}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={this.state.snackMessage}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={this.props.close}
+                onClick={this.handleClose}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          /> :
           <Dialog open={this.state.showPrompt}>
             <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
             <div>

@@ -49,8 +49,8 @@ class SignUpPage extends Component {
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/send", accountInfo).then((res) => {
       if(res.data.sent === true) {
-        //setting label for the  snackbar
-        //making sure that the email was sent
+        // Setting label for the snackbar
+        // Making sure that the email was sent
         this.setState({snackMessage: "Please check your email to continue! (Also check your junk mail!)"})
         //pass info for verification
       } else {

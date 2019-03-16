@@ -233,10 +233,6 @@ class ProgramDetailView extends Component {
               columns = {this.state.columns}
               data = {this.state.courseList}
               options = {options}/>}<br/>
-            {this.state.courseList.length > 0 ?
-            <p style={{fontSize: '13px'}}>
-            <b>Note:</b> This list is based on courses GU students have gotten credit
-            for in the past, but you may be able to get other courses approved. </p> : null}
           </div>
           <div className="header">
             <h2> Program Reviews </h2>

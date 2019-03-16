@@ -21,6 +21,23 @@ class MyAccount extends Component {
       message: ''
     }
     this.getCourses();
+
+    // Check if any courses have been deleted by an admin. If so, delete from saved_courses
+    axios.post("https://zagsabroad-backend.herokuapp.com/deletedcourses", {email: this.state.email}).then((res) => {
+      console.log(res.data);
+      for(var i = 0; i < res.data.length; i++) {
+        axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse",
+        {email: this.state.email, id: res.data[i].course_id}).then((res) => {
+          console.log(res.data);
+        });
+      }
+      if(res.data.length === 1) {
+        this.setState({showMessage: true, message: "Note: 1 previously saved course was removed by an administrator"});
+      } else if (res.data.length > 1) {
+        this.setState({showMessage: true, message: "Note: " + res.data.length +
+        " previously saved courses were removed by an administrator"});
+      }
+    });
   }
 
   formatCourses(data) {
@@ -93,7 +110,6 @@ class MyAccount extends Component {
           open={this.state.showMessage}
           onClose={(event) =>
             this.setState({showMessage: false})}
-          autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
           action={
           <IconButton
             onClick={(event) =>

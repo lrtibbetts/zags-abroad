@@ -54,8 +54,9 @@ class MyAccount extends Component {
   }
 
   render() {
-    let email = this.props.cookies.get('email');
-    if(email) {
+    let role = this.props.cookies.get('role');
+    // Only allow general users who are logged in to access MyAccount
+    if(role === 'user') {
     return(
       <div style={{textAlign: 'center', padding: '20px'}}>
         <h2>My Account</h2>

@@ -13,7 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -124,82 +124,89 @@ class MainPage extends Component {
   };
 
 render() {
-    return (
-      <div style={{textAlign: 'center'}}>
-        <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
-        <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
-          <Select autoWidth={true} value={this.state.searchBy}
-            onChange = { (event) =>
-              this.setState({searchBy : event.target.value})}>
-            <MenuItem value='department'> Department </MenuItem>
-            <MenuItem value='core'> Core Designation </MenuItem>
-          </Select>
+    const cookies = this.props.cookies;
+    if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
+      return (
+        <div style={{textAlign: 'center'}}>
+          <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
+          <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+            <Select autoWidth={true} value={this.state.searchBy}
+              onChange = { (event) =>
+                this.setState({searchBy : event.target.value})}>
+              <MenuItem value='department'> Department </MenuItem>
+              <MenuItem value='core'> Core Designation </MenuItem>
+            </Select>
+          </div>
+          <div className="searchBar">
+            <MultiDropdownTextField
+              id = "search"
+              value = { this.state.filters }
+              onChange = { this.handleChange("filters")}
+              options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
+          </div>
+          <div className="map">
+            <MapView programs={this.state.programList.map((program) => program.programName)}/>
+            {!this.state.loading ?
+            <div>
+              <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
+              <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
+              target = "_blank" rel="noopener noreferrer">Click here.</a>
+            </div> : null}
+          </div>
+          <div className="list">
+            {this.state.loading ? <div id="loading">
+              <CircularProgress variant="indeterminate"/> </div>: null}
+            {this.state.filters.length > 0 && this.state.programList.length === 0
+              && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
+            {this.state.programList.map(program => {
+              return (
+                <ExpansionPanel key={program.programName}>
+                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <b>{program.programName}</b>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
+                      <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>GU Course</TableCell>
+                            <TableCell>Host Course</TableCell>
+                            <TableCell>Core Designation</TableCell>
+                            <TableCell>Requires Signature</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {program.courses.map((course, index) => {
+                            let core = course.core.trim();
+                            return (
+                              <TableRow key={index}>
+                                <TableCell>{course.guCourse}</TableCell>
+                                <TableCell>{course.hostCourse}</TableCell>
+                                <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
+                                <TableCell>{course.requiresSignature}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              );
+            })}
+          </div>
+          {this.state.programList.length > 0 ?
+          <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>
+          <b>Note:</b> This list is based on courses GU students have gotten credit
+          for in the past, but you may be able to get other courses approved. </p> : null} <br/>
         </div>
-        <div className="searchBar">
-          <MultiDropdownTextField
-            id = "search"
-            value = { this.state.filters }
-            onChange = { this.handleChange("filters")}
-            options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
-        </div>
-        <div className="map">
-          <MapView programs={this.state.programList.map((program) => program.programName)}/>
-          {!this.state.loading ?
-          <div>
-            <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
-            <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-            target = "_blank" rel="noopener noreferrer">Click here.</a>
-          </div> : null}
-        </div>
-        <div className="list">
-          {this.state.loading ? <div id="loading">
-            <CircularProgress variant="indeterminate"/> </div>: null}
-          {this.state.filters.length > 0 && this.state.programList.length === 0
-            && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
-          {this.state.programList.map(program => {
-            return (
-              <ExpansionPanel key={program.programName}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <b>{program.programName}</b>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
-                    <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>GU Course</TableCell>
-                          <TableCell>Host Course</TableCell>
-                          <TableCell>Core Designation</TableCell>
-                          <TableCell>Requires Signature</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {program.courses.map((course, index) => {
-                          let core = course.core.trim();
-                          return (
-                            <TableRow key={index}>
-                              <TableCell>{course.guCourse}</TableCell>
-                              <TableCell>{course.hostCourse}</TableCell>
-                              <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
-                              <TableCell>{course.requiresSignature}</TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            );
-          })}
-        </div>
-        {this.state.programList.length > 0 ?
-        <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>
-        <b>Note:</b> This list is based on courses GU students have gotten credit
-        for in the past, but you may be able to get other courses approved. </p> : null} <br/>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <Redirect to="/admin"/>
+      );
+    }
   }
 }
 

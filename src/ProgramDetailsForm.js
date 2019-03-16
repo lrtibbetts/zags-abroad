@@ -4,6 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
+import Geocode from "react-geocode";
 import axios from 'axios';
 import DropdownTextField from './DropdownTextField.js';
 
@@ -23,18 +24,21 @@ const smallDropdownStyle = {
   marginTop: '6px'
 };
 
+Geocode.setApiKey("AIzaSyBFPQ0cFalfg1ea0t_HIhF9NihOeztcdgY");
+
 class ProgramDetailsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       host_program: this.props.program[0],
-      program_type: this.props.program[2],
-      host_url: this.props.program[4],
-      application_link: this.props.program[3],
       city: this.props.program[1],
-      lat: 0.0,
-      lng: 0.0,
-      orig_host_program: this.props.program[0]
+      program_type: this.props.program[2],
+      host_url: this.props.program[3],
+      application_link: this.props.program[4],
+      lat: this.props.program[5],
+      lng: this.props.program[6],
+      orig_host_program: this.props.program[0],
+      orig_host_city: this.props.program[1]
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
@@ -49,11 +53,16 @@ class ProgramDetailsForm extends Component {
     this.setState({program_type: selectedOption.value});
   }
 
-  handleChange = name => value => {
-    this.setState({
-      [name]: value,
+  updateProgram(programInfo) {
+    axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
+      if(res.data.errno) { // Error updating the program
+        this.props.displayMessage("Error updating program");
+      } else { // No error, program updated successfully
+        this.props.displayMessage("Program updated successfully");
+      }
+      this.props.onClose();
     });
-  };
+  }
 
   render() {
     return (
@@ -74,7 +83,7 @@ class ProgramDetailsForm extends Component {
                           {value: "Short Term", label: "Short Term"}]}
                 onChange={this.handleChangeProgramType}/>
             </div>
-            <TextField required style={largeTextFieldStyle} label = "Location"
+            <TextField required style={largeTextFieldStyle} label = "Location (City, Country)"
               defaultValue = {this.state.city}
               onChange = { (event) =>
                 this.setState({city : event.target.value})}/>
@@ -93,25 +102,42 @@ class ProgramDetailsForm extends Component {
                   onClick = {(event) => {
                     let programInfo = this.state;
                     if(this.props.title === "Add Program") {
-                      axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
-                        console.log(res.data);
-                        if(res.data.errno) { // Error adding the program
-                          this.props.displayMessage("Error adding program");
-                        } else { // No error, program added successfully
-                          this.props.displayMessage("Program added successfully");
+                      // Geocoding for lat and lng
+                      Geocode.fromAddress(programInfo.city).then(
+                        response => {
+                          const { lat, lng } = response.results[0].geometry.location;
+                          programInfo["lat"] = lat;
+                          programInfo["lng"] = lng;
+                          axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
+                            if(res.data.errno) { // Error adding the program
+                              this.props.displayMessage("Error adding program");
+                            } else { // No error, program added successfully
+                              this.props.displayMessage("Program added successfully");
+                            }
+                            this.props.onClose();
+                          });
+                        },
+                        error => {
+                          this.props.displayMessage("Error: check that the location is correct");
                         }
-                        this.props.onClose();
-                      });
+                      );
                     } else if(this.props.title === "Edit Program") {
-                      axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
-                        console.log(res.data);
-                        if(res.data.errno) { // Error updating the program
-                          this.props.displayMessage("Error updating program");
-                        } else { // No error, program updated successfully
-                          this.props.displayMessage("Program updated successfully");
-                        }
-                        this.props.onClose();
-                      });
+                      // If program location has changed, use geocoding for lat and lng
+                      if(programInfo.city !== programInfo.orig_host_city) {
+                        Geocode.fromAddress(programInfo.city).then(
+                          response => {
+                            const { lat, lng } = response.results[0].geometry.location;
+                            programInfo["lat"] = lat;
+                            programInfo["lng"] = lng;
+                            this.updateProgram(programInfo);
+                          },
+                          error => {
+                            this.props.displayMessage("Error: check that the location is correct");
+                          }
+                        );
+                      } else {
+                        this.updateProgram(programInfo);
+                      }
                     }
                   }}>
                   Save

@@ -37,7 +37,6 @@ class LogInPage extends Component {
     }
     // for local testing: "http://localhost:3001/login"
     axios.post("https://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
-      console.log(res.data);
       if(res.data === "Email not found") {
         this.setState({showPrompt : true});
       } else if(res.data.is_verified === 0) {

@@ -42,10 +42,9 @@ class MapView extends Component {
     this.setState({popupInfo: null}, this.getCities());
   }
 
-  //https://github.com/uber/react-map-gl/blob/4.0-release/examples/controls/src/app.js
+  //Resource: https://github.com/uber/react-map-gl/blob/4.0-release/examples/controls/src/app.js
   renderPopup() {
     const {popupInfo} = this.state;
-
     return popupInfo && (
       <Popup tipSize={5}
         anchor="top"

@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Geocode from "react-geocode";
 import axios from 'axios';
-import DropdownTextField from './DropdownTextField.js';
+import DropdownTextField from '../DropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,

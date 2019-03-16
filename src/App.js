@@ -3,7 +3,7 @@ import SignUpPage from "./SignUpPage.js";
 import MainPage from "./MainPage.js";
 import LogInPage from "./LogInPage.js";
 import NavigationBar from "./NavigationBar.js";
-import AdminPage from "./AdminPage.js";
+import AdminPage from "./admin/AdminPage.js";
 import ProgramDetailView from "./ProgramDetailView.js";
 import ProgramReviewForm from "./ProgramReviewForm.js";
 import MyAccount from "./MyAccount.js"

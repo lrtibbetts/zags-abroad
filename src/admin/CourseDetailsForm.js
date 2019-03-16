@@ -5,8 +5,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
-import DropdownTextField from './DropdownTextField.js';
-import MultiDropdownTextField from './MultiDropdownTextField.js';
+import DropdownTextField from '../DropdownTextField.js';
+import MultiDropdownTextField from '../MultiDropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,

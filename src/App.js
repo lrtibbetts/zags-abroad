@@ -9,6 +9,7 @@ import ProgramReviewForm from "./ProgramReviewForm.js";
 import MyAccount from "./MyAccount.js"
 import { BrowserRouter, Route } from "react-router-dom";
 import { withCookies } from "react-cookie";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 class App extends Component {
 

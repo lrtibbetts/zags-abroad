@@ -42,5 +42,4 @@ describe('Signup page', () => {
       expect(signUpPage.find('#password').props().helperText).toEqual("Please enter at least 8 characters");
     });
 
-
 });

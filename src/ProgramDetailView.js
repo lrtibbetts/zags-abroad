@@ -23,8 +23,14 @@ const buttonStyle = {
 };
 
 class ProgramDetailView extends Component {
+
   constructor(props) {
     super(props);
+
+    // Here, figure out courses that should have a check mark
+    // 1. Is user logged in? (look at cookies)
+    // 2. If so, get courses from their account (store ids in a list in state)
+
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
@@ -40,11 +46,22 @@ class ProgramDetailView extends Component {
         { name: "",
           options: {
             customBodyRender: (value, tableMeta, updateValue) => {
-              return (
-                <IconButton onClick={(event) => this.saveCourse(value)}
-                  color="primary"><AddIcon/>
-                </IconButton>
-              );
+              console.log(tableMeta.rowData[0]); // Course id
+              // Here, check if the id is in the list in state that you already loaded (from their account)
+              // I just changed the color, but change to a check icon
+              if(true) {
+                return (
+                  <IconButton onClick={(event) => this.saveCourse(value)}
+                    color="secondary"><AddIcon/>
+                  </IconButton>
+                );
+              } else {
+                return (
+                  <IconButton onClick={(event) => this.saveCourse(value)}
+                    color="primary"><AddIcon/>
+                  </IconButton>
+                );
+              }
             }}},
         { name: "Gonzaga Course" },
         { name: "Host Course" },

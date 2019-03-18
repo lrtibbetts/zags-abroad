@@ -183,10 +183,6 @@ class ProgramReviewsApprovalPage extends Component {
             </FormGroup>
           </div>
           {this.state.reviews.map((review) => {
-<<<<<<< HEAD:src/ProgramReviewsApprovalPage.js
-            console.log(review);
-=======
->>>>>>> 96d795f593b82617cf6d1bb24a31b4a4b063dd63:src/admin/ProgramReviewsApprovalPage.js
             return (
               <div className="reviews" key={review.ID}>
                 <Paper>

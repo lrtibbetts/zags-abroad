@@ -188,7 +188,7 @@ class CourseEquivalencyPage extends Component {
         responsive: "scroll" // Table will resize if more columns are added
       };
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center', margin: '20px'}}>
           <Button variant="contained"
             style={addButtonStyle}
             onClick={this.toggleAddForm}>

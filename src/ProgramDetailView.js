@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
@@ -208,6 +208,7 @@ class ProgramDetailView extends Component {
               );
             })}
           </Carousel> : null)}
+          Hi hi
         </div>
         <p className="label"> Search by: </p>
         <div className="select">
@@ -237,7 +238,7 @@ class ProgramDetailView extends Component {
           for in the past, but you may be able to get other courses approved. </p> : null}
         </div>
         <div className="header">
-          <h2> Program Reviews: </h2>
+          <h2> Program Reviews </h2>
         </div>
         <ReviewsDisplay program={this.props.name}/><br/>
         <Snackbar message={this.state.message}
@@ -272,6 +273,105 @@ class ProgramDetailView extends Component {
           </Dialog>
       </div>
     );
+    const cookies = this.props.cookies;
+    if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
+      const options = {
+        print: false, // Remove print icon
+        filter: false,
+        search: false,
+        download: false,
+        viewColumns: false,
+        selectableRows: false,
+        rowsPerPage: 10, // Default to 10 rows per page
+        rowsPerPageOptions: [10, 20, 30],
+        responsive: "scroll"
+      };
+      const maxWidth = Math.max.apply(null, this.state.photos.map((photo) =>
+        parseInt(photo.width)));
+      return (
+        <div className="detail">
+          <h1>{this.props.name}</h1>
+          <div className="photos">
+          {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+          (this.state.photos.length > 0 ?
+            <Carousel
+              showThumbs={false}
+              dynamicHeight={true}
+              width={maxWidth + 'px'}>
+              {this.state.photos.map((photo) => {
+                return(
+                  <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                  paddingRight: (maxWidth - photo.width) / 2}}>
+                    <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                  </div>
+                );
+              })}
+            </Carousel> : null)}
+          </div>
+          <p className="label"> Search by: </p>
+          <div className="select">
+            <Select autoWidth={true} value={this.state.searchBy}
+              onChange = { (event) =>
+                this.setState({searchBy : event.target.value})}>
+              <MenuItem value='department'> Department </MenuItem>
+              <MenuItem value='core'> Core designation </MenuItem>
+            </Select>
+          </div>
+          <div className="search">
+            <MultiDropdownTextField
+                value = { this.state.filters }
+                onChange = { this.handleChange("filters")}
+                options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
+            />
+          </div>
+          <div className="list">
+            {this.state.loading ? null :
+            <MUIDataTable
+              columns = {this.state.columns}
+              data = {this.state.courseList}
+              options = {options}/>}<br/>
+          </div>
+          <div className="header">
+            <h2> Program Reviews </h2>
+          </div>
+          <ReviewsDisplay program={this.props.name}/><br/>
+          <Snackbar message={this.state.message}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={this.state.showMessage}
+            onClose={(event) =>
+              this.setState({showMessage: false})}
+            autoHideDuration={3000} // Automatically hide message after 3 seconds (3000 ms)
+            action={
+            <IconButton
+              onClick={(event) =>
+                this.setState({showMessage: false})}>
+            <CloseIcon/> </IconButton>}/>
+            <Dialog id="dialog" open={this.state.showLogInPrompt}>
+              <DialogTitle id="simple-dialog-title">You must log in to save a course!</DialogTitle>
+              <div>
+                <Button style={buttonStyle} variant="contained" component={Link} to="/login">
+                  Log in
+                </Button>
+                <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
+                  Sign up
+                </Button>
+                <Button style={buttonStyle} variant="contained"
+                  onClick = {(event) =>
+                    this.setState({showLogInPrompt : false})}>
+                  Close
+                </Button>
+              </div>
+            </Dialog>
+        </div>
+      );
+    } else {
+      return (
+        <Redirect to="/admin"/>
+      );
+    }
   }
 }
 

@@ -24,7 +24,8 @@ class LogInPage extends Component {
       validUser : false,
       isAdmin : false,
       wrongPassword : false,
-      showPrompt : false
+      showPrompt : false,
+      notVerified: false,
     }
   }
 
@@ -36,8 +37,11 @@ class LogInPage extends Component {
     }
     // for local testing: "http://localhost:3001/login"
     axios.post("https://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
+      console.log(res.data);
       if(res.data === "Email not found") {
         this.setState({showPrompt : true});
+      } else if(res.data.is_verified === 0) {
+        this.setState({validUser: true, notVerified: true, showPrompt: true});
       } else if(res.data === "Incorrect password") {
         // Email found but password is wrong
         this.setState({wrongPassword : true});
@@ -78,8 +82,23 @@ class LogInPage extends Component {
           onClick = {(event) =>
             this.logIn(event)}> Log In </Button>
         {this.state.validUser === true ?
-          (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>)
-          : (this.state.wrongPassword) ? null :
+          (this.state.notVerified === true ?
+            <Dialog id="login_verified" open={this.state.showPrompt}>
+          <DialogTitle id="verify-dialog-title">Please verify your account before logging in</DialogTitle>
+            <div>
+              <Button style={buttonStyle}
+              variant= 'contained'
+              onClick = {(event) => {
+                this.setState({showPrompt: false})}}
+              >
+              Ok
+              </Button>
+            </div>
+          </Dialog> :
+        (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>))
+          :
+
+          (this.state.wrongPassword) ? null :
           <Dialog id="dialog" open={this.state.showPrompt}>
             <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>
             <div>
@@ -92,11 +111,12 @@ class LogInPage extends Component {
                 Try again
               </Button>
             </div>
-          </Dialog>}
+          </Dialog>
+
+        }
       </div>
     )
   }
-
 }
 
 export default LogInPage;

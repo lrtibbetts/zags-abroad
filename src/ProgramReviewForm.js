@@ -5,8 +5,8 @@ import axios from 'axios';
 import DropdownTextField from './DropdownTextField.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Link } from "react-router-dom";
-import {DropzoneArea} from 'material-ui-dropzone';
+import { Redirect, Link } from "react-router-dom";
+import { DropzoneArea } from 'material-ui-dropzone';
 
 const textFieldStyle = {
   width: 500,
@@ -41,7 +41,6 @@ class ProgramReviewForm extends Component {
       classes: '',
       activities: '',
       staff: '',
-      other: '',
       reviewId: 0,
       formSubmitted: '',
       photos: [],
@@ -73,7 +72,6 @@ class ProgramReviewForm extends Component {
       "trips" : this.state.trips,
       "classes" : this.state.classes,
       "activities" : this.state.activities,
-      "other" : this.state.other,
       "name" : this.state.name,
       "email" : this.state.email,
       "staff" : this.state.staff,
@@ -126,7 +124,6 @@ class ProgramReviewForm extends Component {
   render() {
     return(
       <div style={{textAlign: 'center'}}>
-
         <h3>Tell us about your time abroad!</h3>
         <TextField id="name" label="Name" style={textFieldStyle}
           onChange = { (event) =>
@@ -152,12 +149,134 @@ class ProgramReviewForm extends Component {
         <br/>
         <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1}}>
           <DropdownTextField
+    const cookies = this.props.cookies;
+    if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
+      return(
+        <div style={{textAlign: 'center'}}>
+          <h3>Tell us about your time abroad!</h3>
+          <TextField id="name" label="Name" style={textFieldStyle}
+            onChange = { (event) =>
+              this.setState({name : event.target.value})}/>
+          <br/>
+          <TextField id="email" label="Email" style={textFieldStyle}
+            onChange = { (event) =>
+              this.setState({email : event.target.value})}/>
+          <br/>
+          <TextField id="major" label="What is your major?" required={true} style={textFieldStyle}
+            onChange = { (event) =>
+              this.setState({major : event.target.value})}/>
+          <br/>
+          <div style={{width: 500, margin: '10px', display: 'inline-block', zIndex: 1}}>
+            <DropdownTextField
+              required={true}
+              label="What study abroad program did you participate in?"
+              placeholder={this.state.program ? this.state.program : ""}
+              options={this.state.programs}
+              onChange={(selectedOption) =>
+                this.setState({program : selectedOption.value})}/>
+          </div>
+          <br/>
+          <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1}}>
+            <DropdownTextField
+              required={true}
+              label="When did you study abroad?"
+              placeholder={this.state.term ? this.state.term : ""}
+              options={this.state.terms}
+              onChange={(selectedOption) =>
+                this.setState({term : selectedOption.value})}/>
+          </div>
+          <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1,
+          verticalAlign: 'bottom'}}>
+            <DropdownTextField
             required={true}
-            label="When did you study abroad?"
-            placeholder={this.state.term ? this.state.term : ""}
-            options={this.state.terms}
+            placeholder={this.state.calendarYear ? this.state.calendarYear : ""}
+            options={this.state.calendarYears}
             onChange={(selectedOption) =>
-              this.setState({term : selectedOption.value})}/>
+            this.setState({calendarYear : selectedOption.value})}/>
+          </div><br/>
+          <div style={{width: 500, margin: '10px', display: 'inline-block', zIndex: 1}}>
+            <DropdownTextField
+              required={true}
+              label="What year at Gonzaga did you study abroad?"
+              placeholder={this.state.year ? this.state.year : ""}
+              options={this.state.years}
+              onChange={(selectedOption) =>
+                this.setState({year : selectedOption.value})}/>
+          </div><br/>
+          <TextField id="residence" multiline={true} rows={10} style={textFieldStyle}
+            label="Where did you stay while abroad? What was it like?"
+            placeholder = "E.g. homestay, dormitory, etc."
+            variant = "outlined"
+            inputProps={{maxLength: 1000}}
+            onChange = { (event) =>
+              this.setState({residence : event.target.value})}
+            helperText = {(1000 - this.state.residence.length) + ' characters remaining'}/>
+          <br/>
+          <TextField id="trips" multiline={true} rows={10} style={textFieldStyle}
+            label = "Tell us about any favorite trips you took while abroad"
+            placeholder = "Include any places you recommend, travel advice, etc."
+            variant = "outlined"
+            inputProps={{maxLength: 1000}}
+            onChange = { (event) =>
+              this.setState({trips : event.target.value})}
+            helperText = {(1000 - this.state.trips.length) + ' characters remaining'}/>
+          <br/>
+          <TextField id="classes" multiline={true} rows={10} style={textFieldStyle}
+            label = "What were your classes like?"
+            placeholder = "E.g. any favorite classes, overall workload, etc."
+            variant = "outlined"
+            inputProps={{maxLength: 1000}}
+            onChange = { (event) =>
+              this.setState({classes : event.target.value})}
+            helperText = {(1000 - this.state.classes.length) + ' characters remaining'}/>
+          <br/>
+          <TextField id="activities" multiline={true} rows={10} style={textFieldStyle}
+            label = "Tell us about any extracurricular activities you participated in"
+            placeholder = "E.g. sports teams, volunteering, clubs, etc."
+            variant = "outlined"
+            inputProps={{maxLength: 1000}}
+            onChange = { (event) =>
+              this.setState({activities : event.target.value})}
+            helperText = {(1000 - this.state.activities.length) + ' characters remaining'}/>
+          <br/>
+          <TextField id="staff" multiline={true} rows={10} style={textFieldStyle}
+            label = "What were your experiences with on-campus staff and facilities?"
+            placeholder = "E.g. Health center, gym, library, etc."
+            variant = "outlined"
+            inputProps={{maxLength: 1000}}
+            onChange = { (event) =>
+              this.setState({staff : event.target.value})}
+            helperText = {(1000 - this.state.staff.length) + ' characters remaining'}/>
+          <br/>
+          <p>Please share some photos from your time abroad! <br/> (Only PNG and JPEG files allowed)</p>
+          <div style={{width: '50%', display: 'inline-block'}}>
+            <DropzoneArea
+              acceptedFiles={["image/jpeg", "image/png"]}
+              filesLimit={20}
+              onChange={(photos) => {this.setState({photos: photos})}}
+              dropzoneText="Drag and drop an image or click here"
+              showFileNamesInPreview={true}
+              maxFileSize={5000000}/>
+          </div>
+          <br/>
+          <Button label="submit" variant="contained" style={{margin: '10px'}}
+            disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
+            && this.state.year)}
+            onClick = {(event) => {
+              var time = this.getTime();
+              this.setState({timestamp: time}, () => {
+                this.submitReview();
+              });
+            }}> Submit </Button>
+          {this.state.formSubmitted ?
+            <Dialog id="dialog" open={true}>
+              <DialogTitle id="simple-dialog-title">Thanks for sharing!</DialogTitle>
+              <div>
+                <Button style={{margin: '10px'}} variant="contained" component={Link} to="/">
+                  Return to home
+                </Button>
+              </div>
+            </Dialog> : null}
         </div>
         <div style={{width: 240, margin: '10px', display: 'inline-block', zIndex: 1,
         verticalAlign: 'bottom'}}>
@@ -237,10 +356,9 @@ class ProgramReviewForm extends Component {
           disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year)}
           onClick = {(event) => {
-            var cal = this.getTime();
-            this.setState({timestamp: cal}, () => {
+            var time = this.getTime();
+            this.setState({timestamp: time}, () => {
               this.submitReview();
-              console.log(this.state);
             });
           }}> Submit </Button>
         {this.state.formSubmitted ?
@@ -254,6 +372,12 @@ class ProgramReviewForm extends Component {
           </Dialog> : null}
       </div>
     );
+      );
+    } else {
+      return (
+        <Redirect to="/admin"/>
+      );
+    }
   }
 }
 

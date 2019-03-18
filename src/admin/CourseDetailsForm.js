@@ -5,8 +5,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios';
-import DropdownTextField from './DropdownTextField.js';
-import MultiDropdownTextField from './MultiDropdownTextField.js';
+import DropdownTextField from '../DropdownTextField.js';
+import MultiDropdownTextField from '../MultiDropdownTextField.js';
 
 const largeTextFieldStyle = {
   width: 300,
@@ -19,7 +19,7 @@ const mediumTextFieldStyle = {
 };
 
 const smallTextFieldStyle = {
-  width: 150,
+  width: 170,
   margin: '10px'
 };
 
@@ -61,8 +61,6 @@ class CourseDetailsForm extends Component {
       approved_until: this.props.course[10],
       department: this.props.course[11]
     }
-
-    console.log(this.state.core);
 
     this.handleChangeSignatureNeeded = this.handleChangeSignatureNeeded.bind(this);
     this.handleChangeDepartment = this.handleChangeDepartment.bind(this);
@@ -225,7 +223,6 @@ class CourseDetailsForm extends Component {
                     courseInfo.core = courseInfo.core.map(item => item.value).join(', ') + ",";
                     if(this.props.title === "Add Course Equivalency") {
                       axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
-                        console.log(res.data);
                         if(res.data.errno) { // Error adding the course
                           this.props.displayMessage("Error adding course");
                         } else { // No error, course added successfully
@@ -236,7 +233,6 @@ class CourseDetailsForm extends Component {
                     } else if(this.props.title === "Edit Course Equivalency") {
                       courseInfo.id = this.props.courseId; // Add course id to courseInfo object
                       axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
-                        console.log(res.data);
                         if(res.data.errno) { // Error updating the course
                           this.props.displayMessage("Error updating course");
                         } else { // No error, course updated successfully

@@ -42,15 +42,27 @@ class ProgramManagementPage extends Component {
           }
         },
         {
+          name: "Host Institution Link",
+          options: {
+            display: true
+          }
+        },
+        {
           name: "Application Link",
           options: {
             display: true
           }
         },
         {
-          name: "Host Institution Link",
+          name: "Latitude",
           options: {
-            display: true
+            display: false
+          }
+        },
+        {
+          name: "Longitude",
+          options: {
+            display: false
           }
         }
       ]
@@ -76,8 +88,10 @@ class ProgramManagementPage extends Component {
         prog.push(res.data[i]["host_program"]);
         prog.push(res.data[i]["city"]);
         prog.push(res.data[i]["program_type"]);
-        prog.push(res.data[i]["application_link"]);
         prog.push(res.data[i]["host_url"]);
+        prog.push(res.data[i]["application_link"]);
+        prog.push(res.data[i]["lat"]);
+        prog.push(res.data[i]["lng"]);
         programsToAdd.push(prog);
       }
       this.setState({programs : programsToAdd});
@@ -116,10 +130,6 @@ class ProgramManagementPage extends Component {
 
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
-  }
-
-  handleChange = (event, value) => {
-    this.setState({value});
   }
 
   render() {

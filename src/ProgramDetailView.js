@@ -252,7 +252,7 @@ class ProgramDetailView extends Component {
         <div className="detail">
           <h1>{this.props.name}</h1>
           <div className="photos">
-          <Link to={`/application_link/${this.state.applicationLink}`} target="_blank">Apply Here!</Link>
+          <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">Apply Here!</a>
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
           (this.state.photos.length > 0 ?
             <Carousel

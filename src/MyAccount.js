@@ -41,30 +41,36 @@ class MyAccount extends Component {
   }
 
   formatCourses(data) {
-    var i = 0;
-    let courses = [];
-    let allCourses = [];
-    let programs = [];
-    let programName = data[i].host_program;
-    while(i < data.length) {
-      programName = data[i].host_program;
-      while(i < data.length && data[i].host_program === programName) {
-        let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
-          hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
-          : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id,
-          hostProgram: data[i].host_program};
-        courses.push(newCourse);
-        if(i < data.length) {
-          i++;
+
+    if (data.length === 0){
+      this.setState({programs: ''})
+      this.setState({courses: ''});
+    } else {
+      var i = 0;
+      let courses = [];
+      let allCourses = [];
+      let programs = [];
+      let programName = data[i].host_program;
+      while(i < data.length) {
+        programName = data[i].host_program;
+        while(i < data.length && data[i].host_program === programName) {
+          let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
+            hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
+            : data[i].host_course_name, requiresSignature: data[i].signature_needed, id: data[i].id,
+            hostProgram: data[i].host_program};
+          courses.push(newCourse);
+          if(i < data.length) {
+            i++;
+          }
         }
+        let programObj = {courses: courses, name: programName};
+        programs.push(programObj);
+        allCourses.push(courses);
+        courses = [];
       }
-      let programObj = {courses: courses, name: programName};
-      programs.push(programObj);
-      allCourses.push(courses);
-      courses = [];
+        this.setState({programs: programs});
+        this.setState({courses: allCourses});
     }
-    this.setState({programs: programs});
-    this.setState({courses: allCourses});
   }
 
   getCourses() {
@@ -88,7 +94,7 @@ class MyAccount extends Component {
   render() {
     let role = this.props.cookies.get('role');
     // Only allow general users who are logged in to access MyAccount
-    if(role === 'user') {
+    if(role === 'user' && this.state.programs !== '') {
     return(
       <div style={{textAlign: 'center', padding: '20px'}}>
         <h2>My Account</h2>
@@ -137,7 +143,27 @@ class MyAccount extends Component {
           <CloseIcon/> </IconButton>}/>
       </div>
     );
-    } else {
+  } else if (role === 'user'){
+    return(
+      <div style={{textAlign: 'center', padding: '20px'}}>
+        <h2>My Account</h2>
+        <h4>No saved courses at this time!</h4>
+        <Snackbar message={this.state.message}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={this.state.showMessage}
+          onClose={(event) =>
+            this.setState({showMessage: false})}
+          action={
+          <IconButton
+            onClick={(event) =>
+              this.setState({showMessage: false})}>
+          <CloseIcon/> </IconButton>}/>
+      </div>
+    );
+  } else {
       // Not logged in
       return(
         <Redirect to="/"/>

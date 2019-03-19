@@ -24,7 +24,6 @@ const buttonStyle = {
 };
 
 class ProgramDetailView extends Component {
-
   constructor(props) {
     super(props);
     const savedCourses = this.getSavedCourses();
@@ -33,6 +32,8 @@ class ProgramDetailView extends Component {
       core: [],
       filters: [],
       courseList : [], // Courses matching a user's search
+      savedCoursesList: savedCourses, // IDs of courses saved to logged in account
+      applicationLink: '',
       searchBy: 'department',
       loading: true,
       showMessage : false,
@@ -49,15 +50,24 @@ class ProgramDetailView extends Component {
                   match = true;
                 }
               }
+              // Course is a saved course for logged in user
               if(match) {
                 return (
                   <IconButton
+                    onClick={(event) => {
+                      this.deleteCourse(value);
+                      this.setState({savedCoursesList: this.getSavedCourses()});
+                    }}
                     color="primary"><DoneIcon/>
                   </IconButton>
                 );
               } else {
                 return (
-                  <IconButton onClick={(event) => this.saveCourse(value)}
+                  <IconButton
+                    onClick={(event) => {
+                      this.saveCourse(value);
+                      this.setState({savedCoursesList: this.getSavedCourses()});
+                    }}
                     color="primary"><AddIcon/>
                   </IconButton>
                 );
@@ -95,22 +105,12 @@ class ProgramDetailView extends Component {
         this.getAllCourses();
       });
     });
-  }
 
-  // alkjfdlksdlfalflajsdf;af
-  getSavedCourses() {
-    let email = this.props.cookies.get('email');
-    let savedCourses = [];
-    if(email) {
-      axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
-        for(var i = 0; i < res.data.length; i++) {
-          savedCourses.push(res.data[i].id);
-        }
-        console.log("SAVED COURSES");
-        console.log(savedCourses);
-      });
-    }
-    return savedCourses;
+    // Get application link for Program
+    axios.post("https://zagsabroad-backend.herokuapp.com/applicationlink", {"host_program": this.props.name}).then((res) => {
+      console.log('LINK', res.data[0].application_link);
+      this.setState({applicationLink: res.data[0].application_link});
+    });
   }
 
   // Populate table with relevant courses in list
@@ -127,6 +127,20 @@ class ProgramDetailView extends Component {
       courses.push(newCourse);
     }
     this.setState({courseList: courses, loading: false});
+  }
+
+  // alkjfdlksdlfalflajsdf;af
+  getSavedCourses() {
+    let email = this.props.cookies.get('email');
+    let savedCourses = [];
+    if(email) {
+      axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
+        for(var i = 0; i < res.data.length; i++) {
+          savedCourses.push(res.data[i].id);
+        }
+      });
+    }
+    return savedCourses;
   }
 
   // No filters, Pull all courses in program
@@ -187,11 +201,11 @@ class ProgramDetailView extends Component {
       }
       axios.post("https://zagsabroad-backend.herokuapp.com/savecourse", params).then((res) => {
         if(res.data.code === "ER_DUP_ENTRY") {
-          this.setState({showMessage: true, message: "Course already added.  See My Account"});
+          this.setState({showMessage: true, message: "Course already added.  See \"My Account\""});
         } else if(res.data.errno) {
           this.setState({showMessage: true, message: "Error saving course"});
         } else {
-          this.setState({showMessage: true, message: "Course saved to My Account"});
+          this.setState({showMessage: true, message: "Course saved to \"My Account\""});
         }
       });
     } else {
@@ -200,10 +214,20 @@ class ProgramDetailView extends Component {
     }
   }
 
+  deleteCourse(id) {
+    let params = {
+      email: this.props.cookies.get('email'),
+      id: id
+    }
+    axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
+      res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
+      this.setState({showMessage: true, message: "Course removed from \"My Account\""},
+      this.getCourses());
+    });
+  }
+
   handleChange = name => value => {
-    this.setState({
-      [name]: value,
-    }, () => {
+    this.setState({ [name]: value }, () => {
       (this.state.filters.length > 0) ? this.getCourses() : this.getAllCourses();
     });
   };
@@ -228,6 +252,7 @@ class ProgramDetailView extends Component {
         <div className="detail">
           <h1>{this.props.name}</h1>
           <div className="photos">
+          <Link to={`/application_link/${this.state.applicationLink}`} target="_blank">Apply Here!</Link>
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
           (this.state.photos.length > 0 ?
             <Carousel

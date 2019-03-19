@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -5,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
-import axios from 'axios';
 import IconButton from '@material-ui/core/IconButton';
 import { Redirect } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';

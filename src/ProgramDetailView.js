@@ -3,8 +3,9 @@ import { Redirect, Link } from "react-router-dom";
 import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
 import Snackbar from '@material-ui/core/Snackbar';
+import AddIcon from '@material-ui/icons/Add';
+import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -25,6 +26,7 @@ const buttonStyle = {
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
+    const savedCourses = this.getSavedCourses();
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
@@ -40,11 +42,25 @@ class ProgramDetailView extends Component {
         { name: "",
           options: {
             customBodyRender: (value, tableMeta, updateValue) => {
-              return (
-                <IconButton onClick={(event) => this.saveCourse(value)}
-                  color="primary"><AddIcon/>
-                </IconButton>
-              );
+              let match = false;
+              for(var i = 0; i < savedCourses.length; i++) {
+                if (savedCourses[i] === tableMeta.rowData[0]) {
+                  match = true;
+                }
+              }
+              if(match) {
+                return (
+                  <IconButton
+                    color="primary"><DoneIcon/>
+                  </IconButton>
+                );
+              } else {
+                return (
+                  <IconButton onClick={(event) => this.saveCourse(value)}
+                    color="primary"><AddIcon/>
+                  </IconButton>
+                );
+              }
             }}},
         { name: "Gonzaga Course" },
         { name: "Host Course" },
@@ -78,6 +94,22 @@ class ProgramDetailView extends Component {
         this.getAllCourses();
       });
     });
+  }
+
+  // alkjfdlksdlfalflajsdf;af
+  getSavedCourses() {
+    let email = this.props.cookies.get('email');
+    let savedCourses = [];
+    if(email) {
+      axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
+        for(var i = 0; i < res.data.length; i++) {
+          savedCourses.push(res.data[i].id);
+        }
+        console.log("SAVED COURSES");
+        console.log(savedCourses);
+      });
+    }
+    return savedCourses;
   }
 
   // Populate table with relevant courses in list

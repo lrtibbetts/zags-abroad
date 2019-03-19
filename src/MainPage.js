@@ -21,7 +21,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 class MainPage extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [], // Core designations in dropdown menu

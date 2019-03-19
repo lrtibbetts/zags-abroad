@@ -24,6 +24,7 @@ const buttonStyle = {
 };
 
 class ProgramDetailView extends Component {
+
   constructor(props) {
     super(props);
     const savedCourses = this.getSavedCourses();

@@ -27,9 +27,4 @@ describe('Login page', () => {
       expect(logInPage.find('#password').props().helperText).toEqual("Password is incorrect");
     });
 
-    it('should display pop-up message appropriately', () => {
-      logInPage.setState({wrongPassword: false, showPrompt: true})
-      expect(logInPage.find('#dialog').props().open).toEqual(true);
-    });
-
 });

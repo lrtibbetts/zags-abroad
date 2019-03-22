@@ -21,7 +21,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 class MainPage extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [], // Core designations in dropdown menu
@@ -60,6 +59,8 @@ class MainPage extends Component {
     while(i < data.length) {
       let programName = data[i].host_program;
       let courses = [];
+      //let location = data[i].city;
+      let location = "L O C A T I O N";
       while(i < data.length && data[i].host_program === programName) {
         let newCourse = {guCourse: (data[i].gu_course_name ? (data[i].gu_course_number + ": " + data[i].gu_course_name)
           : data[i].gu_course_number),
@@ -70,7 +71,7 @@ class MainPage extends Component {
           i++;
         }
       }
-      let programObj = {programName: programName, courses: courses};
+      let programObj = {programName: programName, courses: courses, location: location};
       // Only display programs with courses for all filters
       let matchingProgram = true;
       for(let j = 0; j < this.state.filters.length; j++) {
@@ -163,6 +164,8 @@ render() {
                 <ExpansionPanel key={program.programName}>
                   <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <b>{program.programName}</b>
+                    &nbsp;&nbsp;
+                    <b>{program.location}</b>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
                     <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>

@@ -24,23 +24,23 @@ class LogInPage extends Component {
       validUser : false,
       isAdmin : false,
       wrongPassword : false,
-      showPrompt : false,
+      noAccount : false,
       notVerified: false,
     }
   }
 
   logIn(event) {
-    this.setState({wrongPassword: false, showPrompt: false}); // Reset state
+    this.setState({wrongPassword: false, noAccount: false, notVerified: false}); // Reset state
     var accountInfo = {
       "email" : this.state.email,
       "password" : this.state.password
     }
     // for local testing: "http://localhost:3001/login"
     axios.post("https://zagsabroad-backend.herokuapp.com/login", accountInfo).then((res) => {
-      if(res.data === "Email not found") {
-        this.setState({showPrompt : true});
-      } else if(res.data.is_verified === 0) {
-        this.setState({validUser: true, notVerified: true, showPrompt: true});
+      if(res.data === "Not verified") {
+        this.setState({notVerified: true});
+      } else if(res.data === "Email not found") {
+        this.setState({noAccount : true});
       } else if(res.data === "Incorrect password") {
         // Email found but password is wrong
         this.setState({wrongPassword : true});
@@ -48,9 +48,9 @@ class LogInPage extends Component {
         // Valid log in. Set cookies and check if admin or not
         const cookies = this.props.cookies;
         cookies.set('email', this.state.email, {'maxAge': 7200, 'path': '/'}); // Might be good to store user ID instead
-        if(res.data.is_admin === 1) {
+        if(res.data[0].is_admin === 1) {
           cookies.set('role', 'admin', {'maxAge': 7200, 'path': '/'}); // Cookies will expire after two hours
-          this.setState({validUser : true, isAdmin : true});
+          this.setState({isAdmin : true});
         } else {
           cookies.set('role', 'user', {'maxAge': 7200, 'path': '/'});
           this.setState({validUser : true});
@@ -80,43 +80,35 @@ class LogInPage extends Component {
           disabled = {!(this.state.email && this.state.password)}
           onClick = {(event) =>
             this.logIn(event)}> Log In </Button>
-        {this.state.validUser === true ?
-          (this.state.notVerified === true ?
-            <Dialog id="login_verified" open={this.state.showPrompt}>
-          <DialogTitle id="verify-dialog-title">Please verify your account before logging in</DialogTitle>
+        {this.state.isAdmin === true ? <Redirect to="/admin"/> : null}
+        {this.state.validUser === true ? <Redirect to="/"/> : null}
+        <Dialog open={this.state.notVerified}>
+          <DialogTitle>Please check your email to verify your account before logging in!</DialogTitle>
             <div>
               <Button style={buttonStyle}
-              variant= 'contained'
-              onClick = {(event) => {
-                this.setState({showPrompt: false})}}
-              >
-              Ok
+                variant= 'contained'
+                onClick = {(event) => {
+                  this.setState({notVerified: false})}}>
+                Okay
               </Button>
             </div>
-          </Dialog> :
-        (this.state.isAdmin === true ? <Redirect to="/admin"/> : <Redirect to="/"/>))
-          :
-
-          (this.state.wrongPassword) ? null :
-          <Dialog id="dialog" open={this.state.showPrompt}>
-            <DialogTitle id="simple-dialog-title">Account doesn't exist. Sign up now?</DialogTitle>
-            <div>
-              <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
-                Sign Up
-              </Button>
-              <Button style={buttonStyle} variant="contained"
-                onClick = {(event) =>
-                  this.setState({showPrompt : false})}>
-                Try again
-              </Button>
-            </div>
-          </Dialog>
-
-        }
+        </Dialog>
+        <Dialog open={this.state.noAccount}>
+          <DialogTitle> Account doesn't exist. Sign up now? </DialogTitle>
+          <div>
+            <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
+              Sign Up
+            </Button>
+            <Button style={buttonStyle} variant="contained"
+              onClick = {(event) =>
+                this.setState({noAccount : false})}>
+              Try again
+            </Button>
+          </div>
+        </Dialog>
       </div>
-    )
+    );
   }
-
 }
 
 export default LogInPage;

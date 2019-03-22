@@ -14,12 +14,9 @@ const textFieldStyle = {
   margin: '10px'
 };
 
-const buttonStyle = {
-  margin: '5px'
-};
+const buttonStyle = { margin: '5px' };
 
 class SignUpPage extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -31,40 +28,12 @@ class SignUpPage extends Component {
       passwordMatchingError : false,
       passwordLengthError : false,
       emailError : false,
-      accountCreated : false,
       showPrompt : false,
       snackbarOpen: false,
-      snackMessage: '',
-      buttonDisabled: false,
+      snackbarMessage: '',
+      buttonDisabled: true,
     }
-  }
-
-  sendEmail(event) {
-    this.setState({buttonDisabled: true});
-    var accountInfo = {
-      "email" : this.state.email,
-      "first" : this.state.firstName,
-      "last" : this.state.lastName,
-      "password": this.state.password
-    }
-    axios.post("https://zagsabroad-backend.herokuapp.com/send", accountInfo).then((res) => {
-      if(res.data.sent === true) {
-        // Setting label for the snackbar
-        // Making sure that the email was sent
-        this.setState({snackMessage: "Please check your email to continue! (Also check your junk mail!)"})
-        //pass info for verification
-      } else {
-        //change message
-        this.setState({snackMessage: "Something went wrong. Please wait a few minutes and try again!"})
-      }
-    })
-  }
-
-  verifyEmail(event) {
-    axios.get("https://zagsabroad-backend.herokuapp.com/verify").then((res) => {
-      console.log("response from frontend")
-      console.log(res);
-    })
+    this.formIsValid = this.formIsValid.bind(this);
   }
 
   makeAccount(event) {
@@ -74,27 +43,26 @@ class SignUpPage extends Component {
       "last" : this.state.lastName,
       "password" : this.state.password
     }
-
     // local testing: "http://localhost:3001/signup"
     // Using an arrow function allows us to access 'this' within the API callback
     axios.post("https://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
       console.log(res.data);
-      if(res.data !== "User already exists") {
-        // Account created successfully
-        this.setState({accountCreated : true});
-        // const cookies = this.props.cookies;
-        // cookies.set('email', this.state.email, {'maxAge': 7200, 'path': '/'}); // Might be good to store user ID instead
-        // cookies.set('role', 'user', {'maxAge': 7200, 'path': '/'}); // By default, users are not given admin access
-      } else {
+      if (res.data.code === "ER_DUP_ENTRY") {
+        // Account already exists
         this.setState({showPrompt : true});
+      } else if (res.data.sent === true) {
+        this.setState({snackbarOpen: true, snackbarMessage: "Please check your email to continue! (Also check your junk mail!)",
+        emailSent: true}, () => { this.forceUpdate() });
+      } else {
+        this.setState({snackbarOpen: true, snackbarMessage: "Something went wrong"})
       }
     });
   }
 
   formIsValid() {
     // Check that no fields are empty and there are no errors (email or password)
-    this.setState({buttonDisabled: (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
-      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError)})
+    return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
+      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError);
   }
 
   handleClose = () => {
@@ -151,66 +119,48 @@ class SignUpPage extends Component {
           }}
           helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}
           onKeyPress = {(event) => {
-            if(this.formIsValid() && event.key === 'Enter') {
-              this.makeAccount(event)
+            if(Boolean(this.formIsValid()) && event.key === 'Enter') {
+              this.makeAccount(event);
             }}}/>
         <br/>
         <div>
-        <Button
-        variant="contained"
-        disabled={this.state.buttonDisabled}
-        onClick= {(event) => {
-          this.setState({snackbarOpen: true}, () => {
-            this.sendEmail();
+          <Button
+          disabled={!Boolean(this.formIsValid())}
+          variant="contained"
+          onClick= {(event) => {
             this.makeAccount(event);
-            console.log("account made")
-          });
-        }}> Get started </Button>
-
+          }}> Get started </Button>
         </div>
-
-        {this.state.accountCreated === true ?
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            open={this.state.snackbarOpen}
-            autoHideDuration={4000}
-            onClose={this.handleClose}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            message={this.state.snackMessage}
-            action={[
-              <IconButton
-                key="close"
-                aria-label="Close"
-                color="inherit"
-                className={this.props.close}
-                onClick={this.handleClose}
-              >
-                <CloseIcon />
-              </IconButton>,
-            ]}
-          /> :
-          <Dialog open={this.state.showPrompt}>
-            <DialogTitle id="simple-dialog-title">Account already exists. Log in instead?</DialogTitle>
-            <div>
-              <Button style={buttonStyle} variant="contained" component={Link} to="/login">
-                Log In
-              </Button>
-              <Button style={buttonStyle} variant="contained"
-                onClick = {(event) =>
-                  this.setState({showPrompt : false})}>
-                Try again
-              </Button>
-            </div>
-          </Dialog>}
+        <Snackbar
+          key={"email"}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={this.state.snackbarOpen}
+          autoHideDuration={5000}
+          onClose={this.handleClose}
+          message={this.state.snackbarMessage}
+          action={[
+            <IconButton key="close" onClick={this.handleClose}>
+              <CloseIcon/>
+            </IconButton>]}/>
+        <Dialog open={this.state.showPrompt}>
+          <DialogTitle>Account already exists. Log in instead?</DialogTitle>
+          <div>
+            <Button style={buttonStyle} variant="contained" component={Link} to="/login">
+              Log In
+            </Button>
+            <Button style={buttonStyle} variant="contained"
+              onClick = {(event) =>
+                this.setState({showPrompt : false})}>
+              Try again
+            </Button>
+          </div>
+        </Dialog>
       </div>
-    )
+    );
   }
-
 }
 
 export default SignUpPage;

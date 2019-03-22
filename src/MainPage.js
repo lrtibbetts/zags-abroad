@@ -59,8 +59,7 @@ class MainPage extends Component {
     while(i < data.length) {
       let programName = data[i].host_program;
       let courses = [];
-      //let location = data[i].city;
-      let location = "L O C A T I O N";
+      let location = data[i].city;
       while(i < data.length && data[i].host_program === programName) {
         let newCourse = {guCourse: (data[i].gu_course_name ? (data[i].gu_course_number + ": " + data[i].gu_course_name)
           : data[i].gu_course_number),
@@ -101,6 +100,7 @@ class MainPage extends Component {
   getAllPrograms() {
     this.setState({programList: [], loading: true})
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
+      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }
@@ -112,6 +112,7 @@ class MainPage extends Component {
       "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/mainsearch", filters).then((res) => {
+      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }
@@ -163,9 +164,10 @@ render() {
               return (
                 <ExpansionPanel key={program.programName}>
                   <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <b>{program.programName}</b>
-                    &nbsp;&nbsp;
-                    <b>{program.location}</b>
+                    <div>
+                    <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
+                    <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
+                    </div>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
                     <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>

@@ -123,7 +123,8 @@ class CourseEquivalencyPage extends Component {
         for(var field in res.data[0]) {
           if(field === "id") {
             idsToAdd.push(res.data[i][field]);
-          } else {
+          } else if (field !== "program_type" && field !== "host_url" &&
+          field !== "application_link" && field !== "city" && field !== "lat" && field !== "lng"){
             equivalency.push(res.data[i][field]); // Access each field in the row object
           }
         }

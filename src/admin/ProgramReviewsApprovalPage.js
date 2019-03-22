@@ -86,7 +86,6 @@ class ProgramReviewsApprovalPage extends Component {
         reviewsToAdd.push(review);
       }
     }
-    console.log(extraPhotos);
     this.setState({submitting: false, reviews: reviewsToAdd, extraPhotos: extraPhotos, loading: false});
   }
 
@@ -97,7 +96,6 @@ class ProgramReviewsApprovalPage extends Component {
     if(this.state.showUnapproved === true && this.state.showApproved === true) {
       // Show all reviews
       axios.get("https://zagsabroad-backend.herokuapp.com/surveys").then((res) => {
-        console.log(res.data);
         this.formatReviews(res.data);
       });
     } else if(this.state.showApproved === true) {
@@ -152,7 +150,6 @@ class ProgramReviewsApprovalPage extends Component {
   }
 
   render() {
-    console.log(this.state.extraPhotos);
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'admin') {
       return (

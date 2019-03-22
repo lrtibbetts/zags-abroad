@@ -22,7 +22,6 @@ class AdminAccountManagementPage extends Component {
   }
 
   displayMessage(message) {
-    console.log("Debug");
     this.setState({showMessage: true, message: message});
   }
 

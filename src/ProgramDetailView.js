@@ -123,7 +123,8 @@ class ProgramDetailView extends Component {
       newCourse.push(data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name :
       data[i].host_course_name);
       newCourse.push(data[i].signature_needed);
-      newCourse.push(data[i].core);
+      var core = data[i].core.trim().substring(0, data[i].core.length - 1)
+      newCourse.push(core);
       courses.push(newCourse);
     }
     this.setState({courseList: courses, loading: false});

@@ -18,10 +18,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
-import { withStyles } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import Fab from '@material-ui/core/Fab';
 
 const buttonStyle = {
@@ -275,7 +273,6 @@ class ProgramDetailView extends Component {
         <div className="detail">
           <h1>{this.props.name}</h1>
           <div className="photos">
-
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
           (this.state.photos.length > 0 ?
             <Carousel

@@ -17,15 +17,7 @@ import { Redirect} from "react-router-dom";
 import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import blue from '@material-ui/core/colors/blue';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: blue[500] },
-  }
-});
 
 class MainPage extends Component {
   constructor(props) {
@@ -109,7 +101,6 @@ class MainPage extends Component {
   getAllPrograms() {
     this.setState({programList: [], loading: true})
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
-      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }
@@ -118,10 +109,9 @@ class MainPage extends Component {
     this.setState({programList: [], loading: true})
     var filters = {
       "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
-      "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
+      "subjects": this.state.filters.filter(filter => !filter.value.includes("CORE: ")).map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/mainsearch", filters).then((res) => {
-      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }
@@ -174,22 +164,17 @@ render() {
                 <ExpansionPanel key={program.programName}>
                   <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <div>
-                    <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
-                    <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
+                      <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
+                      <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
                     </div>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
                     <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
                       <div>
                         <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                          <MuiThemeProvider theme={theme}>
-                            <Fab
-                              variant="extended"
-                              color="primary"
-                              >
-                              Learn More
-                            </Fab>
-                          </MuiThemeProvider>
+                          <Fab variant="extended" color="primary">
+                            Learn More
+                          </Fab>
                         </a>
                       </div>
                       <Table>

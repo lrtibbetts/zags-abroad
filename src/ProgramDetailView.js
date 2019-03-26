@@ -18,10 +18,31 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
+import blue from '@material-ui/core/colors/blue';
+import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
 };
+
+const style = {
+    display: 'inline-block',
+    marginRight: '25%',
+    marginLeft: '10px',
+    marginBottom: '15px',
+    marginTop: '15px',
+    top: 0,
+};
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: blue[500], dark: blue[700], contrastText: blue[50]},
+  },
+  typography: {
+    useNextVariants: true,
+  }
+});
 
 class ProgramDetailView extends Component {
   constructor(props) {
@@ -108,7 +129,6 @@ class ProgramDetailView extends Component {
 
     // Get application link for Program
     axios.post("https://zagsabroad-backend.herokuapp.com/applicationlink", {"host_program": this.props.name}).then((res) => {
-      console.log('LINK', res.data[0].application_link);
       this.setState({applicationLink: res.data[0].application_link});
     });
   }
@@ -253,7 +273,20 @@ class ProgramDetailView extends Component {
         <div className="detail">
           <h1>{this.props.name}</h1>
           <div className="photos">
-          <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">Apply Here!</a>
+          <div>
+            <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
+              <MuiThemeProvider theme={theme}>
+              <Fab
+                variant="extended"
+                color="primary"
+                style={style}
+                >
+                Apply Here!
+              </Fab>
+              </MuiThemeProvider>
+            </a>
+          </div>
+
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
           (this.state.photos.length > 0 ?
             <Carousel
@@ -327,6 +360,7 @@ class ProgramDetailView extends Component {
                 </Button>
               </div>
             </Dialog>
+
         </div>
       );
     } else {
@@ -336,5 +370,6 @@ class ProgramDetailView extends Component {
     }
   }
 }
+
 
 export default ProgramDetailView;

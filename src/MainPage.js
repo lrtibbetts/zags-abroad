@@ -13,10 +13,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
-import { Redirect, Link } from "react-router-dom";
+import { Redirect} from "react-router-dom";
 import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import blue from '@material-ui/core/colors/blue';
+import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: blue[500], dark: blue[700], contrastText: blue[50]},
+  },
+  typography: {
+    useNextVariants: true,
+  }
+});
 
 class MainPage extends Component {
   constructor(props) {
@@ -171,7 +184,18 @@ render() {
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
                     <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
-                      <Link to={`/program/${program.programName}`} target="_blank">Learn More</Link>
+                      <div>
+                        <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                          <MuiThemeProvider theme={theme}>
+                            <Fab
+                              variant="extended"
+                              color="primary"
+                              >
+                              Learn More
+                            </Fab>
+                          </MuiThemeProvider>
+                        </a>
+                      </div>
                       <Table>
                         <TableHead>
                           <TableRow>

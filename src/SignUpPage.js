@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const textFieldStyle = {
   width: 250,
@@ -28,7 +29,9 @@ class SignUpPage extends Component {
       passwordMatchingError : false,
       passwordLengthError : false,
       emailError : false,
-      showPrompt : false,
+      showAccountExistsPrompt : false,
+      showEmailSentPrompt: false,
+      loading: false,
       snackbarOpen: false,
       snackbarMessage: '',
       buttonDisabled: true,
@@ -46,15 +49,13 @@ class SignUpPage extends Component {
     // local testing: "http://localhost:3001/signup"
     // Using an arrow function allows us to access 'this' within the API callback
     axios.post("https://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
-      console.log(res.data);
       if (res.data.code === "ER_DUP_ENTRY") {
         // Account already exists
-        this.setState({showPrompt : true});
+        this.setState({showAccountExistsPrompt : true, loading: false});
       } else if (res.data.sent === true) {
-        this.setState({snackbarOpen: true, snackbarMessage: "Please check your email to continue! (Also check your junk mail!)",
-        emailSent: true}, () => { this.forceUpdate() });
+        this.setState({showEmailSentPrompt: true, loading: false});
       } else {
-        this.setState({snackbarOpen: true, snackbarMessage: "Something went wrong"})
+        this.setState({snackbarOpen: true, snackbarMessage: "Something went wrong", loading: false})
       }
     });
   }
@@ -120,17 +121,18 @@ class SignUpPage extends Component {
           helperText = {this.state.passwordMatchingError ? "Please enter a matching password" : ""}
           onKeyPress = {(event) => {
             if(Boolean(this.formIsValid()) && event.key === 'Enter') {
-              this.makeAccount(event);
+              this.setState({loading: true}, () => this.makeAccount(event));
             }}}/>
         <br/>
+        {this.state.loading === true ? <CircularProgress variant="indeterminate"/> :
         <div>
           <Button
           disabled={!Boolean(this.formIsValid())}
           variant="contained"
           onClick= {(event) => {
-            this.makeAccount(event);
+            this.setState({loading: true}, () => this.makeAccount(event));
           }}> Get started </Button>
-        </div>
+        </div>}
         <Snackbar
           key={"email"}
           anchorOrigin={{
@@ -145,7 +147,7 @@ class SignUpPage extends Component {
             <IconButton key="close" onClick={this.handleClose}>
               <CloseIcon/>
             </IconButton>]}/>
-        <Dialog open={this.state.showPrompt}>
+        <Dialog open={this.state.showAccountExistsPrompt}>
           <DialogTitle>Account already exists. Log in instead?</DialogTitle>
           <div>
             <Button style={buttonStyle} variant="contained" component={Link} to="/login">
@@ -153,8 +155,16 @@ class SignUpPage extends Component {
             </Button>
             <Button style={buttonStyle} variant="contained"
               onClick = {(event) =>
-                this.setState({showPrompt : false})}>
+                this.setState({showAccountExistsPrompt : false})}>
               Try again
+            </Button>
+          </div>
+        </Dialog>
+        <Dialog open={this.state.showEmailSentPrompt}>
+          <DialogTitle>Please check your email to verify your account!</DialogTitle>
+          <div>
+            <Button style={buttonStyle} variant="contained" component={Link} to="/">
+              Okay
             </Button>
           </div>
         </Dialog>

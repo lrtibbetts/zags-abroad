@@ -18,16 +18,12 @@ import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import blue from '@material-ui/core/colors/blue';
-import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: blue[500], dark: blue[700], contrastText: blue[50]},
-  },
-  typography: {
-    useNextVariants: true,
+    primary: { main: blue[500] },
   }
 });
 

@@ -27,12 +27,12 @@ const buttonStyle = {
 };
 
 const style = {
-    margin: 0,
-    top: 'auto',
-    right: 20,
-    bottom: 20,
-    left: 'auto',
-    position: 'fixed',
+    display: 'inline-block',
+    marginRight: '25%',
+    marginLeft: '10px',
+    marginBottom: '15px',
+    marginTop: '15px',
+    top: 0,
 };
 
 const theme = createMuiTheme({
@@ -273,6 +273,20 @@ class ProgramDetailView extends Component {
         <div className="detail">
           <h1>{this.props.name}</h1>
           <div className="photos">
+          <div>
+            <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
+              <MuiThemeProvider theme={theme}>
+              <Fab
+                variant="extended"
+                color="primary"
+                style={style}
+                >
+                Apply Here!
+              </Fab>
+              </MuiThemeProvider>
+            </a>
+          </div>
+
           {this.state.loading ? <CircularProgress variant="indeterminate"/> :
           (this.state.photos.length > 0 ?
             <Carousel
@@ -346,19 +360,7 @@ class ProgramDetailView extends Component {
                 </Button>
               </div>
             </Dialog>
-            <div>
-              <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
-                <MuiThemeProvider theme={theme}>
-                <Fab
-                  variant="extended"
-                  color="primary"
-                  style={style}
-                  >
-                  Apply Here!
-                </Fab>
-                </MuiThemeProvider>
-              </a>
-            </div>
+
         </div>
       );
     } else {

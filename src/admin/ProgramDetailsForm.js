@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Geocode from "react-geocode";
 import axios from 'axios';
 import DropdownTextField from '../DropdownTextField.js';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 const largeTextFieldStyle = {
   width: 300,
@@ -38,7 +39,8 @@ class ProgramDetailsForm extends Component {
       lat: this.props.program[5],
       lng: this.props.program[6],
       orig_host_program: this.props.program[0],
-      orig_host_city: this.props.program[1]
+      orig_host_city: this.props.program[1],
+      photos: [],
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
@@ -62,6 +64,27 @@ class ProgramDetailsForm extends Component {
       }
       this.props.onClose();
     });
+  }
+
+  handleUploadImages = images => {
+    for(let i = 0; i < images.length; i++) {
+      const formData = new FormData();
+      formData.append("file", images[i]);
+      formData.append("upload_preset", "bdbcyhiw"); // Preset name
+      formData.append("api_key", "{447116233167845}"); // Cloudinary API key
+      // Upload to Cloudinary, store info in database
+      axios.post("https://api.cloudinary.com/v1_1/zagsabroad/image/upload", formData).then(response => {
+          let url = response.data.secure_url.replace('upload', 'upload/a_exif');
+          console.log(url);
+          var upload = {
+            "program" : this.state.host_program, "url" : url, "height" : response.data.height,
+            "width": response.data.width, "survey_id" : this.state.reviewId
+          }
+          axios.post("https://zagsabroad-backend.herokuapp.com/adminphotos", upload).then((res) => {
+            console.log(res.data);
+          });
+      });
+    }
   }
 
   render() {
@@ -95,6 +118,16 @@ class ProgramDetailsForm extends Component {
               defaultValue = {this.state.application_link}
               onChange = { (event) =>
                 this.setState({application_link : event.target.value})}/><br/>
+            <p style={{margin: '10px'}}> Place any default photos here: </p>
+            <div style={{margin: '10px'}}>
+            <DropzoneArea
+              acceptedFiles={["image/jpeg", "image/png"]}
+              filesLimit={20}
+              onChange={(photos) => {this.setState({photos: photos})}}
+              dropzoneText="Drag and drop an image or click here"
+              showFileNamesInPreview={true}
+              maxFileSize={5000000}/>
+            </div>
             <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
               <span>
                 <Button variant="contained" style={buttonStyle}
@@ -139,6 +172,8 @@ class ProgramDetailsForm extends Component {
                         this.updateProgram(programInfo);
                       }
                     }
+                    console.log(this.state.photos);
+                    this.handleUploadImages(this.state.photos);
                   }}>
                   Save
                 </Button>

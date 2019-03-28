@@ -130,7 +130,7 @@ render() {
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return (
         <div className ="wrapper">
-          <p style={{marginTop: '15px', display: 'inline', marginLeft: '3vw'}}> Search by: </p>
+          <p style={{marginTop: '15px', display: 'inline', marginLeft: '15vw'}}> Search by: </p>
           <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
             <Select autoWidth={true} value={this.state.searchBy}
               onChange = { (event) =>

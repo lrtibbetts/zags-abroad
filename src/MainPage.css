@@ -8,9 +8,6 @@
 .expansion-map-wrapper{
   display: flex;
   width: 100vw;
-}
-
-.flex-direction{
   flex-direction: row;
 }
 
@@ -20,12 +17,13 @@
 
 .list {
   width: 50vw;
+  padding-left: 5vw;
   padding-right: 5vw;
   padding-top: 20px;
 }
 
 .map {
-  padding-left: 3vw;
+  padding-right: 3vw;
   padding-top: 20px;
   width: 1000px;
   height: 300px;
@@ -38,22 +36,23 @@
   vertical-align: bottom;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 900px) and (min-width: 401px) {
   /* For non-desktops: */
-  .flex-direction{
-    flex-direction:column;
+  .expansion-map-wrapper{
+    flex-direction: column-reverse;
   }
 
   .map {
-    float: right;
-    padding-top: 20px;
-    width: 100vw;
+    display: inline-block;
+    width: 500px;
     height: 300px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
   .list {
     display: inline-block;
-    float: left;
     width: 60vw;
     padding-right: 5vw;
     padding-top: 20px;
@@ -61,8 +60,34 @@
 
   .expansion{
     width: 95vw;
-    float: left;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  /* For phones & small tables: */
+  .expansion-map-wrapper{
+    display: flex;
+    width: 100vw;
+    flex-direction: column-reverse;
   }
 
+  .map {
+    width: 1000px;
+    height: 300px;
+    display: inline-block;
+    padding-left: 17vw;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 
+  .list {
+    display: inline-block;
+    width: 60vw;
+    padding-right: 5vw;
+    padding-top: 20px;
+  }
+
+  .expansion{
+    width: 95vw;
+  }
 }

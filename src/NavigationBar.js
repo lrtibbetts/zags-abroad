@@ -28,7 +28,7 @@ const headerStyle = {
   color: 'black',
   textDecoration: 'none',
   display: 'inline-block',
-  marginLeft: '1vw'
+  marginLeft: '25px'
 }
 
 

@@ -42,7 +42,7 @@ class NavigationBar extends Component {
         <div className ="flexDirection">
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          <p style={{display: 'inline', fontSize: 'small', fontWeight: 300}}> Already studied abroad? </p>
+          <p style={{display: 'inline', fontSize: 'small', fontWeight: 300, marginLeft: '3vw'}}> Already studied abroad? </p>
           <Link to="/review" style={linkStyle}>Share here.</Link>
           <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
             Sign Up

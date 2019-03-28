@@ -4,6 +4,7 @@
   height: 100vh;
 }
 
+
 .expansion-map-wrapper{
   display: flex;
   width: 100vw;
@@ -29,29 +30,28 @@
   float: right;
   padding-left: 3vw;
   padding-top: 20px;
-  width: 100vw;
-  height: 60vh;
+  width: 1000px;
+  height: 300px;
 }
 
 .searchBar {
   width: 45%;
-  margin-left: 1vw;
+  margin-left: 2vw;
   display: inline-block;
   vertical-align: bottom;
 }
 
 @media only screen and (max-width: 900px) {
-  /* For desktops: */
+  /* For non-desktops: */
   .flex-direction{
     flex-direction:column;
   }
 
   .map {
     float: right;
-    padding-left: 20vw;
     padding-top: 20px;
-    width: 55vw;
-    height: 45vh;
+    width: 100vw;
+    height: 300px;
   }
 
   .list {
@@ -66,5 +66,6 @@
     width: 95vw;
     float: left;
   }
+
 
 }

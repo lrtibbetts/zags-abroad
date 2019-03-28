@@ -16,18 +16,15 @@
 
 .expansion{
   width: 50vw;
-  float: left;
 }
 
 .list {
-  float: left;
   width: 50vw;
   padding-right: 5vw;
   padding-top: 20px;
 }
 
 .map {
-  float: right;
   padding-left: 3vw;
   padding-top: 20px;
   width: 1000px;

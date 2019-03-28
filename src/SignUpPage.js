@@ -46,7 +46,6 @@ class SignUpPage extends Component {
       "last" : this.state.lastName,
       "password" : this.state.password
     }
-    // local testing: "http://localhost:3001/signup"
     // Using an arrow function allows us to access 'this' within the API callback
     axios.post("https://zagsabroad-backend.herokuapp.com/signup", accountInfo).then((res) => {
       if (res.data.code === "ER_DUP_ENTRY") {

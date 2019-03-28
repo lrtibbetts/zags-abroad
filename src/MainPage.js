@@ -20,7 +20,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Fab from '@material-ui/core/Fab';
 
 
-
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -103,7 +102,6 @@ class MainPage extends Component {
   getAllPrograms() {
     this.setState({programList: [], loading: true})
     axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
-      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }

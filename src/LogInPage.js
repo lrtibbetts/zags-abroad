@@ -15,6 +15,7 @@ const buttonStyle = {
   margin: '5px'
 };
 
+// TODO: Add flag to show message when an account has been verified
 class LogInPage extends Component {
   constructor(props) {
     super(props);

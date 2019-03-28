@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
+import "./NavigationBar.css";
 
 const buttonStyle = {
-  margin: '10px'
+  margin: '5px',
+}
+
+const loginStyle = {
+  marginRight: '2vw',
+  marginTop: '20px',
+  float: 'right',
+}
+
+const signupStyle = {
+  marginRight: '3vw',
+  marginTop: '20px',
+  float: 'right',
 }
 
 const linkStyle = {
   color: 'black',
-  marginRight: '10px'
+  fontSize: 'small',
 }
 
 const headerStyle = {
   color: 'black',
   textDecoration: 'none',
   display: 'inline-block',
-  marginRight: '25%',
-  marginLeft: '10px'
+  marginLeft: '1vw'
 }
+
 
 class NavigationBar extends Component {
   render() {
@@ -26,15 +39,15 @@ class NavigationBar extends Component {
     const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div style={{textAlign: 'center', whiteSpace: 'nowrap'}}>
+        <div className ="flexDirection">
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          <p style={{display: 'inline'}}> Already studied abroad? </p>
+          <p style={{display: 'inline', fontSize: 'small', fontWeight: 300}}> Already studied abroad? </p>
           <Link to="/review" style={linkStyle}>Share here.</Link>
-          <Button style={buttonStyle} variant="outlined" component={Link} to="/signup">
+          <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
             Sign Up
           </Button>
-          <Button style={buttonStyle} variant="outlined" component={Link} to="/login">
+          <Button style={loginStyle} variant="outlined" component={Link} to="/login">
             Log In
           </Button>
         </div>

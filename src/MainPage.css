@@ -1,54 +1,70 @@
+.wrapper{
+  display: inline-block;
+  width: 100vw;
+  height: 100vh;
+}
+
+.expansion-map-wrapper{
+  display: flex;
+  width: 100vw;
+}
+
+.flex-direction{
+  flex-direction: row;
+}
+
+.expansion{
+  width: 50vw;
+  float: left;
+}
+
 .list {
   float: left;
-  width: 50%;
-  padding-left: 1%;
+  width: 50vw;
+  padding-right: 5vw;
   padding-top: 20px;
 }
 
 .map {
   float: right;
-  text-align: justify;
-  padding-right: 1%;
+  padding-left: 3vw;
   padding-top: 20px;
+  width: 100vw;
+  height: 60vh;
 }
 
 .searchBar {
   width: 45%;
-  margin-left: 10px;
+  margin-left: 1vw;
   display: inline-block;
   vertical-align: bottom;
 }
 
-@media screen and (max-width: 1080px) {
-  .list {
-    text-align: center;
-    width: 98%;
-    padding-top: 20px;
+@media only screen and (max-width: 900px) {
+  /* For desktops: */
+  .flex-direction{
+    flex-direction:column;
   }
-  .map {
-    text-align: justify;
-    padding-right: 25%;
-    padding-bottom: 10px;
-    padding-top: 20px;
-  }
-}
 
-@media screen and (max-width: 700px) {
-  .list {
-    text-align: center;
-    width: 98%;
-    padding-top: 20px;
-  }
   .map {
-    text-align: justify;
-    padding-right: 1%;
-    padding-bottom: 10px;
+    float: right;
+    padding-left: 20vw;
+    padding-top: 20px;
+    width: 55vw;
+    height: 45vh;
+  }
+
+  .list {
+    display: inline-block;
+    float: left;
+    width: 60vw;
+    padding-right: 5vw;
     padding-top: 20px;
   }
-  .searchBar {
-    width: 80%;
-    margin-left: 10px;
-    display: inline-block;
-    vertical-align: bottom;
+
+  .expansion{
+    width: 95vw;
+    float: left;
   }
+
 }

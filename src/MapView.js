@@ -87,8 +87,8 @@ class MapView extends Component {
     return(
       <MapGL
         {...viewport}
-        width="510px"
-        height="350px"
+        width= "100%"
+        height= "100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
         onViewportChange={this.updateViewport}
         mapboxApiAccessToken={token} >

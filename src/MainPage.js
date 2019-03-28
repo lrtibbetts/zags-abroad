@@ -17,19 +17,9 @@ import { Redirect} from "react-router-dom";
 import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import blue from '@material-ui/core/colors/blue';
-import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 
 
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: blue[500], dark: blue[700], contrastText: blue[50]},
-  },
-  typography: {
-    useNextVariants: true,
-  }
-});
 
 class MainPage extends Component {
   constructor(props) {
@@ -122,10 +112,9 @@ class MainPage extends Component {
     this.setState({programList: [], loading: true})
     var filters = {
       "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
-      "subjects": this.state.filters.filter(filter => filter.value !== 'core').map((filter) => filter.value)
+      "subjects": this.state.filters.filter(filter => !filter.value.includes("CORE: ")).map((filter) => filter.value)
     }
     axios.post("https://zagsabroad-backend.herokuapp.com/mainsearch", filters).then((res) => {
-      console.log(res.data);
       this.formatPrograms(res.data);
     });
   }
@@ -142,7 +131,7 @@ render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return (
-        <div style={{textAlign: 'center'}}>
+        <div className ="wrapper">
           <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
           <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
             <Select autoWidth={true} value={this.state.searchBy}
@@ -159,71 +148,68 @@ render() {
               onChange = { this.handleChange("filters")}
               options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
           </div>
-          <div className="map">
-            <MapView programs={this.state.programList.map((program) => program.programName)}/>
-            {!this.state.loading ?
-            <div>
-              <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
-              <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-              target = "_blank" rel="noopener noreferrer">Click here.</a>
-            </div> : null}
-          </div>
-          <div className="list">
-            {this.state.loading ? <div id="loading">
-              <CircularProgress variant="indeterminate"/> </div>: null}
-            {this.state.filters.length > 0 && this.state.programList.length === 0
-              && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
-            {this.state.programList.map(program => {
-              return (
-                <ExpansionPanel key={program.programName}>
-                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <div>
-                    <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
-                    <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
-                    </div>
-                  </ExpansionPanelSummary>
-                  <ExpansionPanelDetails>
-                    <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
+          <div className="expansion-map-wrapper flex-direction">
+            <div className="map">
+              <MapView programs={this.state.programList.map((program) => program.programName)}/>
+              {!this.state.loading ?
+              <div>
+                <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
+                <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
+                target = "_blank" rel="noopener noreferrer">Click here.</a>
+              </div> : null}
+            </div>
+            <div className="list">
+              {this.state.loading ? <div id="loading">
+                <CircularProgress variant="indeterminate"/> </div>: null}
+              {this.state.filters.length > 0 && this.state.programList.length === 0
+                && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
+              {this.state.programList.map(program => {
+                return (
+                  <ExpansionPanel className="expansion" key={program.programName}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                       <div>
-                        <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                          <MuiThemeProvider theme={theme}>
-                            <Fab
-                              variant="extended"
-                              color="primary"
-                              >
-                              Learn More
-                            </Fab>
-                          </MuiThemeProvider>
-                        </a>
+                        <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
+                        <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
                       </div>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>GU Course</TableCell>
-                            <TableCell>Host Course</TableCell>
-                            <TableCell>Core Designation</TableCell>
-                            <TableCell>Requires Signature</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {program.courses.map((course, index) => {
-                            let core = course.core.trim();
-                            return (
-                              <TableRow key={index}>
-                                <TableCell>{course.guCourse}</TableCell>
-                                <TableCell>{course.hostCourse}</TableCell>
-                                <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
-                                <TableCell>{course.requiresSignature}</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </ExpansionPanelDetails>
-                </ExpansionPanel>
-              );
-            })}
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails >
+                      <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
+                        <div>
+                          <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                          <Fab variant="extended" color="primary">
+                            Learn More
+                          </Fab>
+                          </a>
+                        </div>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>GU Course</TableCell>
+                              <TableCell>Host Course</TableCell>
+                              <TableCell>Core Designation</TableCell>
+                              <TableCell>Requires Signature</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {program.courses.map((course, index) => {
+                              let core = course.core.trim();
+                              return (
+                                <TableRow key={index}>
+                                  <TableCell>{course.guCourse}</TableCell>
+                                  <TableCell>{course.hostCourse}</TableCell>
+                                  <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
+                                  <TableCell>{course.requiresSignature}</TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                );
+              })}
+            </div>
           </div>
           {this.state.programList.length > 0 ?
           <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>

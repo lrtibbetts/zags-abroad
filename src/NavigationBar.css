@@ -1,0 +1,13 @@
+.flex-direction{
+  flex-direction: row;
+  display: flex;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 900px) {
+  .flex-direction{
+    flex-direction: column;
+  }
+
+
+}

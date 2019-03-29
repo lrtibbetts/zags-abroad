@@ -8,15 +8,18 @@ const buttonStyle = {
 }
 
 const loginStyle = {
+  margin: '0',
   marginRight: '2vw',
   marginTop: '20px',
   float: 'right',
+  marginBottom: '2vw',
 }
 
 const signupStyle = {
-  marginRight: '3vw',
+  margin: '0',
   marginTop: '20px',
   float: 'right',
+  marginBottom: '2vw',
 }
 
 const linkStyle = {
@@ -28,7 +31,7 @@ const headerStyle = {
   color: 'black',
   textDecoration: 'none',
   display: 'inline-block',
-  marginLeft: '25px'
+  marginLeft: '2vw'
 }
 
 
@@ -39,17 +42,19 @@ class NavigationBar extends Component {
     const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div className ="flexDirection">
+        <div>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <p style={{display: 'inline', fontSize: 'small', fontWeight: 300, marginLeft: '3vw'}}> Already studied abroad? </p>
           <Link to="/review" style={linkStyle}>Share here.</Link>
-          <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
-            Sign Up
-          </Button>
-          <Button style={loginStyle} variant="outlined" component={Link} to="/login">
-            Log In
-          </Button>
+          <div className ="button-wrapper">
+            <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
+              Sign Up
+            </Button>
+            <Button style={loginStyle} variant="outlined" component={Link} to="/login">
+              Log In
+            </Button>
+          </div>
         </div>
       );
     } else {

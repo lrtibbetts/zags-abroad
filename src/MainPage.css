@@ -35,6 +35,13 @@
   vertical-align: bottom;
 }
 
+
+.search-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20%;
+}
+
 @media only screen and (max-width: 400px) {
   /* For phones & small tables: */
   .expansion-map-wrapper{
@@ -88,5 +95,10 @@
 
   .expansion{
     width: 95vw;
+  }
+
+  .search-wrapper {
+    flex-direction: row;
+    margin-left: 5%;
   }
 }

@@ -42,35 +42,6 @@
   margin-left: 20%;
 }
 
-@media only screen and (max-width: 400px) {
-  /* For phones & small tables: */
-  .expansion-map-wrapper{
-    display: flex;
-    width: 100vw;
-    flex-direction: column-reverse;
-  }
-
-  .map {
-    width: 1000px;
-    height: 300px;
-    display: inline-block;
-    padding-left: 17vw;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  .list {
-    display: inline-block;
-    width: 60vw;
-    padding-right: 5vw;
-    padding-top: 20px;
-  }
-
-  .expansion{
-    width: 95vw;
-  }
-}
-
 @media only screen and (max-width: 1000px) {
   /* For non-desktops: */
   .expansion-map-wrapper{

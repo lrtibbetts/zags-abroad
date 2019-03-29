@@ -131,23 +131,22 @@ render() {
       return (
         <div className ="wrapper">
           <div className ="search-wrapper">
-          <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
-          <div style={{marginTop: '4px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
-            <Select autoWidth={true} value={this.state.searchBy}
-              onChange = { (event) =>
-                this.setState({searchBy : event.target.value})}>
-              <MenuItem value='department'> Department </MenuItem>
-              <MenuItem value='core'> Core Designation </MenuItem>
-            </Select>
-          </div>
-
-          <div className="searchBar">
-            <MultiDropdownTextField
-              id = "search"
-              value = { this.state.filters }
-              onChange = { this.handleChange("filters")}
-              options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
-          </div>
+            <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
+            <div style={{marginTop: '4px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+              <Select autoWidth={true} value={this.state.searchBy}
+                onChange = { (event) =>
+                  this.setState({searchBy : event.target.value})}>
+                <MenuItem value='department'> Department </MenuItem>
+                <MenuItem value='core'> Core Designation </MenuItem>
+              </Select>
+            </div>
+            <div className="searchBar">
+              <MultiDropdownTextField
+                id = "search"
+                value = { this.state.filters }
+                onChange = { this.handleChange("filters")}
+                options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
+            </div>
           </div>
           <div className="expansion-map-wrapper">
             <div className="list">

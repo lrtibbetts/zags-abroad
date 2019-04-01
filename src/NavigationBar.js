@@ -8,23 +8,17 @@ const buttonStyle = {
 }
 
 const loginStyle = {
-  margin: '0',
-  marginRight: '2vw',
   marginTop: '20px',
-  float: 'right',
-  marginBottom: '2vw',
+  marginRight: '2vw'
 }
 
 const signupStyle = {
-  margin: '0',
   marginTop: '20px',
-  float: 'right',
-  marginBottom: '2vw',
+  float: 'right'
 }
 
 const linkStyle = {
-  color: 'black',
-  fontSize: 'small',
+  color: 'black'
 }
 
 const headerStyle = {
@@ -33,7 +27,6 @@ const headerStyle = {
   display: 'inline-block',
   marginLeft: '2vw'
 }
-
 
 class NavigationBar extends Component {
   render() {
@@ -45,8 +38,10 @@ class NavigationBar extends Component {
         <div>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          <p style={{display: 'inline', fontSize: 'small', fontWeight: 300, marginLeft: '3vw'}}> Already studied abroad? </p>
-          <Link to="/review" style={linkStyle}>Share here.</Link>
+          <div className="link">
+            <p style={{display: 'inline', marginLeft: '2vw'}}> Already studied abroad? </p>
+            <Link to="/review" style={linkStyle}>Share here.</Link>
+          </div>
           <div className ="button-wrapper">
             <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
               Sign Up

@@ -44,6 +44,37 @@ const theme = createMuiTheme({
   }
 });
 
+class SaveButton extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: 0,
+      isSaved: false
+    }
+  }
+
+  render() {
+    return(
+      <IconButton
+        onClick={() => this.setState({ isSaved: !this.state.isSaved })}>
+        { this.state.isSaved ?
+          <DoneIcon color="primary"
+            onClick={() => {
+              console.log("SAVED: ", this.state.id);
+              /*this.deleteCourse(this.state.id);
+              this.setState({savedCoursesList: this.getSavedCourses()});*/
+            }}/> :
+          <AddIcon color="primary"
+            onClick={() => {
+              console.log("NOT SAVED: ", this.state.id);
+              /*this.saveCourse(this.state.id);
+              this.setState({savedCoursesList: this.getSavedCourses()});*/
+            }}/> }
+      </IconButton>
+    );
+  }
+}
+
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
@@ -74,23 +105,35 @@ class ProgramDetailView extends Component {
               // Course is a saved course for logged in user
               if(match) {
                 return (
-                  <IconButton
-                    onClick={(event) => {
+                  <SaveButton>
+                    {
+                      this.setState({id: value});
+                      //this.setState({isSaved: true});
+                    }
+                  </SaveButton>
+                  /*<IconButton
+                    onClick={() => {
                       this.deleteCourse(value);
                       this.setState({savedCoursesList: this.getSavedCourses()});
                     }}
                     color="primary"><DoneIcon/>
-                  </IconButton>
+                  </IconButton>*/
                 );
               } else {
                 return (
-                  <IconButton
-                    onClick={(event) => {
+                  <SaveButton>
+                    {
+                      //this.setState({id: value});
+                      //this.setState({isSaved: false});
+                    }
+                  </SaveButton>
+                  /*<IconButton
+                    onClick={() => {
                       this.saveCourse(value);
                       this.setState({savedCoursesList: this.getSavedCourses()});
                     }}
                     color="primary"><AddIcon/>
-                  </IconButton>
+                  </IconButton>*/
                 );
               }
             }}},
@@ -370,6 +413,5 @@ class ProgramDetailView extends Component {
     }
   }
 }
-
 
 export default ProgramDetailView;

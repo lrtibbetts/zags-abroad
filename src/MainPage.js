@@ -130,32 +130,25 @@ render() {
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return (
         <div className ="wrapper">
-          <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
-          <div style={{marginTop: '15px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
-            <Select autoWidth={true} value={this.state.searchBy}
-              onChange = { (event) =>
-                this.setState({searchBy : event.target.value})}>
-              <MenuItem value='department'> Department </MenuItem>
-              <MenuItem value='core'> Core Designation </MenuItem>
-            </Select>
-          </div>
-          <div className="searchBar">
-            <MultiDropdownTextField
-              id = "search"
-              value = { this.state.filters }
-              onChange = { this.handleChange("filters")}
-              options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
-          </div>
-          <div className="expansion-map-wrapper flex-direction">
-            <div className="map">
-              <MapView programs={this.state.programList.map((program) => program.programName)}/>
-              {!this.state.loading ?
-              <div>
-                <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
-                <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-                target = "_blank" rel="noopener noreferrer">Click here.</a>
-              </div> : null}
+          <div className ="search-wrapper">
+            <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
+            <div style={{marginTop: '4px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
+              <Select autoWidth={true} value={this.state.searchBy}
+                onChange = { (event) =>
+                  this.setState({searchBy : event.target.value})}>
+                <MenuItem value='department'> Department </MenuItem>
+                <MenuItem value='core'> Core Designation </MenuItem>
+              </Select>
             </div>
+            <div className="searchBar">
+              <MultiDropdownTextField
+                id = "search"
+                value = { this.state.filters }
+                onChange = { this.handleChange("filters")}
+                options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
+            </div>
+          </div>
+          <div className="expansion-map-wrapper">
             <div className="list">
               {this.state.loading ? <div id="loading">
                 <CircularProgress variant="indeterminate"/> </div>: null}
@@ -207,6 +200,15 @@ render() {
                   </ExpansionPanel>
                 );
               })}
+            </div>
+            <div className="map">
+              <MapView programs={this.state.programList.map((program) => program.programName)}/>
+              {!this.state.loading ?
+              <div>
+                <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
+                <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
+                target = "_blank" rel="noopener noreferrer">Click here.</a>
+              </div> : null}
             </div>
           </div>
           {this.state.programList.length > 0 ?

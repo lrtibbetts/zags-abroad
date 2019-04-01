@@ -18,7 +18,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
-import blue from '@material-ui/core/colors/blue';
+import blue from '@material-ui/core/colors/indigo';
 import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 
@@ -28,11 +28,7 @@ const buttonStyle = {
 
 const style = {
     display: 'inline-block',
-    marginRight: '25%',
-    marginLeft: '10px',
-    marginBottom: '15px',
-    marginTop: '15px',
-    top: 0,
+    marginLeft: '3vw',
 };
 
 const theme = createMuiTheme({
@@ -315,59 +311,54 @@ class ProgramDetailView extends Component {
       return (
         <div className="detail">
           <h1>{this.props.name}</h1>
-          <div className="photos">
-          <div>
+          <div className ="search-wrapper">
+            <p className="label"> Search by: </p>
+            <div className="select">
+              <Select autoWidth={true} value={this.state.searchBy}
+                onChange = { (event) =>
+                  this.setState({searchBy : event.target.value})}>
+                <MenuItem value='department'> Department </MenuItem>
+                <MenuItem value='core'> Core designation </MenuItem>
+              </Select>
+            </div>
+            <div className="search">
+              <MultiDropdownTextField
+                  value = { this.state.filters }
+                  onChange = { this.handleChange("filters")}
+                  options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
+              />
+            </div>
             <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
               <MuiThemeProvider theme={theme}>
-              <Fab
-                variant="extended"
-                color="primary"
-                style={style}
-                >
-                Apply Here!
-              </Fab>
+                <Fab variant="extended" color="primary" style={style}> Apply Here! </Fab>
               </MuiThemeProvider>
             </a>
           </div>
-
-          {this.state.loading ? <CircularProgress variant="indeterminate"/> :
-          (this.state.photos.length > 0 ?
-            <Carousel
-              showThumbs={false}
-              dynamicHeight={true}
-              width={maxWidth + 'px'}>
-              {this.state.photos.map((photo) => {
-                return(
-                  <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
-                  paddingRight: (maxWidth - photo.width) / 2}}>
-                    <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
-                  </div>
-                );
-              })}
-            </Carousel> : null)}
-          </div>
-          <p className="label"> Search by: </p>
-          <div className="select">
-            <Select autoWidth={true} value={this.state.searchBy}
-              onChange = { (event) =>
-                this.setState({searchBy : event.target.value})}>
-              <MenuItem value='department'> Department </MenuItem>
-              <MenuItem value='core'> Core designation </MenuItem>
-            </Select>
-          </div>
-          <div className="search">
-            <MultiDropdownTextField
-                value = { this.state.filters }
-                onChange = { this.handleChange("filters")}
-                options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
-            />
-          </div>
-          <div className="list">
-            {this.state.loading ? null :
-            <MUIDataTable
-              columns = {this.state.columns}
-              data = {this.state.courseList}
-              options = {options}/>}<br/>
+          <div className ="photo-wrapper">
+            <div className="list">
+              {this.state.loading ? null :
+              <MUIDataTable
+                columns = {this.state.columns}
+                data = {this.state.courseList}
+                options = {options}/>}<br/>
+            </div>
+            <div className="photos">
+              {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+              (this.state.photos.length > 0 ?
+                <Carousel
+                  showThumbs={false}
+                  dynamicHeight={true}
+                  width={maxWidth + 'px'}>
+                  {this.state.photos.map((photo) => {
+                    return(
+                      <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                      paddingRight: (maxWidth - photo.width) / 2}}>
+                        <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                      </div>
+                    );
+                  })}
+                </Carousel> : null)}
+            </div>
           </div>
           <div className="header">
             <h2> Program Reviews </h2>
@@ -403,7 +394,6 @@ class ProgramDetailView extends Component {
                 </Button>
               </div>
             </Dialog>
-
         </div>
       );
     } else {

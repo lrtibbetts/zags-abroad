@@ -1,13 +1,17 @@
-.flex-direction{
-  flex-direction: row;
-  display: flex;
-  white-space: nowrap;
+.button-wrapper {
+  float: right;
+  margin-right: 2vw;
 }
 
-@media only screen and (max-width: 900px) {
-  .flex-direction{
-    flex-direction: column;
+.link {
+  color: black;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 625px) {
+  .link {
+      color: black;
+      display: inline-block;
+      font-size: small;
   }
-
-
 }

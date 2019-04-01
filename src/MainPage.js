@@ -19,7 +19,6 @@ import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Fab from '@material-ui/core/Fab';
 
-
 class MainPage extends Component {
   constructor(props) {
     super(props);

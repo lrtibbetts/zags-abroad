@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { Redirect, Link } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const textFieldStyle = {
   width: 250,
@@ -15,7 +16,6 @@ const buttonStyle = {
   margin: '5px'
 };
 
-// TODO: Add flag to show message when an account has been verified
 class LogInPage extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +27,11 @@ class LogInPage extends Component {
       wrongPassword : false,
       noAccount : false,
       notVerified: false,
+      showResetPasswordMessage: false,
+      validEmail: false, // Make sure it is a Gonzaga email
+      emailForReset: '',
+      showEmailSentMessage: false,
+      sending: false // Show progress icon
     }
   }
 
@@ -60,6 +65,18 @@ class LogInPage extends Component {
     });
   }
 
+  sendResetEmail() {
+    this.setState({sending: true})
+    axios.post("https://zagsabroad-backend.herokuapp.com/sendreset", {email: this.state.emailForReset}).then((res) => {
+      console.log(res.data);
+      if(res.data === "Account does not exist") {
+        this.setState({sending: false, showResetPasswordMessage: false, noAccount: true})
+      } else {
+        this.setState({sending: false, showResetPasswordMessage: false, showEmailSentMessage: true})
+      }
+    });
+  }
+
   render() {
     return (
       <div style={{textAlign: 'center'}}>
@@ -80,7 +97,12 @@ class LogInPage extends Component {
         <Button label="Log in" variant="contained"
           disabled = {!(this.state.email && this.state.password)}
           onClick = {(event) =>
-            this.logIn(event)}> Log In </Button>
+            this.logIn(event)}> Log In </Button><br/><br/>
+        <Button
+          onClick = {(event) =>
+            this.setState({showResetPasswordMessage: true})
+          }> Forgot your password?
+        </Button>
         {this.state.isAdmin === true ? <Redirect to="/admin"/> : null}
         {this.state.validUser === true ? <Redirect to="/"/> : null}
         <Dialog open={this.state.notVerified}>
@@ -104,6 +126,38 @@ class LogInPage extends Component {
               onClick = {(event) =>
                 this.setState({noAccount : false})}>
               Try again
+            </Button>
+          </div>
+        </Dialog>
+        <Dialog open={this.state.showResetPasswordMessage}
+          onBackdropClick={() => this.setState({showResetPasswordMessage: false})}>
+          <DialogTitle> Please enter your email: </DialogTitle>
+          <TextField style={textFieldStyle}
+            helperText = {!this.state.validEmail && (this.state.emailForReset.length > 0) ?
+            "Please enter a Gonzaga email" : ""}
+            onChange = { (event) => {
+              let newValue = event.target.value;
+              this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
+              && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
+              {validEmail : false, emailForReset: newValue} : {validEmail : true, emailForReset: newValue});
+            }}/>
+          <div>
+            {this.state.sending ? <CircularProgress variant="indeterminate"/> :
+            <Button style={buttonStyle} label="Email" variant="contained"
+              disabled = {!this.state.validEmail}
+              onClick = {(event) =>
+                this.sendResetEmail()}>
+              Submit
+            </Button>}
+          </div>
+        </Dialog>
+        <Dialog open={this.state.showEmailSentMessage}>
+          <DialogTitle> Check your email to reset your password! </DialogTitle>
+          <div>
+            <Button style={buttonStyle} variant="contained"
+              onClick = {(event) =>
+                this.setState({showEmailSentMessage: false})}>
+              Okay
             </Button>
           </div>
         </Dialog>

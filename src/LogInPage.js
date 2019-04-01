@@ -130,7 +130,7 @@ class LogInPage extends Component {
           </div>
         </Dialog>
         <Dialog open={this.state.showResetPasswordMessage}
-          onBackdropClick={() => this.setState({showResetPasswordMessage: false})}>
+          onBackdropClick={() => this.setState({showResetPasswordMessage: false, emailForReset: ''})}>
           <DialogTitle> Please enter your email: </DialogTitle>
           <TextField style={textFieldStyle}
             helperText = {!this.state.validEmail && (this.state.emailForReset.length > 0) ?

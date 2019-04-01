@@ -3,10 +3,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 
-const buttonStyle = {
-  margin: '5px',
-}
-
 const loginStyle = {
   marginTop: '20px',
   marginRight: '2vw'
@@ -69,9 +65,7 @@ class NavigationBar extends Component {
         </div>
       );
     }
-
   }
-
 }
 
 export default NavigationBar;

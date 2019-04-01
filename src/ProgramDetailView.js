@@ -21,6 +21,7 @@ import ReviewsDisplay from './ReviewsDisplay.js';
 import blue from '@material-ui/core/colors/indigo';
 import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
+import SaveButton from './SaveButton.js';
 
 const buttonStyle = {
   margin: '5px',
@@ -40,41 +41,14 @@ const theme = createMuiTheme({
   }
 });
 
-class SaveButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: 0,
-      isSaved: false
-    }
-  }
-
-  render() {
-    return(
-      <IconButton
-        onClick={() => this.setState({ isSaved: !this.state.isSaved })}>
-        { this.state.isSaved ?
-          <DoneIcon color="primary"
-            onClick={() => {
-              console.log("SAVED: ", this.state.id);
-              /*this.deleteCourse(this.state.id);
-              this.setState({savedCoursesList: this.getSavedCourses()});*/
-            }}/> :
-          <AddIcon color="primary"
-            onClick={() => {
-              console.log("NOT SAVED: ", this.state.id);
-              /*this.saveCourse(this.state.id);
-              this.setState({savedCoursesList: this.getSavedCourses()});*/
-            }}/> }
-      </IconButton>
-    );
-  }
-}
-
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
-    const savedCourses = this.getSavedCourses();
+    let email = this.props.cookies.get('email');
+    let savedCourses = []
+    if(email) {
+      savedCourses = this.getSavedCourses(email);
+    }
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
@@ -101,36 +75,14 @@ class ProgramDetailView extends Component {
               // Course is a saved course for logged in user
               if(match) {
                 return (
-                  <SaveButton>
-                    {
-                      this.setState({id: value});
-                      //this.setState({isSaved: true});
-                    }
-                  </SaveButton>
-                  /*<IconButton
-                    onClick={() => {
-                      this.deleteCourse(value);
-                      this.setState({savedCoursesList: this.getSavedCourses()});
-                    }}
-                    color="primary"><DoneIcon/>
-                  </IconButton>*/
+                  <SaveButton id={value} isSaved={true} email={this.props.cookies.get('email')}
+                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
                 );
               } else {
                 return (
-                  <SaveButton>
-                    {
-                      //this.setState({id: value});
-                      //this.setState({isSaved: false});
-                    }
-                  </SaveButton>
-                  /*<IconButton
-                    onClick={() => {
-                      this.saveCourse(value);
-                      this.setState({savedCoursesList: this.getSavedCourses()});
-                    }}
-                    color="primary"><AddIcon/>
-                  </IconButton>*/
-                );
+                  <SaveButton id={value} isSaved={false} email={this.props.cookies.get('email')}
+                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
+            );
               }
             }}},
         { name: "Gonzaga Course" },
@@ -189,9 +141,7 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses, loading: false});
   }
 
-  // alkjfdlksdlfalflajsdf;af
-  getSavedCourses() {
-    let email = this.props.cookies.get('email');
+  getSavedCourses(email) {
     let savedCourses = [];
     if(email) {
       axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
@@ -251,8 +201,7 @@ class ProgramDetailView extends Component {
     });
   }
 
-  saveCourse(id) {
-    let email = this.props.cookies.get('email');
+  saveCourse = (id, email) => {
     if(email) {
       // User is logged in
       let params = {
@@ -274,16 +223,20 @@ class ProgramDetailView extends Component {
     }
   }
 
-  deleteCourse(id) {
-    let params = {
-      email: this.props.cookies.get('email'),
-      id: id
+  deleteCourse = (id, email) => {
+    if(email) {
+      let params = {
+        email: email,
+        id: id
+      }
+      axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
+        res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
+        this.setState({showMessage: true, message: "Course removed from \"My Account\""});
+      });
+    } else {
+      // Not logged in
+      this.setState({showLogInPrompt: true})
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
-      res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
-      this.setState({showMessage: true, message: "Course removed from \"My Account\""},
-      this.getCourses());
-    });
   }
 
   handleChange = name => value => {

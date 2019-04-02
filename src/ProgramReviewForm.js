@@ -7,11 +7,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Redirect, Link } from "react-router-dom";
 import { DropzoneArea } from 'material-ui-dropzone';
+import "./ProgramReviewForm.css";
 
 const textFieldStyle = {
   width: 500,
   margin: '20px',
-  zIndex: 0
+  zIndex: 0,
 };
 
 class ProgramReviewForm extends Component {
@@ -135,7 +136,7 @@ class ProgramReviewForm extends Component {
             onChange = { (event) =>
               this.setState({email : event.target.value})}/>
           <br/>
-          <TextField id="major" label="What is your major?" required={true} style={textFieldStyle}
+          <TextField id="required" label="What was your major?" required={true} style ={textFieldStyle} classes="textField"
             onChange = { (event) =>
               this.setState({major : event.target.value})}/>
           <br/>
@@ -186,7 +187,7 @@ class ProgramReviewForm extends Component {
             helperText = {(1000 - this.state.residence.length) + ' characters remaining'}/>
           <br/>
           <TextField id="trips" multiline={true} rows={10} style={textFieldStyle}
-            label = "Tell us about any favorite trips you took while abroad"
+            label = "Tell us about any favorite trips you took while abroad."
             placeholder = "Include any places you recommend, travel advice, etc."
             variant = "outlined"
             inputProps={{maxLength: 1000}}

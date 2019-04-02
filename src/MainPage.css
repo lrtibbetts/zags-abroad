@@ -24,21 +24,19 @@
 .map {
   padding-right: 3vw;
   padding-top: 20px;
-  width: 1000px;
-  height: 300px;
+  width: 510px;
+  height: 350px;
 }
 
 .searchBar {
   width: 45%;
-  margin-left: 2vw;
+  margin-left: 10px;
   display: inline-block;
   vertical-align: bottom;
 }
 
-
 .search-wrapper {
-  display: flex;
-  flex-direction: row;
+  /* try to center */
   margin-left: 20%;
 }
 
@@ -50,8 +48,8 @@
 
   .map {
     display: inline-block;
-    width: 500px;
-    height: 300px;
+    width: 510px;
+    height: 350px;
     margin: 0 auto;
     padding-top: 20px;
     padding-bottom: 20px;

@@ -8,8 +8,23 @@
   display: inline-block;
 }
 
-@media only screen and (max-width: 625px) {
+.logged-in-link {
+    color: black;
+    display: inline-block;
+}
+
+/* Adjust link font-size when screen width is relatively small*/
+@media only screen and (max-width: 650px) {
   .link {
+      color: black;
+      display: inline-block;
+      font-size: small;
+  }
+}
+
+/* Adjust link font-size when user is logged in and screen width is relatively small*/
+@media only screen and (max-width: 690px) {
+  .logged-in-link {
       color: black;
       display: inline-block;
       font-size: small;

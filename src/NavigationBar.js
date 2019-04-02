@@ -3,12 +3,12 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 
-const loginStyle = {
+const leftButtonStyle = {
   marginTop: '20px',
   marginRight: '2vw'
 }
 
-const signupStyle = {
+const rightButtonStyle = {
   marginTop: '20px',
   marginRight: '2vw',
   float: 'right'
@@ -40,10 +40,10 @@ class NavigationBar extends Component {
             <Link to="/review" style={linkStyle}>Share here.</Link>
           </div>
           <div className ="button-wrapper">
-            <Button style={signupStyle} variant="outlined" component={Link} to="/signup">
+            <Button style={rightButtonStyle} variant="outlined" component={Link} to="/signup">
               Sign Up
             </Button>
-            <Button style={loginStyle} variant="outlined" component={Link} to="/login">
+            <Button style={leftButtonStyle} variant="outlined" component={Link} to="/login">
               Log In
             </Button>
           </div>
@@ -54,14 +54,16 @@ class NavigationBar extends Component {
         <div>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
-          {!isAdmin ? <p style={{display: 'inline', marginLeft: '2vw'}}> Already studied abroad? </p> : null}
-          {!isAdmin ? <Link to="/review" style={linkStyle}> Share here.</Link> : null}
-          {!isAdmin ? <Button style={signupStyle} variant="outlined" component={Link} to="/account"> My Account </Button> : null}
-          <Button style={signupStyle} variant="outlined"
+          <div className="logged-in-link">
+            {!isAdmin ? <p style={{display: 'inline', marginLeft: '2vw'}}> Already studied abroad? </p> : null}
+            {!isAdmin ? <Link to="/review" style={linkStyle}> Share here.</Link> : null}
+          </div>
+          <Button style={rightButtonStyle} variant="outlined"
             onClick = {(event) => {
               cookies.remove('email', {'path': '/'});
               cookies.remove('role', {'path': '/'}); }}>
               Log Out </Button>
+          {!isAdmin ? <Button style={rightButtonStyle} variant="outlined" component={Link} to="/account"> My Account </Button> : null}
         </div>
       );
     }

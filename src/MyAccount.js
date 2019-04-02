@@ -108,6 +108,7 @@ class MyAccount extends Component {
                       <TableCell>GU Course</TableCell>
                       <TableCell>Host Course</TableCell>
                       <TableCell>Requires Signature</TableCell>
+                      <TableCell>  </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

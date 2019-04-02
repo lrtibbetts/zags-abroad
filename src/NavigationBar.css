@@ -1,0 +1,17 @@
+.button-wrapper {
+  float: right;
+  margin-right: 2vw;
+}
+
+.link {
+  color: black;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 625px) {
+  .link {
+      color: black;
+      display: inline-block;
+      font-size: small;
+  }
+}

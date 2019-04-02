@@ -1,36 +1,37 @@
+.detail {
+  display: inline-block;
+  width: 100vw;
+  height: 100vh;
+}
+
 .header {
   clear: both;
   text-align: center;
 }
 
 .search {
-  margin-left: 10px;
-  width: 30%;
+  width: 45%;
+  margin-left: 2vw;
   display: inline-block;
   vertical-align: bottom;
-  z-index: 1;
-  position: relative;
 }
 
 .list {
-  z-index: 0;
-  position: relative;
-  float: left;
-  width: 55%;
-  padding-left: 2%;
+  width: 50vw;
+  padding-left: 2vw;
+  padding-right: 3vw;
   padding-top: 20px;
 }
 
 .photos {
-  text-align: center;
-  float: right;
-  padding-right: 2%;
+  padding-left: 2vw;
+  padding-right: 3vw;
   padding-top: 20px;
 }
 
 .label {
   display: inline;
-  padding-left: 2%;
+  padding-left: 15px;
 }
 
 .detail h1 {
@@ -41,17 +42,31 @@
   display: inline-block;
   vertical-align: bottom;
   margin-left: 10px;
+  margin-top: 4px;
 }
 
-@media screen and (max-width: 1240px) {
+.search-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20%;
+}
+
+.photo-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 1000px) {
   .header {
     clear: both;
     text-align: center;
   }
 
   .photos {
-    width: 80%;
-    padding-left: 20%;
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
     padding-bottom: 10px;
     padding-top: 20px;
   }
@@ -81,44 +96,13 @@
     vertical-align: bottom;
     margin-left: 10px;
   }
-}
 
-@media screen and (max-width: 650px) {
-  .header {
-    clear: both;
-    text-align: center;
+  .search-wrapper {
+    flex-direction: row;
+    margin-left: 5%;
   }
 
-  .photos {
-    width: 97%;
-    padding-left: 3%;
-    padding-bottom: 10px;
-    padding-top: 20px;
-  }
-  .search {
-    margin-left: 10px;
-    width: 60%;
-    display: inline-block;
-    vertical-align: bottom;
-    z-index: 1;
-    position: relative;
-  }
-  .list {
-    z-index: 0;
-    position: relative;
-    text-align: center;
-    width: 95%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    position: relative;
-  }
-  .label {
-    display: inline;
-    padding-left: 2%;
-  }
-  .select {
-    display: inline-block;
-    vertical-align: bottom;
-    margin-left: 10px;
+  .photo-wrapper {
+    flex-direction: column-reverse;
   }
 }

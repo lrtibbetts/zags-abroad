@@ -4,8 +4,6 @@ import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
-import AddIcon from '@material-ui/icons/Add';
-import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,9 +16,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
-import blue from '@material-ui/core/colors/blue';
+import blue from '@material-ui/core/colors/indigo';
 import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
+import SaveButton from './SaveButton.js';
 
 const buttonStyle = {
   margin: '5px',
@@ -28,11 +27,7 @@ const buttonStyle = {
 
 const style = {
     display: 'inline-block',
-    marginRight: '25%',
-    marginLeft: '10px',
-    marginBottom: '15px',
-    marginTop: '15px',
-    top: 0,
+    marginLeft: '3vw',
 };
 
 const theme = createMuiTheme({
@@ -47,7 +42,11 @@ const theme = createMuiTheme({
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
-    const savedCourses = this.getSavedCourses();
+    let email = this.props.cookies.get('email');
+    let savedCourses = []
+    if(email) {
+      savedCourses = this.getSavedCourses(email);
+    }
     this.state = {
       subjects: [], // Subjects in dropdown menu
       core: [],
@@ -74,24 +73,14 @@ class ProgramDetailView extends Component {
               // Course is a saved course for logged in user
               if(match) {
                 return (
-                  <IconButton
-                    onClick={(event) => {
-                      this.deleteCourse(value);
-                      this.setState({savedCoursesList: this.getSavedCourses()});
-                    }}
-                    color="primary"><DoneIcon/>
-                  </IconButton>
+                  <SaveButton id={value} isSaved={true} email={this.props.cookies.get('email')}
+                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
                 );
               } else {
                 return (
-                  <IconButton
-                    onClick={(event) => {
-                      this.saveCourse(value);
-                      this.setState({savedCoursesList: this.getSavedCourses()});
-                    }}
-                    color="primary"><AddIcon/>
-                  </IconButton>
-                );
+                  <SaveButton id={value} isSaved={false} email={this.props.cookies.get('email')}
+                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
+            );
               }
             }}},
         { name: "Gonzaga Course" },
@@ -150,9 +139,7 @@ class ProgramDetailView extends Component {
     this.setState({courseList: courses, loading: false});
   }
 
-  // alkjfdlksdlfalflajsdf;af
-  getSavedCourses() {
-    let email = this.props.cookies.get('email');
+  getSavedCourses(email) {
     let savedCourses = [];
     if(email) {
       axios.post("https://zagsabroad-backend.herokuapp.com/accountcourses", {email: email}).then((res) => {
@@ -212,8 +199,7 @@ class ProgramDetailView extends Component {
     });
   }
 
-  saveCourse(id) {
-    let email = this.props.cookies.get('email');
+  saveCourse = (id, email) => {
     if(email) {
       // User is logged in
       let params = {
@@ -235,16 +221,20 @@ class ProgramDetailView extends Component {
     }
   }
 
-  deleteCourse(id) {
-    let params = {
-      email: this.props.cookies.get('email'),
-      id: id
+  deleteCourse = (id, email) => {
+    if(email) {
+      let params = {
+        email: email,
+        id: id
+      }
+      axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
+        res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
+        this.setState({showMessage: true, message: "Course removed from \"My Account\""});
+      });
+    } else {
+      // Not logged in
+      this.setState({showLogInPrompt: true})
     }
-    axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
-      res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
-      this.setState({showMessage: true, message: "Course removed from \"My Account\""},
-      this.getCourses());
-    });
   }
 
   handleChange = name => value => {
@@ -272,59 +262,54 @@ class ProgramDetailView extends Component {
       return (
         <div className="detail">
           <h1>{this.props.name}</h1>
-          <div className="photos">
-          <div>
+          <div className ="search-wrapper">
+            <p className="label"> Search by: </p>
+            <div className="select">
+              <Select autoWidth={true} value={this.state.searchBy}
+                onChange = { (event) =>
+                  this.setState({searchBy : event.target.value})}>
+                <MenuItem value='department'> Department </MenuItem>
+                <MenuItem value='core'> Core designation </MenuItem>
+              </Select>
+            </div>
+            <div className="search">
+              <MultiDropdownTextField
+                  value = { this.state.filters }
+                  onChange = { this.handleChange("filters")}
+                  options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
+              />
+            </div>
             <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
               <MuiThemeProvider theme={theme}>
-              <Fab
-                variant="extended"
-                color="primary"
-                style={style}
-                >
-                Apply Here!
-              </Fab>
+                <Fab variant="extended" color="primary" style={style}> Apply Here! </Fab>
               </MuiThemeProvider>
             </a>
           </div>
-
-          {this.state.loading ? <CircularProgress variant="indeterminate"/> :
-          (this.state.photos.length > 0 ?
-            <Carousel
-              showThumbs={false}
-              dynamicHeight={true}
-              width={maxWidth + 'px'}>
-              {this.state.photos.map((photo) => {
-                return(
-                  <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
-                  paddingRight: (maxWidth - photo.width) / 2}}>
-                    <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
-                  </div>
-                );
-              })}
-            </Carousel> : null)}
-          </div>
-          <p className="label"> Search by: </p>
-          <div className="select">
-            <Select autoWidth={true} value={this.state.searchBy}
-              onChange = { (event) =>
-                this.setState({searchBy : event.target.value})}>
-              <MenuItem value='department'> Department </MenuItem>
-              <MenuItem value='core'> Core designation </MenuItem>
-            </Select>
-          </div>
-          <div className="search">
-            <MultiDropdownTextField
-                value = { this.state.filters }
-                onChange = { this.handleChange("filters")}
-                options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
-            />
-          </div>
-          <div className="list">
-            {this.state.loading ? null :
-            <MUIDataTable
-              columns = {this.state.columns}
-              data = {this.state.courseList}
-              options = {options}/>}<br/>
+          <div className ="photo-wrapper">
+            <div className="list">
+              {this.state.loading ? null :
+              <MUIDataTable
+                columns = {this.state.columns}
+                data = {this.state.courseList}
+                options = {options}/>}<br/>
+            </div>
+            <div className="photos">
+              {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+              (this.state.photos.length > 0 ?
+                <Carousel
+                  showThumbs={false}
+                  dynamicHeight={true}
+                  width={maxWidth + 'px'}>
+                  {this.state.photos.map((photo) => {
+                    return(
+                      <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                      paddingRight: (maxWidth - photo.width) / 2}}>
+                        <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                      </div>
+                    );
+                  })}
+                </Carousel> : null)}
+            </div>
           </div>
           <div className="header">
             <h2> Program Reviews </h2>
@@ -360,7 +345,6 @@ class ProgramDetailView extends Component {
                 </Button>
               </div>
             </Dialog>
-
         </div>
       );
     } else {
@@ -370,6 +354,5 @@ class ProgramDetailView extends Component {
     }
   }
 }
-
 
 export default ProgramDetailView;

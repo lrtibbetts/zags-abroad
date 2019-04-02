@@ -44,6 +44,14 @@ class ProgramDetailsForm extends Component {
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
+    this.getOldPhotos(this.state.host_program);
+  }
+
+  getOldPhotos(programInfo) {
+    axios.post("http://localhost:3001/populatedropzone", programInfo).then((res) => {
+      console.log(res.data);
+      console.log(programInfo);
+    })
   }
 
   formIsValid() {

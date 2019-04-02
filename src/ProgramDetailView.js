@@ -4,8 +4,6 @@ import axios from 'axios';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
-import AddIcon from '@material-ui/icons/Add';
-import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';

@@ -7,6 +7,7 @@ import AdminPage from "./admin/AdminPage.js";
 import ProgramDetailView from "./ProgramDetailView.js";
 import ProgramReviewForm from "./ProgramReviewForm.js";
 import MyAccount from "./MyAccount.js"
+import PasswordResetPage from "./PasswordResetPage.js";
 import { BrowserRouter, Route } from "react-router-dom";
 import { withCookies } from "react-cookie";
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -38,6 +39,9 @@ class App extends Component {
           )}/>
           <Route exact={true} path='/account' render={() => (
               <MyAccount cookies = {this.props.cookies}/>
+          )}/>
+          <Route exact={true} path='/reset/:token' render={(props) => (
+              <PasswordResetPage token={props.match.params.token} cookies = {this.props.cookies}/>
           )}/>
         </div>
       </BrowserRouter>

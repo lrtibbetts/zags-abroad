@@ -129,7 +129,7 @@ render() {
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return (
         <div className ="wrapper">
-          <div className ="search-wrapper">
+          <div className ="search-bar-wrapper">
             <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
             <div style={{marginTop: '4px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
               <Select autoWidth={true} value={this.state.searchBy}
@@ -139,7 +139,7 @@ render() {
                 <MenuItem value='core'> Core Designation </MenuItem>
               </Select>
             </div>
-            <div className="searchBar">
+            <div className="search-bar">
               <MultiDropdownTextField
                 id = "search"
                 value = { this.state.filters }
@@ -148,14 +148,14 @@ render() {
             </div>
           </div>
           <div className="expansion-map-wrapper">
-            <div className="list">
+            <div className="program-list">
               {this.state.loading ? <div id="loading">
                 <CircularProgress variant="indeterminate"/> </div>: null}
               {this.state.filters.length > 0 && this.state.programList.length === 0
                 && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
               {this.state.programList.map(program => {
                 return (
-                  <ExpansionPanel className="expansion" key={program.programName}>
+                  <ExpansionPanel key={program.programName}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                       <div>
                         <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
@@ -210,10 +210,6 @@ render() {
               </div> : null}
             </div>
           </div>
-          {this.state.programList.length > 0 ?
-          <p style={{fontSize: '13px', clear: 'both', padding: '15px'}}>
-          <b>Note:</b> This list is based on courses GU students have gotten credit
-          for in the past, but you may be able to get other courses approved. </p> : null} <br/>
         </div>
       );
     } else {

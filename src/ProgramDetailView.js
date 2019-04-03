@@ -311,9 +311,7 @@ class ProgramDetailView extends Component {
                 </Carousel> : null)}
             </div>
           </div>
-          <div className="header">
-            <h2> Program Reviews </h2>
-          </div>
+          <h2> Program Reviews </h2>
           <ReviewsDisplay program={this.props.name}/><br/>
           <Snackbar message={this.state.message}
             anchorOrigin={{

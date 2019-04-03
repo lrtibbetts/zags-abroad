@@ -118,7 +118,7 @@ class LogInPage extends Component {
         </Dialog>
         <Dialog open={this.state.noAccount}>
           <DialogTitle> Account doesn't exist. Sign up now? </DialogTitle>
-          <div>
+          <div style={{margin: '0 auto', marginBottom: '5px'}}>
             <Button style={buttonStyle} variant="contained" component={Link} to="/signup">
               Sign Up
             </Button>
@@ -141,7 +141,7 @@ class LogInPage extends Component {
               && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
               {validEmail : false, emailForReset: newValue} : {validEmail : true, emailForReset: newValue});
             }}/>
-          <div>
+          <div style={{margin: '0 auto', marginBottom: '5px'}}>
             {this.state.sending ? <CircularProgress variant="indeterminate"/> :
             <Button style={buttonStyle} label="Email" variant="contained"
               disabled = {!this.state.validEmail}

@@ -215,7 +215,7 @@ class CourseDetailsForm extends Component {
                 this.setState({approved_until : event.target.value})}/>
             <br/>
             <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
-              <span>
+              <span style={{margin: '0 auto', marginBottom: '5px'}}>
                 <Button variant="contained" style={buttonStyle}
                   disabled={!this.formIsValid()}
                   onClick = {(event) => {

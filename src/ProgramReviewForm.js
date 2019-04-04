@@ -136,7 +136,7 @@ class ProgramReviewForm extends Component {
             onChange = { (event) =>
               this.setState({email : event.target.value})}/>
           <br/>
-          <TextField id="required" label="What was your major?" required={true} style ={textFieldStyle} classes="textField"
+          <TextField id="required" label="What was your major?" required={true} style ={textFieldStyle}
             onChange = { (event) =>
               this.setState({major : event.target.value})}/>
           <br/>

@@ -148,7 +148,7 @@ class SignUpPage extends Component {
             </IconButton>]}/>
         <Dialog open={this.state.showAccountExistsPrompt}>
           <DialogTitle>Account already exists. Log in instead?</DialogTitle>
-          <div>
+          <div style={{margin: '0 auto', marginBottom: '5px'}}>
             <Button style={buttonStyle} variant="contained" component={Link} to="/login">
               Log In
             </Button>
@@ -161,7 +161,7 @@ class SignUpPage extends Component {
         </Dialog>
         <Dialog open={this.state.showEmailSentPrompt}>
           <DialogTitle>Please check your email to verify your account!</DialogTitle>
-          <div>
+          <div style={{margin: '0 auto', marginBottom: '5px'}}>
             <Button style={buttonStyle} variant="contained" component={Link} to="/">
               Okay
             </Button>

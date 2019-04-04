@@ -16,8 +16,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
-import blue from '@material-ui/core/colors/indigo';
-import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import SaveButton from './SaveButton.js';
 
@@ -29,15 +27,6 @@ const style = {
     display: 'inline-block',
     marginLeft: '3vw',
 };
-
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: blue[500], dark: blue[700], contrastText: blue[50]},
-  },
-  typography: {
-    useNextVariants: true,
-  }
-});
 
 class ProgramDetailView extends Component {
   constructor(props) {
@@ -73,12 +62,12 @@ class ProgramDetailView extends Component {
               // Course is a saved course for logged in user
               if(match) {
                 return (
-                  <SaveButton id={value} isSaved={true} email={this.props.cookies.get('email')}
+                  <SaveButton id={tableMeta.rowData[0]} isSaved={true} email={this.props.cookies.get('email')}
                   deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
                 );
               } else {
                 return (
-                  <SaveButton id={value} isSaved={false} email={this.props.cookies.get('email')}
+                  <SaveButton id={tableMeta.rowData[0]} isSaved={false} email={this.props.cookies.get('email')}
                   deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
             );
               }
@@ -280,9 +269,7 @@ class ProgramDetailView extends Component {
               />
             </div>
             <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
-              <MuiThemeProvider theme={theme}>
-                <Fab variant="extended" color="primary" style={style}> Apply Here! </Fab>
-              </MuiThemeProvider>
+              <Fab variant="extended" color="primary" style={style}> Apply Here! </Fab>
             </a>
           </div>
           <div className ="photo-wrapper">

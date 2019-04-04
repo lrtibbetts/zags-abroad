@@ -7,9 +7,7 @@ class SaveButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.id,
-      isSaved: this.props.isSaved,
-      email: this.props.email
+      isSaved: this.props.isSaved
     }
   }
 
@@ -17,10 +15,11 @@ class SaveButton extends Component {
     return(
         <IconButton
           onClick={(event) => {
+            console.log(this.props.id);
             if(this.state.isSaved) {
-              this.props.deleteCourse(this.state.id, this.state.email);
+              this.props.deleteCourse(this.props.id, this.props.email);
             } else {
-              this.props.saveCourse(this.state.id, this.state.email);
+              this.props.saveCourse(this.props.id, this.props.email);
             }
             this.setState({ isSaved: !this.state.isSaved });
           }}>

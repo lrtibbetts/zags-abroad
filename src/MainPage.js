@@ -149,7 +149,7 @@ render() {
           </div>
           <div className="expansion-map-wrapper">
             <div className="program-list">
-              {this.state.loading ? <div id="loading">
+              {this.state.loading ? <div id="loading" style={{textAlign: "center"}}>
                 <CircularProgress variant="indeterminate"/> </div>: null}
               {this.state.filters.length > 0 && this.state.programList.length === 0
                 && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}

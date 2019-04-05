@@ -66,7 +66,7 @@ class ProgramDetailView extends Component {
             customBodyRender: (value, tableMeta, updateValue) => {
               let match = false;
               for(var i = 0; i < savedCourses.length; i++) {
-                if (savedCourses[i] === tableMeta.rowData[0]) {
+                if (savedCourses[i] === value) {
                   match = true;
                 }
               }
@@ -243,6 +243,8 @@ class ProgramDetailView extends Component {
     });
   };
 
+  handlePageChange = () => {this.forceUpdate();};
+
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
@@ -253,6 +255,7 @@ class ProgramDetailView extends Component {
         download: false,
         viewColumns: false,
         selectableRows: false,
+        onChangePage: this.handlePageChange,
         rowsPerPage: 10, // Default to 10 rows per page
         rowsPerPageOptions: [10, 20, 30],
         responsive: "scroll"

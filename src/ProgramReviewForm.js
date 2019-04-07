@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Redirect, Link } from "react-router-dom";
 import { DropzoneArea } from 'material-ui-dropzone';
+import Tooltip from '@material-ui/core/Tooltip';
 import "./ProgramReviewForm.css";
 
 const textFieldStyle = {
@@ -233,15 +234,20 @@ class ProgramReviewForm extends Component {
               maxFileSize={5000000}/>
           </div>
           <br/>
-          <Button label="submit" variant="contained" style={{margin: '10px'}}
-            disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
-            && this.state.year)}
-            onClick = {(event) => {
-              var time = this.getTime();
-              this.setState({timestamp: time}, () => {
-                this.submitReview();
-              });
-            }}> Submit </Button>
+          <Tooltip title={!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
+          && this.state.year) ? "Please fill out required fields" : ""} placement="top">
+            <span style={{margin: '0 auto', marginBottom: '5px'}}>
+              <Button label="submit" variant="contained" style={{margin: '10px'}}
+                disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
+                && this.state.year)}
+                onClick = {(event) => {
+                  var time = this.getTime();
+                  this.setState({timestamp: time}, () => {
+                    this.submitReview();
+                  });
+                }}> Submit </Button>
+                </span>
+              </Tooltip>
           {this.state.formSubmitted ?
             <Dialog id="dialog" open={true}>
               <DialogTitle id="simple-dialog-title">Thanks for sharing!</DialogTitle>

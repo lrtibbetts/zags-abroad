@@ -16,7 +16,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
-import Fab from '@material-ui/core/Fab';
 import SaveButton from './SaveButton.js';
 
 const buttonStyle = {
@@ -272,7 +271,7 @@ class ProgramDetailView extends Component {
               />
             </div>
             <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
-              <Fab variant="extended" color="primary" style={style}> Apply Here! </Fab>
+              <Button variant="outlined" color="primary" style={style}> Apply Here </Button>
             </a>
           </div>
           <div className ="photo-wrapper">

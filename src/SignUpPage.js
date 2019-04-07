@@ -9,6 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const textFieldStyle = {
   width: 250,
@@ -62,7 +63,7 @@ class SignUpPage extends Component {
   formIsValid() {
     // Check that no fields are empty and there are no errors (email or password)
     return (this.state.firstName && this.state.lastName && this.state.email && !this.state.emailError &&
-      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError);
+      this.state.password && this.state.confirmedPassword && !this.state.passwordMatchingError && !this.state.passwordLengthError);
   }
 
   handleClose = () => {
@@ -125,12 +126,16 @@ class SignUpPage extends Component {
         <br/>
         {this.state.loading === true ? <CircularProgress variant="indeterminate"/> :
         <div>
-          <Button
-          disabled={!Boolean(this.formIsValid())}
-          variant="contained"
-          onClick= {(event) => {
-            this.setState({loading: true}, () => this.makeAccount(event));
-          }}> Get started </Button>
+          <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
+            <span style={{margin: '0 auto', marginBottom: '5px'}}>
+              <Button
+              disabled={!Boolean(this.formIsValid())}
+              variant="contained"
+              onClick= {(event) => {
+                this.setState({loading: true}, () => this.makeAccount(event));
+              }}> Get started </Button>
+            </span>
+          </Tooltip>
         </div>}
         <Snackbar
           key={"email"}

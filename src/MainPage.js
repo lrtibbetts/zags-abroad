@@ -172,7 +172,7 @@ render() {
                             Learn more
                           </Button>
                           </a>
-                          <a href="/review" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                          <a href="/review" style={{ textDecoration: 'none' }}>
                           <Button variant="outlined" color="primary">
                             Submit a review
                           </Button>

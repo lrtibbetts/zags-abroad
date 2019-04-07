@@ -18,6 +18,7 @@ import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class MainPage extends Component {
   constructor(props) {
@@ -174,10 +175,18 @@ render() {
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell>GU Course</TableCell>
-                              <TableCell>Host Course</TableCell>
-                              <TableCell>Core Designation</TableCell>
-                              <TableCell>Requires Signature</TableCell>
+                              <Tooltip placement="bottom" title={"Course listing at Gonzaga"}>
+                                <TableCell>GU Course</TableCell>
+                              </Tooltip>
+                              <Tooltip placement="bottom" title={"Course listing abroad"}>
+                                <TableCell>Host Course</TableCell>
+                              </Tooltip>
+                              <Tooltip placement="bottom" title={"Any core requirements the course fulfills"}>
+                                <TableCell>Core Designation</TableCell>
+                              </Tooltip>
+                              <Tooltip placement="bottom" title={"Whether or not the department chair must sign off"}>
+                                <TableCell>Requires Signature</TableCell>
+                              </Tooltip>
                             </TableRow>
                           </TableHead>
                           <TableBody>

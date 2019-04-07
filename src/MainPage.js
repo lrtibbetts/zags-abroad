@@ -17,7 +17,7 @@ import { Redirect} from "react-router-dom";
 import MapView from "./MapView.js";
 import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 
 class MainPage extends Component {
@@ -165,11 +165,17 @@ render() {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails >
                       <div style={{display: 'inline-block', textAlign: 'left', overflow: 'auto'}}>
-                        <div>
-                          <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                          <Fab variant="extended" color="primary">
-                            Learn More
-                          </Fab>
+                        <div style={{display: 'inline'}}>
+                          <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer"
+                          style={{textDecoration: 'none', marginRight: '20px'}}>
+                          <Button variant="outlined" color="primary">
+                            Learn more
+                          </Button>
+                          </a>
+                          <a href="/review" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                          <Button variant="outlined" color="primary">
+                            Submit a review
+                          </Button>
                           </a>
                         </div>
                         <Table>

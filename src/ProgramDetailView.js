@@ -29,11 +29,6 @@ const buttonStyle = {
   margin: '5px',
 };
 
-const style = {
-    display: 'inline-block',
-    marginLeft: '3vw',
-};
-
 class ProgramDetailView extends Component {
   constructor(props) {
     super(props);
@@ -241,7 +236,31 @@ class ProgramDetailView extends Component {
         parseInt(photo.width)));
       return (
         <div className="detail">
-          <h1>{this.props.name}</h1>
+          <div style={{textAlign: 'center'}}>
+            <h1>{this.props.name}</h1>
+          </div>
+          <div className="app">
+            <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+              <Button variant="outlined" color="primary"> Apply Here </Button>
+            </a>
+          </div>
+          <div className="photos">
+            {this.state.loading ? <CircularProgress variant="indeterminate"/> :
+            (this.state.photos.length > 0 ?
+              <Carousel
+                showThumbs={false}
+                dynamicHeight={true}
+                width={maxWidth + 'px'}>
+                {this.state.photos.map((photo) => {
+                  return(
+                    <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                    paddingRight: (maxWidth - photo.width) / 2}}>
+                      <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                    </div>
+                  );
+                })}
+              </Carousel> : null)}
+          </div>
           <div className ="search-wrapper">
             <p className="label"> Search by: </p>
             <div className="select">
@@ -259,84 +278,62 @@ class ProgramDetailView extends Component {
                   options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
               />
             </div>
-            <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer">
-              <Button variant="outlined" color="primary" style={style}> Apply Here </Button>
-            </a>
           </div>
-          <div className ="photo-wrapper">
-            <div className="list">
-              {this.state.loading ? null :
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell> </TableCell>
-                      <Tooltip placement="bottom" title={"Course listing at Gonzaga"}>
-                        <TableCell>GU Course</TableCell>
-                      </Tooltip>
-                      <Tooltip placement="bottom" title={"Course listing abroad"}>
-                        <TableCell>Host Course</TableCell>
-                      </Tooltip>
-                      <Tooltip placement="bottom" title={"Any core requirements the course fulfills"}>
-                        <TableCell>Core Designation</TableCell>
-                      </Tooltip>
-                      <Tooltip placement="bottom" title={"Whether or not the department chair must sign off"}>
-                        <TableCell>Requires Signature</TableCell>
-                      </Tooltip>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {courseList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(course => {
-                      let core = course.core.trim();
-                      return (
-                        <TableRow key={course.id}>
-                          <TableCell><SaveButton id={course.id} email={cookies.get('email')}
-                          isSaved={cookies.get('email') ? this.isCourseSaved(course.id) : false}
-                          saveCourse={this.saveCourse} deleteCourse={this.deleteCourse}/></TableCell>
-                          <TableCell>{course.guCourse}</TableCell>
-                          <TableCell>{course.hostCourse}</TableCell>
-                          <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
-                          <TableCell>{course.requiresSignature}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 48 * emptyRows }}>
-                        <TableCell colSpan={6} />
+          <div className="list">
+            {this.state.loading ? null :
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell> </TableCell>
+                    <Tooltip placement="bottom" title={"Course listing at Gonzaga"}>
+                      <TableCell>GU Course</TableCell>
+                    </Tooltip>
+                    <Tooltip placement="bottom" title={"Course listing abroad"}>
+                      <TableCell>Host Course</TableCell>
+                    </Tooltip>
+                    <Tooltip placement="bottom" title={"Any core requirements the course fulfills"}>
+                      <TableCell>Core Designation</TableCell>
+                    </Tooltip>
+                    <Tooltip placement="bottom" title={"Whether or not the department chair must sign off"}>
+                      <TableCell>Requires Signature</TableCell>
+                    </Tooltip>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {courseList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(course => {
+                    let core = course.core.trim();
+                    return (
+                      <TableRow key={course.id}>
+                        <TableCell><SaveButton id={course.id} email={cookies.get('email')}
+                        isSaved={cookies.get('email') ? this.isCourseSaved(course.id) : false}
+                        saveCourse={this.saveCourse} deleteCourse={this.deleteCourse}/></TableCell>
+                        <TableCell>{course.guCourse}</TableCell>
+                        <TableCell>{course.hostCourse}</TableCell>
+                        <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
+                        <TableCell>{course.requiresSignature}</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 20]}
-                        colSpan={3}
-                        count={courseList.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={this.handleChangePage}
-                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                      />
-                    </TableRow>
-                  </TableFooter>
-                </Table>}<br/>
-            </div>
-            <div className="photos">
-              {this.state.loading ? <CircularProgress variant="indeterminate"/> :
-              (this.state.photos.length > 0 ?
-                <Carousel
-                  showThumbs={false}
-                  dynamicHeight={true}
-                  width={maxWidth + 'px'}>
-                  {this.state.photos.map((photo) => {
-                    return(
-                      <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
-                      paddingRight: (maxWidth - photo.width) / 2}}>
-                        <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
-                      </div>
                     );
                   })}
-                </Carousel> : null)}
-            </div>
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 48 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 20]}
+                      colSpan={3}
+                      count={courseList.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onChangePage={this.handleChangePage}
+                      onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>}<br/>
           </div>
           <h2> Program Reviews </h2>
           <ReviewsDisplay program={this.props.name}/><br/>

@@ -214,42 +214,44 @@ class CourseDetailsForm extends Component {
               onChange = { (event) =>
                 this.setState({approved_until : event.target.value})}/>
             <br/>
-            <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
-              <span style={{margin: '0 auto', marginBottom: '5px'}}>
-                <Button variant="contained" style={buttonStyle}
-                  disabled={!this.formIsValid()}
-                  onClick = {(event) => {
-                    let courseInfo = this.state;
-                    courseInfo.core = courseInfo.core.map(item => item.value).join(', ') + ",";
-                    if(this.props.title === "Add Course Equivalency") {
-                      axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
-                        if(res.data.errno) { // Error adding the course
-                          this.props.displayMessage("Error adding course");
-                        } else { // No error, course added successfully
-                          this.props.displayMessage("Course added successfully");
-                        }
-                        this.props.onClose();
-                      });
-                    } else if(this.props.title === "Edit Course Equivalency") {
-                      courseInfo.id = this.props.courseId; // Add course id to courseInfo object
-                      axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
-                        if(res.data.errno) { // Error updating the course
-                          this.props.displayMessage("Error updating course");
-                        } else { // No error, course updated successfully
-                          this.props.displayMessage("Course updated successfully");
-                        }
-                        this.props.onClose();
-                      });
-                    }
-                  }}>
-                  Save
-                </Button>
-              </span>
-            </Tooltip>
-            <Button variant="contained" style={buttonStyle}
-              onClick = {this.props.onClose}>
-              Cancel
-            </Button>
+            <div style={{textAlign: 'center'}}>
+              <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
+                <span style={{margin: '0 auto', marginBottom: '5px'}}>
+                  <Button variant="contained" style={buttonStyle}
+                    disabled={!this.formIsValid()}
+                    onClick = {(event) => {
+                      let courseInfo = this.state;
+                      courseInfo.core = courseInfo.core.map(item => item.value).join(', ') + ",";
+                      if(this.props.title === "Add Course Equivalency") {
+                        axios.post("https://zagsabroad-backend.herokuapp.com/addcourse", courseInfo).then((res) => {
+                          if(res.data.errno) { // Error adding the course
+                            this.props.displayMessage("Error adding course");
+                          } else { // No error, course added successfully
+                            this.props.displayMessage("Course added successfully");
+                          }
+                          this.props.onClose();
+                        });
+                      } else if(this.props.title === "Edit Course Equivalency") {
+                        courseInfo.id = this.props.courseId; // Add course id to courseInfo object
+                        axios.post("https://zagsabroad-backend.herokuapp.com/editcourse", courseInfo).then((res) => {
+                          if(res.data.errno) { // Error updating the course
+                            this.props.displayMessage("Error updating course");
+                          } else { // No error, course updated successfully
+                            this.props.displayMessage("Course updated successfully");
+                          }
+                          this.props.onClose();
+                        });
+                      }
+                    }}>
+                    Save
+                  </Button>
+                </span>
+              </Tooltip>
+              <Button variant="contained" style={buttonStyle}
+                onClick = {this.props.onClose}>
+                Cancel
+              </Button>
+            </div>
           </div>
         </Dialog>
       </div>

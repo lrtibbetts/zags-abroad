@@ -1,6 +1,10 @@
+import axios from 'axios';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "./ProgramDetailView.css";
 import React, { Component } from 'react';
 import { Redirect, Link } from "react-router-dom";
-import axios from 'axios';
+import { Carousel } from 'react-responsive-carousel';
+import MUIDataTable from "mui-datatables";
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -11,12 +15,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import MUIDataTable from "mui-datatables";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
-import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
 import SaveButton from './SaveButton.js';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
 const buttonStyle = {
   margin: '5px',
@@ -68,7 +75,7 @@ class ProgramDetailView extends Component {
                 return (
                   <SaveButton id={tableMeta.rowData[0]} isSaved={false} email={this.props.cookies.get('email')}
                   deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
-            );
+                );
               }
             }}},
         { name: "Gonzaga Course" },
@@ -231,8 +238,14 @@ class ProgramDetailView extends Component {
     });
   };
 
-  handlePageChange = () => {this.forceUpdate();};
+  handlePageChange = (event, page) => {console.log("CHANGED")};
 
+/*
+<MUIDataTable
+  columns = {this.state.columns}
+  data = {this.state.courseList}
+  options = {options}/>
+*/
   render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
@@ -277,10 +290,15 @@ class ProgramDetailView extends Component {
           <div className ="photo-wrapper">
             <div className="list">
               {this.state.loading ? null :
-              <MUIDataTable
-                columns = {this.state.columns}
-                data = {this.state.courseList}
-                options = {options}/>}<br/>
+                <Table className="courses">
+                  <TableBody>
+                    {this.state.courseList.map((row) => {
+                      <TableRow>
+                      {row.map((index) => {<TableCell>{index}</TableCell>})}
+                      </TableRow>})}
+                  </TableBody>
+                </Table>
+              }<br/>
             </div>
             <div className="photos">
               {this.state.loading ? <CircularProgress variant="indeterminate"/> :

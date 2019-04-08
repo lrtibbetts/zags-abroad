@@ -52,7 +52,8 @@ class MapView extends Component {
         latitude={popupInfo.lat}
         closeOnClick={false}
         onClose={() => this.setState({popupInfo: null})} >
-        <Link to={`/program/${this.state.popupInfo.host_program}`} target="_blank">
+        <Link to={`/program/${this.state.popupInfo.host_program}`} target="_blank"
+        style={{color: 'black'}}>
         {this.state.popupInfo.host_program}</Link>
       </Popup>
     );

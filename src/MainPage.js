@@ -221,7 +221,7 @@ render() {
               <div>
                 <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
                 <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-                target = "_blank" rel="noopener noreferrer">Click here.</a>
+                target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}>Click here.</a>
               </div> : null}
             </div>
           </div>

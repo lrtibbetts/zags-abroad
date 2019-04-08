@@ -15,13 +15,15 @@ class SaveButton extends Component {
     return(
         <IconButton
           onClick={(event) => {
-            console.log(this.props.id);
             if(this.state.isSaved) {
               this.props.deleteCourse(this.props.id, this.props.email);
             } else {
               this.props.saveCourse(this.props.id, this.props.email);
             }
-            this.setState({ isSaved: !this.state.isSaved });
+            if(this.props.email) {
+              // Only toggle button if user is logged in
+              this.setState({ isSaved: !this.state.isSaved });
+            }
           }}>
           { this.state.isSaved ?
             <DoneIcon color="primary" /> :

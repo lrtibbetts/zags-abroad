@@ -26,7 +26,6 @@ class ReviewsDisplay extends Component {
     axios.post("https://zagsabroad-backend.herokuapp.com/programsurveys", {"program": this.props.program}).then((res) => {
       let surveysToAdd = res.data;
       this.setState({surveys: surveysToAdd});
-      console.log(this.state.surveys)
     });
   }
 

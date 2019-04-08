@@ -46,11 +46,12 @@
 
 .list {
   width: calc(93vw - 500px);
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-left: 1.5vw;
+  margin-right: 1vw;
   padding-top: 20px;
   z-index: 0;
   position: relative;
+  overflow: scroll;
 }
 
 .photos {

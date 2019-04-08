@@ -11,12 +11,19 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import MUIDataTable from "mui-datatables";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./ProgramDetailView.css";
 import ReviewsDisplay from './ReviewsDisplay.js';
 import SaveButton from './SaveButton.js';
+import TableFooter from '@material-ui/core/TableFooter';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const buttonStyle = {
   margin: '5px',
@@ -48,34 +55,11 @@ class ProgramDetailView extends Component {
       message: '',
       showLogInPrompt: false,
       photos: [],
-      columns: [
-        { name: "",
-          options: {
-            customBodyRender: (value, tableMeta, updateValue) => {
-              let match = false;
-              for(var i = 0; i < savedCourses.length; i++) {
-                if (savedCourses[i] === value) {
-                  match = true;
-                }
-              }
-              // Course is a saved course for logged in user
-              if(match) {
-                return (
-                  <SaveButton id={tableMeta.rowData[0]} isSaved={true} email={this.props.cookies.get('email')}
-                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
-                );
-              } else {
-                return (
-                  <SaveButton id={tableMeta.rowData[0]} isSaved={false} email={this.props.cookies.get('email')}
-                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
-            );
-              }
-            }}},
-        { name: "Gonzaga Course" },
-        { name: "Host Course" },
-        { name: "Signature needed" },
-        { name: "Core Designation" }]
+      page: 0,
+      rowsPerPage: 10
     }
+
+    this.refresh = this.refresh.bind(this);
 
     // Getting all of the programs for the dropdown
     axios.post("https://zagsabroad-backend.herokuapp.com/programsubjects", {"program": this.props.name}).then((res) => {
@@ -114,14 +98,10 @@ class ProgramDetailView extends Component {
   formatCourses(data) {
     let courses = [];
     for(var i = 0; i < data.length; i++) {
-      let newCourse = [];
-      newCourse.push(data[i].id);
-      newCourse.push(data[i].gu_course_number + (data[i].gu_course_name ? ": " + data[i].gu_course_name : ""));
-      newCourse.push(data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name :
-      data[i].host_course_name);
-      newCourse.push(data[i].signature_needed);
-      var core = data[i].core.trim().substring(0, data[i].core.length - 1)
-      newCourse.push(core);
+      let newCourse = {id: data[i].id, guCourse: (data[i].gu_course_name ?
+        (data[i].gu_course_number + ": " + data[i].gu_course_name) : data[i].gu_course_number),
+        hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
+        : data[i].host_course_name, requiresSignature: data[i].signature_needed, core: data[i].core};
       courses.push(newCourse);
     }
     this.setState({courseList: courses, loading: false});
@@ -200,7 +180,9 @@ class ProgramDetailView extends Component {
         } else if(res.data.errno) {
           this.setState({showMessage: true, message: "Error saving course"});
         } else {
-          this.setState({showMessage: true, message: "Course saved to \"My Account\""});
+          this.setState({showMessage: true, message: "Course saved to \"My Account\""}, () => {
+            this.refresh(email);
+          });
         }
       });
     } else {
@@ -217,7 +199,9 @@ class ProgramDetailView extends Component {
       }
       axios.post("https://zagsabroad-backend.herokuapp.com/deleteaccountcourse", params).then((res) => {
         res.data.errno ? this.setState({showMessage: true, message: "Error deleting course"}) :
-        this.setState({showMessage: true, message: "Course removed from \"My Account\""});
+        this.setState({showMessage: true, message: "Course removed from \"My Account\""}, () => {
+          this.refresh(email);
+        });
       });
     } else {
       // Not logged in
@@ -231,23 +215,28 @@ class ProgramDetailView extends Component {
     });
   };
 
-  handlePageChange = () => {this.forceUpdate();};
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ page: 0, rowsPerPage: event.target.value });
+  };
+
+  isCourseSaved(id) {
+    return this.state.savedCoursesList.includes(id);
+  }
+
+  refresh(email) {
+    let savedCourses = this.getSavedCourses(email);
+    this.setState({savedCoursesList: savedCourses});
+  }
 
   render() {
     const cookies = this.props.cookies;
+    const { rowsPerPage, page, courseList } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, courseList.length - page * rowsPerPage);
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
-      const options = {
-        print: false, // Remove print icon
-        filter: false,
-        search: false,
-        download: false,
-        viewColumns: false,
-        selectableRows: false,
-        onChangePage: this.handlePageChange,
-        rowsPerPage: 10, // Default to 10 rows per page
-        rowsPerPageOptions: [10, 20, 30],
-        responsive: "scroll"
-      };
       const maxWidth = Math.max.apply(null, this.state.photos.map((photo) =>
         parseInt(photo.width)));
       return (
@@ -277,10 +266,59 @@ class ProgramDetailView extends Component {
           <div className ="photo-wrapper">
             <div className="list">
               {this.state.loading ? null :
-              <MUIDataTable
-                columns = {this.state.columns}
-                data = {this.state.courseList}
-                options = {options}/>}<br/>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell> </TableCell>
+                      <Tooltip placement="bottom" title={"Course listing at Gonzaga"}>
+                        <TableCell>GU Course</TableCell>
+                      </Tooltip>
+                      <Tooltip placement="bottom" title={"Course listing abroad"}>
+                        <TableCell>Host Course</TableCell>
+                      </Tooltip>
+                      <Tooltip placement="bottom" title={"Any core requirements the course fulfills"}>
+                        <TableCell>Core Designation</TableCell>
+                      </Tooltip>
+                      <Tooltip placement="bottom" title={"Whether or not the department chair must sign off"}>
+                        <TableCell>Requires Signature</TableCell>
+                      </Tooltip>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {courseList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(course => {
+                      let core = course.core.trim();
+                      return (
+                        <TableRow key={course.id}>
+                          <TableCell><SaveButton id={course.id} email={cookies.get('email')}
+                          isSaved={cookies.get('email') ? this.isCourseSaved(course.id) : false}
+                          saveCourse={this.saveCourse} deleteCourse={this.deleteCourse}/></TableCell>
+                          <TableCell>{course.guCourse}</TableCell>
+                          <TableCell>{course.hostCourse}</TableCell>
+                          <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
+                          <TableCell>{course.requiresSignature}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 48 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 20]}
+                        colSpan={3}
+                        count={courseList.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>}<br/>
             </div>
             <div className="photos">
               {this.state.loading ? <CircularProgress variant="indeterminate"/> :

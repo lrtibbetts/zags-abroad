@@ -20,6 +20,11 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 
+const buttonStyle = {
+  margin: '5px',
+  fontWeight: '700'
+};
+
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -168,12 +173,12 @@ render() {
                         <div style={{display: 'inline'}}>
                           <a href={`/program/${program.programName}`} target="_blank" rel="noopener noreferrer"
                           style={{textDecoration: 'none', marginRight: '20px'}}>
-                          <Button variant="outlined" color="primary">
+                          <Button variant="outlined" color="primary" style={buttonStyle}>
                             Learn more
                           </Button>
                           </a>
                           <a href="/review" style={{ textDecoration: 'none' }}>
-                          <Button variant="outlined" color="primary">
+                          <Button variant="outlined" color="primary" style={buttonStyle}>
                             Submit a review
                           </Button>
                           </a>

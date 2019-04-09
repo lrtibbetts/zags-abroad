@@ -13,7 +13,8 @@ const textFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
+  fontWeight: '700'
 };
 
 class PasswordResetPage extends Component {
@@ -56,7 +57,7 @@ class PasswordResetPage extends Component {
             this.setState({confirmedPassword : event.target.value})}/>
         <br/><br/>
         {this.state.sending ? <CircularProgress variant="indeterminate"/> :
-        <Button variant="contained"
+        <Button variant="contained" style={buttonStyle}
           disabled = {this.state.newPassword.length === 0 ||
           this.state.newPassword !== this.state.confirmedPassword}
           onClick = {(event) =>

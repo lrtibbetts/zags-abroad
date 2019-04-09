@@ -24,7 +24,8 @@ const smallTextFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
+  fontWeight: '700'
 };
 
 const smallDropdownStyle = {

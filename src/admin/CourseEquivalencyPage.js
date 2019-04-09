@@ -9,7 +9,8 @@ import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
 const addButtonStyle = {
-  margin: '10px'
+  margin: '10px',
+  fontWeight: '700'
 };
 
 class CourseEquivalencyPage extends Component {

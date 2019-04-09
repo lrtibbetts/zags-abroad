@@ -13,7 +13,8 @@ const textFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
+  fontWeight: '700'
 };
 
 class LogInPage extends Component {
@@ -94,11 +95,11 @@ class LogInPage extends Component {
               this.logIn(event)
             }}}/>
         <br/> <br/>
-        <Button label="Log in" variant="contained"
+        <Button label="Log in" variant="contained" style={buttonStyle}
           disabled = {!(this.state.email && this.state.password)}
           onClick = {(event) =>
             this.logIn(event)}> Log In </Button><br/><br/>
-        <Button
+        <Button style={buttonStyle}
           onClick = {(event) =>
             this.setState({showResetPasswordMessage: true})
           }> Forgot your password?

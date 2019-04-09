@@ -27,6 +27,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 const buttonStyle = {
   margin: '5px',
+  fontWeight: '700'
 };
 
 class ProgramDetailView extends Component {
@@ -239,48 +240,48 @@ class ProgramDetailView extends Component {
           <div style={{textAlign: 'center'}}>
             <h1>{this.props.name}</h1>
           </div>
-          <div className="app">
-            <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
-              <Button variant="outlined" color="primary"> Apply Here </Button>
-            </a>
-          </div>
-          <div className="photos">
-            {this.state.loading ? <CircularProgress variant="indeterminate"/> :
-            (this.state.photos.length > 0 ?
-              <Carousel
-                showThumbs={false}
-                dynamicHeight={true}
-                width={maxWidth + 'px'}>
-                {this.state.photos.map((photo) => {
-                  return(
-                    <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
-                    paddingRight: (maxWidth - photo.width) / 2}}>
-                      <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
-                    </div>
-                  );
-                })}
-              </Carousel> : null)}
-          </div>
-          <div className ="search-wrapper">
-            <p className="label"> Search by: </p>
-            <div className="select">
-              <Select autoWidth={true} value={this.state.searchBy}
-                onChange = { (event) =>
-                  this.setState({searchBy : event.target.value})}>
-                <MenuItem value='department'> Department </MenuItem>
-                <MenuItem value='core'> Core designation </MenuItem>
-              </Select>
+          {this.state.loading ? <div style={{textAlign: 'center'}}> <CircularProgress variant="indeterminate"/> </div> :
+          <div>
+            <div className="app">
+              <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+                <Button variant="outlined" color="primary" style={buttonStyle}> Apply Here </Button>
+              </a>
             </div>
-            <div className="search">
-              <MultiDropdownTextField
-                  value = { this.state.filters }
-                  onChange = { this.handleChange("filters")}
-                  options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
-              />
+            <div className="photos">
+              {this.state.photos.length > 0 ?
+                <Carousel
+                  showThumbs={false}
+                  dynamicHeight={true}
+                  width={maxWidth + 'px'}>
+                  {this.state.photos.map((photo) => {
+                    return(
+                      <div key={photo.url} style={{paddingLeft: (maxWidth - photo.width) / 2,
+                      paddingRight: (maxWidth - photo.width) / 2}}>
+                        <img src={photo.url} height={photo.height} width={photo.width} alt=""/>
+                      </div>
+                    );
+                  })}
+                </Carousel> : null}
             </div>
-          </div>
-          <div className="list">
-            {this.state.loading ? null :
+            <div className ="search-wrapper">
+              <p className="label"> Search by: </p>
+              <div className="select">
+                <Select autoWidth={true} value={this.state.searchBy}
+                  onChange = { (event) =>
+                    this.setState({searchBy : event.target.value})}>
+                  <MenuItem value='department'> Department </MenuItem>
+                  <MenuItem value='core'> Core designation </MenuItem>
+                </Select>
+              </div>
+              <div className="search">
+                <MultiDropdownTextField
+                    value = { this.state.filters }
+                    onChange = { this.handleChange("filters")}
+                    options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}
+                />
+              </div>
+            </div>
+            <div className="list">
               <Table>
                 <TableHead>
                   <TableRow>
@@ -333,10 +334,11 @@ class ProgramDetailView extends Component {
                     />
                   </TableRow>
                 </TableFooter>
-              </Table>}<br/>
-          </div>
-          <h2> Program Reviews </h2>
-          <ReviewsDisplay program={this.props.name}/><br/>
+              </Table><br/>
+            </div>
+            <h2> Program Reviews </h2>
+            <ReviewsDisplay program={this.props.name}/><br/>
+          </div>}
           <Snackbar message={this.state.message}
             anchorOrigin={{
               vertical: 'top',

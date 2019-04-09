@@ -13,6 +13,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 
+const buttonStyle = {
+  margin: '5px',
+  fontWeight: '700'
+};
+
 var _ = require('lodash'); // Provides the neat 'omit' function
 
 class ProgramReviewsApprovalPage extends Component {
@@ -227,7 +232,7 @@ class ProgramReviewsApprovalPage extends Component {
                     </div>
                   )}<br/>
                   <div style={{paddingBottom: '15px'}}>
-                    <Button variant="contained"
+                    <Button variant="contained" style={buttonStyle}
                       onClick = {(event) => {
                         this.setState({open: true})
                         this.saveChanges(review)
@@ -264,7 +269,7 @@ class ProgramReviewsApprovalPage extends Component {
                   );})}
               </div>
               <div style={{paddingBottom: '15px'}}>
-                <Button variant="contained"
+                <Button variant="contained" style={buttonStyle}
                   onClick = {(event) => {
                     this.setState({open: true})
                     this.savePhotos(this.state.extraPhotos)

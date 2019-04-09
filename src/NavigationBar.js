@@ -5,13 +5,15 @@ import "./NavigationBar.css";
 
 const leftButtonStyle = {
   marginTop: '20px',
-  marginRight: '2vw'
+  marginRight: '2vw',
+  fontWeight: '700'
 }
 
 const rightButtonStyle = {
   marginTop: '20px',
   marginRight: '2vw',
-  float: 'right'
+  float: 'right',
+  fontWeight: '700'
 }
 
 const linkStyle = {
@@ -32,7 +34,7 @@ class NavigationBar extends Component {
     const isAdmin = cookies.get('role') === 'admin';
     if(!loggedIn) {
       return (
-        <div>
+        <div style={{backgroundColor: 'rgb(94, 138, 180, 0.5)'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <div className="link">
@@ -51,7 +53,7 @@ class NavigationBar extends Component {
       );
     } else {
       return (
-        <div>
+        <div style={{backgroundColor: 'rgb(94, 138, 180, 0.5)'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
           <div className="logged-in-link">

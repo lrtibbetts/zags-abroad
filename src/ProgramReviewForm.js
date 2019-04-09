@@ -8,7 +8,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Redirect, Link } from "react-router-dom";
 import { DropzoneArea } from 'material-ui-dropzone';
 import Tooltip from '@material-ui/core/Tooltip';
-import "./ProgramReviewForm.css";
 
 const textFieldStyle = {
   width: 500,
@@ -237,7 +236,7 @@ class ProgramReviewForm extends Component {
           <Tooltip title={!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
           && this.state.year) ? "Please fill out required fields" : ""} placement="top">
             <span style={{margin: '0 auto', marginBottom: '5px'}}>
-              <Button label="submit" variant="contained" style={{margin: '10px'}}
+              <Button label="submit" variant="contained" style={{margin: '10px', fontWeight: '700'}}
                 disabled = {!(this.state.major && this.state.program && this.state.term && this.state.calendarYear
                 && this.state.year)}
                 onClick = {(event) => {
@@ -252,7 +251,7 @@ class ProgramReviewForm extends Component {
             <Dialog id="dialog" open={true}>
               <DialogTitle id="simple-dialog-title">Thanks for sharing!</DialogTitle>
               <div>
-                <Button style={{margin: '10px'}} variant="contained" component={Link} to="/">
+                <Button style={{margin: '10px', fontWeight: '700'}} variant="contained" component={Link} to="/">
                   Return to home
                 </Button>
               </div>

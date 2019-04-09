@@ -42,13 +42,11 @@ class ReviewsDisplay extends Component {
   render() {
     const { tabValue } = this.state;
     return (
-      <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '20px'}}>
-        <AppBar position ="static" color="default">
+      <div style={{marginLeft: '2vw', marginRight: '2vw', marginTop: '20px'}}>
+        <AppBar position ="static" color="primary">
           <Tabs
             value={this.state.tabValue}
             onChange={this.handleTabChange}
-            indicatorColor="primary"
-            textColor="primary"
             variant="fullWidth">
             <Tab label="Residence"/>
             <Tab label="Trips"/>

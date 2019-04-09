@@ -16,7 +16,10 @@ const textFieldStyle = {
   margin: '10px'
 };
 
-const buttonStyle = { margin: '5px' };
+const buttonStyle = {
+  margin: '5px',
+  fontWeight: '700'
+};
 
 class SignUpPage extends Component {
   constructor(props) {
@@ -129,6 +132,7 @@ class SignUpPage extends Component {
           <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
             <span style={{margin: '0 auto', marginBottom: '5px'}}>
               <Button
+              style={buttonStyle}
               disabled={!Boolean(this.formIsValid())}
               variant="contained"
               onClick= {(event) => {

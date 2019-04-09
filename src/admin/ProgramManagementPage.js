@@ -9,7 +9,8 @@ import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
 const addButtonStyle = {
-  margin: '10px'
+  margin: '10px',
+  fontWeight: '700'
 };
 
 class ProgramManagementPage extends Component {
@@ -37,12 +38,6 @@ class ProgramManagementPage extends Component {
         },
         {
           name: "Program Type",
-          options: {
-            display: true
-          }
-        },
-        {
-          name: "Host Institution Link",
           options: {
             display: true
           }
@@ -88,7 +83,6 @@ class ProgramManagementPage extends Component {
         prog.push(res.data[i]["host_program"]);
         prog.push(res.data[i]["city"]);
         prog.push(res.data[i]["program_type"]);
-        prog.push(res.data[i]["host_url"]);
         prog.push(res.data[i]["application_link"]);
         prog.push(res.data[i]["lat"]);
         prog.push(res.data[i]["lng"]);

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+/* Source: https://github.com/cockroachdb/docs/tree/master/fonts */
+@font-face {
+  font-family: 'Adelle-Bold';
+  src: url('Adelle-Bold.eot'),
+       url('Adelle-Bold.woff') format('woff'), /* Modern Browsers */
+       url('Adelle-Bold.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+h1 {
+  font-family: 'Adelle-Bold';
+}
+
+h2 {
+  font-family: 'Adelle-Bold';
+}
+
+h3 {
+  font-family: 'Adelle-Bold';
+}
+
+h4 {
+  font-family: 'Adelle-Bold';
+}
+
+b {
+  font-family: 'Adelle-Bold';
+}

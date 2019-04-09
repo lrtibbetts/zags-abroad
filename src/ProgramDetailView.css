@@ -1,19 +1,25 @@
-.detail {
-  display: inline-block;
-}
-
 /* Center headers */
 .detail h1 {
-  text-align: center
+  display: inline-block;
 }
 
 .detail h2  {
   text-align: center
 }
 
+.photos {
+  padding-right: 2vw;
+  float: right;
+}
+
+.app {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
 .label {
   display: inline;
-  padding-left: 15px;
+  margin-top: 15px;
 }
 
 .select {
@@ -24,7 +30,7 @@
 }
 
 .search {
-  width: 35vw;
+  width: 33vw;
   margin-left: 10px;
   display: inline-block;
   vertical-align: bottom;
@@ -33,47 +39,66 @@
 }
 
 .search-wrapper {
-  display: flex;
-  flex-direction: row;
-  margin-left: 2vw;
-}
-
-/* Wrapper around photos and table */
-.photo-wrapper {
-  display: flex;
-  flex-direction: row;
+  margin-left: 3vw;
 }
 
 .list {
-  width: calc(93vw - 500px);
-  padding-left: 1.5vw;
-  margin-right: 1.5vw;
+  width: calc(94vw - 500px);
+  margin-left: 1.5vw;
+  margin-right: 1vw;
   padding-top: 20px;
   z-index: 0;
   position: relative;
   overflow: scroll;
 }
 
-.photos {
-  padding-top: 20px;
-}
-
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   .photos {
-    margin: 0 auto;
-    padding-top: 10px;
+    float: none;
+    display: flex;
+    justify-content: center;
+    width: 95vw;
   }
 
   .list {
     z-index: 0;
     position: relative;
     text-align: center;
-    width: 94vw;
+    width: 95vw;
     padding-top: 20px;
     padding-bottom: 20px;
   }
 
-  .photo-wrapper {
-    flex-direction: column-reverse;
+  .search {
+    width: 40vw;
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: bottom;
+    z-index: 1;
+    position: relative;
   }
+
+  .search-wrapper {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+}
+
+@media screen and (max-width: 500px) {
+  /* For phones */
+  .photos {
+    float: none;
+    width: 70%;
+  }
+
+  .list {
+    z-index: 0;
+    position: relative;
+    text-align: center;
+    width: 90vw;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
 }

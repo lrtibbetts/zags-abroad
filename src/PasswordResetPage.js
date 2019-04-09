@@ -13,7 +13,8 @@ const textFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
+  fontWeight: '700'
 };
 
 class PasswordResetPage extends Component {
@@ -44,15 +45,19 @@ class PasswordResetPage extends Component {
       <div style={{textAlign: 'center'}}>
         <h3> Please enter a new password </h3>
         <TextField label="Password" style={textFieldStyle} type="password"
+          helperText = {this.state.newPassword.length > 0 && this.state.newPassword.length < 8
+          ? "Please enter at least 8 characters" : ""}
           onChange = { (event) =>
             this.setState({newPassword : event.target.value})}/>
         <br/>
         <TextField label="Confirm your password" style={textFieldStyle} type="password"
+          helperText = {this.state.newPassword !== this.state.confirmedPassword
+          && this.state.confirmedPassword.length > 0 ? "Please enter a matching password" : ""}
           onChange = { (event) =>
             this.setState({confirmedPassword : event.target.value})}/>
         <br/><br/>
         {this.state.sending ? <CircularProgress variant="indeterminate"/> :
-        <Button variant="contained"
+        <Button variant="contained" style={buttonStyle}
           disabled = {this.state.newPassword.length === 0 ||
           this.state.newPassword !== this.state.confirmedPassword}
           onClick = {(event) =>

@@ -15,7 +15,8 @@ const largeTextFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px'
+  margin: '5px',
+  fontWeight: '700'
 };
 
 const smallDropdownStyle = {
@@ -34,24 +35,15 @@ class ProgramDetailsForm extends Component {
       host_program: this.props.program[0],
       city: this.props.program[1],
       program_type: this.props.program[2],
-      host_url: this.props.program[3],
-      application_link: this.props.program[4],
-      lat: this.props.program[5],
-      lng: this.props.program[6],
+      application_link: this.props.program[3],
+      lat: this.props.program[4],
+      lng: this.props.program[5],
       orig_host_program: this.props.program[0],
       orig_host_city: this.props.program[1],
       photos: [],
     }
 
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
-    this.getOldPhotos(this.state.host_program);
-  }
-
-  getOldPhotos(programInfo) {
-    axios.post("http://localhost:3001/populatedropzone", programInfo).then((res) => {
-      console.log(res.data);
-      console.log(programInfo);
-    })
   }
 
   formIsValid() {
@@ -118,15 +110,11 @@ class ProgramDetailsForm extends Component {
               defaultValue = {this.state.city}
               onChange = { (event) =>
                 this.setState({city : event.target.value})}/>
-            <TextField style={largeTextFieldStyle} label = "Host Institution Link"
-              defaultValue = {this.state.host_url}
-              onChange = { (event) =>
-                this.setState({host_url : event.target.value})}/>
             <TextField style={largeTextFieldStyle} label = "Application Link"
               defaultValue = {this.state.application_link}
               onChange = { (event) =>
                 this.setState({application_link : event.target.value})}/><br/>
-            <p style={{margin: '10px'}}> Place any default photos here: </p>
+            <p style={{margin: '10px'}}> Add any photos here: </p>
             <div style={{margin: '10px'}}>
             <DropzoneArea
               acceptedFiles={["image/jpeg", "image/png"]}

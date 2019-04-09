@@ -15,12 +15,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-<<<<<<< HEAD
-=======
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
-import "./ProgramDetailView.css";
->>>>>>> fc9b0fc74e91a97779105cd5ee2f0990d6bcb2ec
 import ReviewsDisplay from './ReviewsDisplay.js';
 import SaveButton from './SaveButton.js';
 import TableFooter from '@material-ui/core/TableFooter';
@@ -31,13 +25,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import TablePagination from '@material-ui/core/TablePagination';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 
 const buttonStyle = {
   margin: '5px',
@@ -69,38 +56,8 @@ class ProgramDetailView extends Component {
       message: '',
       showLogInPrompt: false,
       photos: [],
-<<<<<<< HEAD
-      columns: [
-        { name: "",
-          options: {
-            customBodyRender: (value, tableMeta, updateValue) => {
-              let match = false;
-              for(var i = 0; i < savedCourses.length; i++) {
-                if (savedCourses[i] === value) {
-                  match = true;
-                }
-              }
-              // Course is a saved course for logged in user
-              if(match) {
-                return (
-                  <SaveButton id={tableMeta.rowData[0]} isSaved={true} email={this.props.cookies.get('email')}
-                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
-                );
-              } else {
-                return (
-                  <SaveButton id={tableMeta.rowData[0]} isSaved={false} email={this.props.cookies.get('email')}
-                  deleteCourse={this.deleteCourse} saveCourse={this.saveCourse} />
-                );
-              }
-            }}},
-        { name: "Gonzaga Course" },
-        { name: "Host Course" },
-        { name: "Signature needed" },
-        { name: "Core Designation" }]
-=======
       page: 0,
       rowsPerPage: 10
->>>>>>> fc9b0fc74e91a97779105cd5ee2f0990d6bcb2ec
     }
 
     this.refresh = this.refresh.bind(this);
@@ -211,6 +168,15 @@ class ProgramDetailView extends Component {
     });
   }
 
+  isCourseSaved(id) {
+    return this.state.savedCoursesList.includes(id);
+  }
+
+  refresh(email) {
+    let savedCourses = this.getSavedCourses(email);
+    this.setState({savedCoursesList: savedCourses});
+  }
+
   saveCourse = (id, email) => {
     if(email) {
       // User is logged in
@@ -267,21 +233,6 @@ class ProgramDetailView extends Component {
     this.setState({ page: 0, rowsPerPage: event.target.value });
   };
 
-  isCourseSaved(id) {
-    return this.state.savedCoursesList.includes(id);
-  }
-
-  refresh(email) {
-    let savedCourses = this.getSavedCourses(email);
-    this.setState({savedCoursesList: savedCourses});
-  }
-
-/*
-<MUIDataTable
-  columns = {this.state.columns}
-  data = {this.state.courseList}
-  options = {options}/>
-*/
   render() {
     const cookies = this.props.cookies;
     const { rowsPerPage, page, courseList } = this.state;
@@ -316,17 +267,6 @@ class ProgramDetailView extends Component {
           <div className ="photo-wrapper">
             <div className="list">
               {this.state.loading ? null :
-<<<<<<< HEAD
-                <Table className="courses">
-                  <TableBody>
-                    {this.state.courseList.map((row) => {
-                      <TableRow>
-                      {row.map((index) => {<TableCell>{index}</TableCell>})}
-                      </TableRow>})}
-                  </TableBody>
-                </Table>
-              }<br/>
-=======
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -334,10 +274,10 @@ class ProgramDetailView extends Component {
                       <Tooltip placement="bottom" title={"Course listing at Gonzaga"}>
                         <TableCell>GU Course</TableCell>
                       </Tooltip>
-                      <Tooltip placement="bottom" title={"Course listing abroad"}>
+                      <Tooltip placement="bottom" title={"Course listing Abroad"}>
                         <TableCell>Host Course</TableCell>
                       </Tooltip>
-                      <Tooltip placement="bottom" title={"Any core requirements the course fulfills"}>
+                      <Tooltip placement="bottom" title={"Core requirements the course fulfills"}>
                         <TableCell>Core Designation</TableCell>
                       </Tooltip>
                       <Tooltip placement="bottom" title={"Whether or not the department chair must sign off"}>
@@ -368,7 +308,7 @@ class ProgramDetailView extends Component {
                   </TableBody>
                   <TableFooter>
                     <TableRow>
-                      <TablePagination
+                      <TablePagination 
                         rowsPerPageOptions={[5, 10, 20]}
                         colSpan={3}
                         count={courseList.length}
@@ -379,8 +319,8 @@ class ProgramDetailView extends Component {
                       />
                     </TableRow>
                   </TableFooter>
-                </Table>}<br/>
->>>>>>> fc9b0fc74e91a97779105cd5ee2f0990d6bcb2ec
+                </Table>
+              }<br/>
             </div>
             <div className="photos">
               {this.state.loading ? <CircularProgress variant="indeterminate"/> :

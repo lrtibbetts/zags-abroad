@@ -6,7 +6,6 @@ import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import "./ReviewsDisplay.css";
 
 class ReviewsDisplay extends Component {
   constructor(props) {
@@ -57,7 +56,7 @@ class ReviewsDisplay extends Component {
         </AppBar>
         {tabValue === 0 &&
           <div>
-            <h4> Where did you stay while abroad? What was it like? </h4>
+            <h4 style={{textAlign: 'center'}}> Where did you stay while abroad? What was it like? </h4>
             {this.state.surveys.map((residenceSurvey, index) =>
             {if (residenceSurvey.residence !== "") {
               return(
@@ -79,7 +78,7 @@ class ReviewsDisplay extends Component {
           </div>}
         {tabValue === 1 &&
           <div>
-            <h4> Tell us about any favorite trips you took while abroad. </h4>
+            <h4 style={{textAlign: 'center'}}> Tell us about any favorite trips you took while abroad. </h4>
             {this.state.surveys.map((tripSurvey, index) =>
             {if (tripSurvey.trips !== "") {
               return(
@@ -101,7 +100,7 @@ class ReviewsDisplay extends Component {
           </div>}
         {tabValue === 2 &&
           <div>
-            <h4> What were your classes like? </h4>
+            <h4 style={{textAlign: 'center'}}> What were your classes like? </h4>
             {this.state.surveys.map((classSurvey, index) =>
             {if (classSurvey.classes !== "") {
               return(
@@ -123,7 +122,7 @@ class ReviewsDisplay extends Component {
           </div>}
         {tabValue === 3 &&
           <div>
-            <h4> Tell us about any extracurricular activities you participated in. </h4>
+            <h4 style={{textAlign: 'center'}}> Tell us about any extracurricular activities you participated in. </h4>
             {this.state.surveys.map((activitySurvey, index) =>
             {if (activitySurvey.activities !== "") {
               return(
@@ -145,7 +144,7 @@ class ReviewsDisplay extends Component {
           </div>}
         {tabValue === 4 &&
           <div>
-            <h4> What were your experiences with on-campus staff and facilities? </h4>
+            <h4 style={{textAlign: 'center'}}> What were your experiences with on-campus staff and facilities? </h4>
             {this.state.surveys.map((staffSurvey, index) =>
             {if (staffSurvey.staff !== "") {
               return(

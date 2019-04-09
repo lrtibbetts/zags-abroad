@@ -19,10 +19,18 @@ import "./MainPage.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const buttonStyle = {
   margin: '5px',
   fontWeight: '700'
+};
+
+const textFieldStyle = {
+  width: '700px',
+  margin: '10px'
 };
 
 class MainPage extends Component {
@@ -34,6 +42,7 @@ class MainPage extends Component {
       filters: [],
       programList : [], // Programs matching a user's search
       loading: true,
+      showFAQ: false,
       searchBy: 'department'
     }
 
@@ -228,6 +237,69 @@ render() {
                 <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
                 target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}>Click here.</a>
               </div> : null}
+              <Button style={buttonStyle}
+                onClick = {(event) =>
+                  this.setState({showFAQ: true})
+                }> FAQ
+              </Button>
+              <Dialog open={this.state.showFAQ}
+                onBackdropClick={() => this.setState({showFAQ: false})}>
+                <DialogTitle style={{margin: '0 auto', marginBottom: '5px'}}> Frequently asked questions: </DialogTitle>
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What is Zags Abroad? </p>
+                <p className = "faq">
+                 Zags Abroad is a senior design project from 2018-19. It allows students to filter through programs
+                 and save different courses so that they can manage their study abroad easily and quickly.
+                </p>
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What is a core designation? </p>
+                <p className = "faq">
+                 Core designations are titles given to courses taught by specific professors.
+                 For example, English 101 may have a writing designation when taught by one professor,
+                 but not when taught by a professor who has not gotten the writing designation certification.
+                 In order to graduate, students must complete certain core designations,
+                 making it an integral part of planning a study abroad.
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> Which class will be listed on my transcript? </p>
+                <p className = "faq">
+                  The Gonzaga course title will be listed on your transcript.
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What does ‘requires signature’ mean? </p>
+                <p className = "faq">
+                  This means that you must get a signature from the department chair of the course
+                  subject. For example, to get a signature for a Biology course, you must get a
+                  signature from the department chair of Biology.
+                  If the department type of the host course is different
+                  from that of the Gonzaga course, get the signature of the Gonzaga course department.
+                  Signature forms can be found in the study abroad office.
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> Where is Florence? </p>
+                <p className = "faq">
+                  Florence is managed separately from other study abroad programs. You can find information on Florence
+                  <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
+                  target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}> here.</a>
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> Where are short-term and faculty-led programs? </p>
+                <p className = "faq">
+                  Those programs change semester to semester and usually
+                  include abnormal application procedures. These
+                  programs can be discovered via your professors and department chairs.
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> Are these all the classes I can take abroad? </p>
+                <p className = "faq">
+                  These are the courses that Gonzaga students have gotten credit for in the past.
+                  You can take other classes at these universities!
+                </p>
+
+                <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> Are these the only semester-long programs? </p>
+                <p className = "faq">
+                  No! There are countless programs offered through other organizations that you can discover at the
+                  study abroad fair, online, or by visiting the study abroad office.
+                </p>
+              </Dialog>
             </div>
           </div>
         </div>

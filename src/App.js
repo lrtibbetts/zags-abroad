@@ -10,9 +10,9 @@ import MyAccount from "./MyAccount.js"
 import PasswordResetPage from "./PasswordResetPage.js";
 import { BrowserRouter, Route } from "react-router-dom";
 import { withCookies } from "react-cookie";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./App.css";
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 const font = "'Lato', sans-serif";
 const muiTheme = createMuiTheme({
@@ -24,7 +24,7 @@ const muiTheme = createMuiTheme({
       main: '#002D72' // Bulldog Blue
     },
     secondary: {
-      main: '#CC0033' // Bulldog Red
+      main: '#C8102E' // Bulldog Red
     }
   },
   overrides: {

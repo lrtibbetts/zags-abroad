@@ -4,7 +4,6 @@ import "./ProgramDetailView.css";
 import React, { Component } from 'react';
 import { Redirect, Link } from "react-router-dom";
 import { Carousel } from 'react-responsive-carousel';
-import MUIDataTable from "mui-datatables";
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';

@@ -36,18 +36,18 @@ class AdminPage extends Component {
           </AppBar>
           {value === 0 &&
             <div>
-              <h1> Course Equivalencies </h1>
+              <h1 style={{color: '#06274F'}}> Course Equivalencies </h1>
               <CourseEquivalencyPage cookies = {this.props.cookies}/>
             </div>}
           {value === 1 &&
             <div>
-              <h1>Program Reviews</h1>
+              <h1 style={{color: '#06274F'}}>Program Reviews</h1>
               <ProgramReviewsApprovalPage cookies = {this.props.cookies}/>
             </div>}
-          {value === 2 && <div><h1>Programs</h1>
+          {value === 2 && <div><h1 style={{color: '#06274F'}}>Programs</h1>
             <ProgramManagementPage cookies = {this.props.cookies}/>
           </div>}
-          {value === 3 && <div><h1>Admin Accounts</h1>
+          {value === 3 && <div><h1 style={{color: '#06274F'}}>Admin Accounts</h1>
             <AdminAccountManagementPage cookies = {this.props.cookies} />
           </div>}
         </div>

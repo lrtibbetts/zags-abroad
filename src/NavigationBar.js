@@ -17,14 +17,14 @@ const rightButtonStyle = {
 }
 
 const linkStyle = {
-  color: 'black'
+  color: '#06274F'
 }
 
 const headerStyle = {
-  color: 'black',
+  color: '#06274F',
   textDecoration: 'none',
-  display: 'inline-block',
-  marginLeft: '2vw'
+  marginLeft: '2vw',
+  display: 'inline-block'
 }
 
 class NavigationBar extends Component {
@@ -37,8 +37,10 @@ class NavigationBar extends Component {
         <div style={{backgroundColor: 'rgb(94, 138, 180, 0.5)'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
+          <img style={{position: 'absolute', marginLeft: '-25px', marginTop: '10px'}}
+          src={require('./spires-logo.png')} alt="" width={58} height={45.5}/>
           <div className="link">
-            <p style={{display: 'inline', marginLeft: '2vw'}}> Already studied abroad? </p>
+            <p style={{display: 'inline', marginLeft: '4vw', color: '#06274F'}}> Already studied abroad? </p>
             <Link to="/review" style={linkStyle}>Share here.</Link>
           </div>
           <div className ="button-wrapper">
@@ -56,8 +58,10 @@ class NavigationBar extends Component {
         <div style={{backgroundColor: 'rgb(94, 138, 180, 0.5)'}}>
           <Link to={(cookies.get('role') === 'admin') ? "/admin" : "/"}
             style={headerStyle}><h2> Zags Abroad </h2></Link>
+          <img style={{position: 'absolute', marginLeft: '-25px', marginTop: '10px'}}
+          src={require('./spires-logo.png')} alt="" width={58} height={45.5}/>
           <div className="logged-in-link">
-            {!isAdmin ? <p style={{display: 'inline', marginLeft: '2vw'}}> Already studied abroad? </p> : null}
+            {!isAdmin ? <p style={{display: 'inline', marginLeft: '4vw', color: '#06274F'}}> Already studied abroad? </p> : null}
             {!isAdmin ? <Link to="/review" style={linkStyle}> Share here.</Link> : null}
           </div>
           <Button style={rightButtonStyle} variant="outlined"

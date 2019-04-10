@@ -127,7 +127,7 @@ class ProgramReviewForm extends Component {
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return(
         <div style={{textAlign: 'center'}}>
-          <h3>Tell us about your time abroad!</h3>
+          <h3 style={{color: '#06274F'}}>Tell us about your time abroad!</h3>
           <TextField id="name" label="Name" style={textFieldStyle}
             onChange = { (event) =>
               this.setState({name : event.target.value})}/>

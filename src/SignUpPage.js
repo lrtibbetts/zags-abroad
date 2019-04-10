@@ -76,7 +76,7 @@ class SignUpPage extends Component {
   render() {
     return (
       <div style={{textAlign: 'center'}}>
-        <h1> Sign Up </h1>
+        <h1 style={{color: '#06274F'}}> Sign Up </h1>
         <TextField style = {textFieldStyle}
           id = "firstName"
           label = "First Name"

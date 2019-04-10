@@ -21,7 +21,7 @@ const muiTheme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#002D72' // Bulldog Blue
+      main: '#06274F' // GU Blue
     },
     secondary: {
       main: '#C8102E' // Bulldog Red
@@ -31,6 +31,19 @@ const muiTheme = createMuiTheme({
       MUIDataTableHeadCell: {
         root: {
           fontWeight: 700
+        }
+      },
+      MuiButton: {
+        outlined: {
+          color: '#06274F',
+          borderColor: '#06274F'
+        },
+        text: {
+          color: '#06274F'
+        },
+        raised: {
+          color: '#06274F',
+          backgroundColor: 'rgb(94, 138, 180, 0.5)'
         }
       }
     }

@@ -238,7 +238,7 @@ class ProgramDetailView extends Component {
         parseInt(photo.width)));
       return (
         <div className="detail">
-          <div style={{textAlign: 'center'}}>
+          <div style={{textAlign: 'center', color: '#06274F'}}>
             <h1>{this.props.name}</h1>
           </div>
           {this.state.loading ? <div style={{textAlign: 'center'}}> <CircularProgress variant="indeterminate"/> </div> :
@@ -264,7 +264,7 @@ class ProgramDetailView extends Component {
                   })}
                 </Carousel> : null}
             </div>
-            <div className ="search-wrapper">
+            <div className ={this.state.photos.length === 0 ? "search-wrapper-centered" : "search-wrapper"}>
               <p className="label"> Search by: </p>
               <div className="select">
                 <Select autoWidth={true} value={this.state.searchBy}
@@ -282,7 +282,7 @@ class ProgramDetailView extends Component {
                 />
               </div>
             </div>
-            <div className="list">
+            <div className="list" style={this.state.photos.length === 0 ? {margin: '0 auto', width: '75vw'} : null}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -337,7 +337,7 @@ class ProgramDetailView extends Component {
                 </TableFooter>
               </Table><br/>
             </div>
-            <h2> Program Reviews </h2>
+            <h2 style={{color: '#06274F'}}> Program Reviews </h2>
             <ReviewsDisplay program={this.props.name}/><br/>
           </div>}
           <Snackbar message={this.state.message}

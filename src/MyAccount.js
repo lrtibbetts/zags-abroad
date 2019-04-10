@@ -97,11 +97,11 @@ class MyAccount extends Component {
     if(role === 'user' && this.state.programs !== '') {
     return(
       <div style={{textAlign: 'center', padding: '20px'}}>
-        <h2>My Account</h2>
+        <h2 style={{color: '#06274F'}}>My Account</h2>
             {this.state.programs.map((program, index) => {
               return (
                 <div style={{display: 'inline-block', textAlign: 'center', overflow: 'auto'}}>
-                <h3>{program.name}</h3>
+                <h3 style={{color: '#06274F'}}>{program.name}</h3>
                 <Table key = {program.name}>
                   <TableHead>
                     <TableRow>

@@ -42,6 +42,10 @@
   margin-left: 3vw;
 }
 
+.search-wrapper-centered {
+  text-align: center;
+}
+
 .list {
   width: calc(94vw - 500px);
   margin-left: 1.5vw;
@@ -49,7 +53,7 @@
   padding-top: 20px;
   z-index: 0;
   position: relative;
-  overflow: scroll;
+  overflow: auto;
 }
 
 @media screen and (max-width: 1200px) {

@@ -139,7 +139,7 @@ render() {
       return (
         <div className ="wrapper">
           <div className ="search-bar-wrapper">
-            <p style={{marginTop: '15px', display: 'inline'}}> Search by: </p>
+            <p style={{marginTop: '15px', display: 'inline', color: '#06274F', fontFamily: 'Adelle-Bold'}}> Search by: </p>
             <div style={{marginTop: '4px', marginLeft: '10px', display: 'inline-block', verticalAlign: 'bottom'}}>
               <Select autoWidth={true} value={this.state.searchBy}
                 onChange = { (event) =>
@@ -167,7 +167,7 @@ render() {
                   <ExpansionPanel key={program.programName}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                       <div>
-                        <div style={{textAlign: 'left'}}><b>{program.programName}</b></div>
+                        <div style={{textAlign: 'left', color: '#06274F'}}><b>{program.programName}</b></div>
                         <div style={{textAlign: 'left', fontSize: 'small', fontWeight: 300 }}>{program.location}</div>
                       </div>
                     </ExpansionPanelSummary>
@@ -227,10 +227,10 @@ render() {
               <MapView programs={this.state.programList.map((program) => program.programName)}/>
               {!this.state.loading ?
               <div>
-                <p style={{display: 'inline'}}> Interested in Gonzaga in Florence? </p>
+                <p style={{display: 'inline-block', marginTop: '10px'}}> Interested in Gonzaga in Florence? </p>
                 <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-                target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}>Click here.</a>
-                <Button style={{fontWeight: '700', marginTop: '5px', display: 'inline', float: 'right'}}
+                target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}><span>&nbsp;</span>Click here.</a>
+                <Button style={{fontWeight: '700', marginTop: '10px', display: 'inline', float: 'right'}}
                   onClick = {(event) =>
                     this.setState({showFAQ: true})
                   }> FAQ

@@ -24,7 +24,8 @@ const smallTextFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px',
+  margin: '0 auto',
+  marginBottom: '5px',
   fontWeight: '700'
 };
 
@@ -217,7 +218,7 @@ class CourseDetailsForm extends Component {
             <br/>
             <div style={{textAlign: 'center'}}>
               <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
-                <span style={{margin: '0 auto', marginBottom: '5px'}}>
+                <span>
                   <Button variant="contained" style={buttonStyle}
                     disabled={!this.formIsValid()}
                     onClick = {(event) => {
@@ -248,7 +249,7 @@ class CourseDetailsForm extends Component {
                   </Button>
                 </span>
               </Tooltip>
-              <Button variant="contained" style={buttonStyle}
+              <Button variant="contained" style={{marginLeft: '10px', marginBottom: '5px'}}
                 onClick = {this.props.onClose}>
                 Cancel
               </Button>

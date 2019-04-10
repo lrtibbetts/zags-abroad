@@ -15,7 +15,8 @@ const largeTextFieldStyle = {
 };
 
 const buttonStyle = {
-  margin: '5px',
+  margin: '0 auto',
+  marginBottom: '5px',
   fontWeight: '700'
 };
 
@@ -124,61 +125,63 @@ class ProgramDetailsForm extends Component {
               showFileNamesInPreview={true}
               maxFileSize={5000000}/>
             </div>
-            <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
-              <span>
-                <Button variant="contained" style={buttonStyle}
-                  disabled={!this.formIsValid()}
-                  onClick = {(event) => {
-                    let programInfo = this.state;
-                    if(this.props.title === "Add Program") {
-                      // Geocoding for lat and lng
-                      Geocode.fromAddress(programInfo.city).then(
-                        response => {
-                          const { lat, lng } = response.results[0].geometry.location;
-                          programInfo["lat"] = lat;
-                          programInfo["lng"] = lng;
-                          axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
-                            if(res.data.errno) { // Error adding the program
-                              this.props.displayMessage("Error adding program");
-                            } else { // No error, program added successfully
-                              this.props.displayMessage("Program added successfully");
-                            }
-                            this.props.onClose();
-                          });
-                        },
-                        error => {
-                          this.props.displayMessage("Error: check that the location is correct");
-                        }
-                      );
-                    } else if(this.props.title === "Edit Program") {
-                      // If program location has changed, use geocoding for lat and lng
-                      if(programInfo.city !== programInfo.orig_host_city) {
+            <div style={{textAlign: 'center'}}>
+              <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
+                <span>
+                  <Button variant="contained" style={buttonStyle}
+                    disabled={!this.formIsValid()}
+                    onClick = {(event) => {
+                      let programInfo = this.state;
+                      if(this.props.title === "Add Program") {
+                        // Geocoding for lat and lng
                         Geocode.fromAddress(programInfo.city).then(
                           response => {
                             const { lat, lng } = response.results[0].geometry.location;
                             programInfo["lat"] = lat;
                             programInfo["lng"] = lng;
-                            this.updateProgram(programInfo);
+                            axios.post("https://zagsabroad-backend.herokuapp.com/addprogram", programInfo).then((res) => {
+                              if(res.data.errno) { // Error adding the program
+                                this.props.displayMessage("Error adding program");
+                              } else { // No error, program added successfully
+                                this.props.displayMessage("Program added successfully");
+                              }
+                              this.props.onClose();
+                            });
                           },
                           error => {
                             this.props.displayMessage("Error: check that the location is correct");
                           }
                         );
-                      } else {
-                        this.updateProgram(programInfo);
+                      } else if(this.props.title === "Edit Program") {
+                        // If program location has changed, use geocoding for lat and lng
+                        if(programInfo.city !== programInfo.orig_host_city) {
+                          Geocode.fromAddress(programInfo.city).then(
+                            response => {
+                              const { lat, lng } = response.results[0].geometry.location;
+                              programInfo["lat"] = lat;
+                              programInfo["lng"] = lng;
+                              this.updateProgram(programInfo);
+                            },
+                            error => {
+                              this.props.displayMessage("Error: check that the location is correct");
+                            }
+                          );
+                        } else {
+                          this.updateProgram(programInfo);
+                        }
                       }
-                    }
-                    console.log(this.state.photos);
-                    this.handleUploadImages(this.state.photos);
-                  }}>
-                  Save
-                </Button>
-              </span>
-            </Tooltip>
-            <Button variant="contained" style={buttonStyle}
-              onClick = {this.props.onClose}>
-              Cancel
-            </Button>
+                      console.log(this.state.photos);
+                      this.handleUploadImages(this.state.photos);
+                    }}>
+                    Save
+                  </Button>
+                </span>
+              </Tooltip>
+              <Button variant="contained" style={{marginLeft: '10px', marginBottom: '5px'}}
+                onClick = {this.props.onClose}>
+                Cancel
+              </Button>
+            </div>
           </div>
         </Dialog>
       </div>

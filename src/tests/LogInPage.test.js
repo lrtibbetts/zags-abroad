@@ -9,7 +9,7 @@ describe('Login page', () => {
     const logInPage = shallow(<LogInPage/>);
 
     it('should render correctly with header', () => {
-      expect(logInPage.contains(<h1> Log In </h1>)).toBe(true);
+      expect(logInPage.contains(<h1 style={{color: '#06274F'}}> Log In </h1>)).toBe(true);
     });
 
     it('should get email from user correctly', () => {

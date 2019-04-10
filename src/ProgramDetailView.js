@@ -263,7 +263,7 @@ class ProgramDetailView extends Component {
                   })}
                 </Carousel> : null}
             </div>
-            <div className ="search-wrapper">
+            <div className ={this.state.photos.length === 0 ? "search-wrapper-centered" : "search-wrapper"}>
               <p className="label"> Search by: </p>
               <div className="select">
                 <Select autoWidth={true} value={this.state.searchBy}
@@ -281,7 +281,7 @@ class ProgramDetailView extends Component {
                 />
               </div>
             </div>
-            <div className="list">
+            <div className="list" style={this.state.photos.length === 0 ? {margin: '0 auto', width: '75vw'} : null}>
               <Table>
                 <TableHead>
                   <TableRow>

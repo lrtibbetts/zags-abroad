@@ -158,6 +158,7 @@ render() {
           </div>
           <div className="expansion-map-wrapper">
             <div className="program-list">
+            <h2 style={{color: '#06274F'}}>Current Programs:</h2>
               {this.state.loading ? <div id="loading" style={{textAlign: "center"}}>
                 <CircularProgress variant="indeterminate"/> </div>: null}
               {this.state.filters.length > 0 && this.state.programList.length === 0

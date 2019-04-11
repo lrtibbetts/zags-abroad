@@ -169,7 +169,7 @@ class SignUpPage extends Component {
           </div>
         </Dialog>
         <Dialog open={this.state.showEmailSentPrompt}>
-          <DialogTitle>Please check your email to verify your account! (also check your junk/spam folder) </DialogTitle>
+          <DialogTitle>Please check your email to verify your account (Check your junk/spam folder too!) </DialogTitle>
           <div style={{margin: '0 auto', marginBottom: '5px'}}>
             <Button style={buttonStyle} variant="contained" component={Link} to="/">
               Okay

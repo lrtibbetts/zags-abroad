@@ -158,9 +158,9 @@ render() {
           </div>
           <div className="expansion-map-wrapper">
             <div className="program-list">
-            <h3 style={{color: '#06274F'}}>Current Programs:</h3>
-              {this.state.loading ? <div id="loading" style={{textAlign: "center"}}>
-                <CircularProgress variant="indeterminate"/> </div>: null}
+              {this.state.loading ? <div id="loading" style={{textAlign: "center", paddingTop: '20px'}}>
+                <CircularProgress variant="indeterminate"/> </div>:
+              <h3 style={{color: '#06274F'}}>Current Programs:</h3>}
               {this.state.filters.length > 0 && this.state.programList.length === 0
                 && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
               {this.state.programList.map(program => {

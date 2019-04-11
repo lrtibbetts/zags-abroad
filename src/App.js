@@ -75,6 +75,10 @@ class App extends Component {
             <Route exact={true} path='/review' render={() => (
                 <ProgramReviewForm cookies = {this.props.cookies}/>
             )}/>
+            {/* Program review form with program name pre-populated */}
+            <Route exact={true} path='/review/:program' render={(props) => (
+                <ProgramReviewForm program={props.match.params.program} cookies = {this.props.cookies}/>
+            )}/>
             <Route exact={true} path='/account' render={() => (
                 <MyAccount cookies = {this.props.cookies}/>
             )}/>

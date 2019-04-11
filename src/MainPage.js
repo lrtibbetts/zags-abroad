@@ -181,7 +181,7 @@ render() {
                             Learn more
                           </Button>
                           </a>
-                          <a href="/review" style={{ textDecoration: 'none' }}>
+                          <a href={`/review/${program.programName}`}  style={{ textDecoration: 'none' }}>
                           <Button variant="outlined" color="primary" style={buttonStyle}>
                             Submit a review
                           </Button>

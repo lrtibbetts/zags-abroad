@@ -33,7 +33,7 @@ class ProgramReviewForm extends Component {
       name: '',
       email: '',
       major: '',
-      program: '',
+      program: this.props.program,
       term: '',
       calendarYear: '',
       year: '',

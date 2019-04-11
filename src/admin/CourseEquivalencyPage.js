@@ -115,7 +115,7 @@ class CourseEquivalencyPage extends Component {
   }
 
   loadCourses() {
-    axios.get("https://zagsabroad-backend.herokuapp.com/courses").then((res) => {
+    axios.get("https://zagsabroad-backend.herokuapp.com/admincourses").then((res) => {
       // Convert array of objects to 2D array
       const coursesToAdd = [];
       const idsToAdd = [];

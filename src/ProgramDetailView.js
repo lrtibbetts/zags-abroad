@@ -321,7 +321,7 @@ class ProgramDetailView extends Component {
                     );
                   })}
                   {emptyRows > 0 && (
-                    <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableRow style={{ height: Math.min(48 * emptyRows, 144) }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}

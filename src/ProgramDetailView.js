@@ -273,13 +273,12 @@ class ProgramDetailView extends Component {
                   <MenuItem value='core'> Core designation </MenuItem>
                 </Select>
               </div>
-              
               <div className="search">
                 <MultiDropdownTextField
                     value = { this.state.filters }
                     onChange = { this.handleChange("filters")}
                     options = {this.state.searchBy === 'department' ? this.state.subjects : this.state.core}/>
-              </div>          
+              </div>
             </div>
             <div className="list" style={this.state.photos.length === 0 ? {margin: '0 auto', width: '75vw'} : null}>
               <Table>

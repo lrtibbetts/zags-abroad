@@ -103,7 +103,15 @@ class ProgramManagementPage extends Component {
         } else { // No error, course updated successfully
           this.displayMessage(host_program + " deleted successfully");
         }
-      });
+      });/*
+      // Delete course equivalencies of deleted program
+      axios.post("https://zagsabroad-backend.herokuapp.com/deleteprogramcourses", programInfo).then((res) => {
+        if(res.data.errno) { // Error deleting the program
+          this.displayMessage("Error deleting program courses");
+        } else { // No error, course updated successfully
+          this.displayMessage(host_program + " courses deleted successfully");
+        }
+      });*/
     }
   }
 

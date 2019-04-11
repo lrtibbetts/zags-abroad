@@ -47,6 +47,7 @@ class ProgramDetailView extends Component {
       applicationLink: '',
       searchBy: 'department',
       loading: true,
+      tableLoading: false,
       showMessage : false,
       message: '',
       showLogInPrompt: false,
@@ -100,7 +101,7 @@ class ProgramDetailView extends Component {
         : data[i].host_course_name, requiresSignature: data[i].signature_needed, core: data[i].core};
       courses.push(newCourse);
     }
-    this.setState({courseList: courses, loading: false});
+    this.setState({courseList: courses, tableLoading: false});
   }
 
   getSavedCourses(email) {
@@ -117,7 +118,7 @@ class ProgramDetailView extends Component {
 
   // No filters, Pull all courses in program
   getAllCourses() {
-    this.setState({courseList: [], loading: true})
+    this.setState({courseList: [], tableLoading: true})
     axios.post("https://zagsabroad-backend.herokuapp.com/programcourses", {"program": this.props.name}).then((res) => {
       this.formatCourses(res.data);
     });
@@ -152,7 +153,7 @@ class ProgramDetailView extends Component {
 
   // Filters applied, pull matching courses in program
   getCourses() {
-    this.setState({courseList: [], loading: true})
+    this.setState({courseList: [], tableLoading: true})
     let params = {
       "program": this.props.name,
       "core": this.state.filters.filter(filter => filter.value.includes("CORE: ")).map((filter) => filter.label),
@@ -215,7 +216,7 @@ class ProgramDetailView extends Component {
   }
 
   handleChange = name => value => {
-    this.setState({ [name]: value }, () => {
+    this.setState({[name]: value, page: 0, tableLoading: true}, () => {
       (this.state.filters.length > 0) ? this.getCourses() : this.getAllCourses();
     });
   };
@@ -282,6 +283,10 @@ class ProgramDetailView extends Component {
               </div>
             </div>
             <div className="list" style={this.state.photos.length === 0 ? {margin: '0 auto', width: '75vw'} : null}>
+              {this.state.tableLoading && !this.state.loading ?
+              <div style={{textAlign: 'center', height: '350px'}}>
+                <CircularProgress variant="indeterminate"/>
+              </div> :
               <Table>
                 <TableHead>
                   <TableRow>
@@ -334,7 +339,7 @@ class ProgramDetailView extends Component {
                     />
                   </TableRow>
                 </TableFooter>
-              </Table><br/>
+              </Table>}<br/>
             </div>
             <h2 style={{color: '#06274F'}}> Program Reviews </h2>
             <ReviewsDisplay program={this.props.name}/><br/>

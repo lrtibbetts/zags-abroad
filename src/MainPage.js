@@ -1,3 +1,16 @@
+/*
+This file contains code for the main page. This includes the search bar,
+map, FAQ, programs list, and navigation bar.
+
+backend calls:
+/subjects
+/core
+/courses
+/mainsearch
+*/
+
+
+
 import React, { Component } from 'react';
 import MultiDropdownTextField from './MultiDropdownTextField.js';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';

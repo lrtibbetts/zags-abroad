@@ -1,3 +1,12 @@
+/*
+This file contains the code for displaying student reviews on the program detail
+view pages.
+
+backend calls:
+/programsurveys
+*/
+
+
 import axios from 'axios';
 import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';

@@ -1,3 +1,15 @@
+/*
+This file contains code for the student user account pages. This includes the
+navigation bar and saved courses (listed by program).
+
+backend calls:
+/deletedcourses
+/deleteaccountcourse
+/accountcourses
+*/
+
+
+
 import axios from 'axios';
 import React, { Component } from 'react';
 import Table from '@material-ui/core/Table';

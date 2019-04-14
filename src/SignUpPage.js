@@ -1,3 +1,12 @@
+/*
+This file contains code for the signup page. It includes the sign up fields,
+'get started' button, and the navigation bar.
+
+backend calls:
+/signup
+*/
+
+
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';

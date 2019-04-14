@@ -1,3 +1,20 @@
+/*
+This file contains code for each program page. This includes application links,
+the navigation bar, photos, student reviews, and a table of offered courses.
+
+backend calls:
+/programsubjects
+/programcore
+/applicationlink
+/accountcourses
+/programcourses
+/programphotos
+/detailsearch
+/savecourse
+/deleteaccountcourse
+*/
+
+
 import axios from 'axios';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./ProgramDetailView.css";

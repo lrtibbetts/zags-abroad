@@ -1,16 +1,14 @@
 /*
-This file contains code for the review form when the user clicks on
-"Already studied abroad? Share here" (link in navigation bar). This page includes
-the navigation bar, the review form, and the submit button.
+This file contains code for the review form when the user clicks on "Already
+studied abroad? Share here" (link in navigation bar).
 
-backend calls:
+Backend API calls:
 /programs
 /submitsurvey
 /photos
 
-also contains call to cloudinary photo storage
+* Also contains call to cloudinary photo storage
 */
-
 
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';

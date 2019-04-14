@@ -1,11 +1,10 @@
 /*
-This file contains code for the signup page. It includes the sign up fields,
-'get started' button, and the navigation bar.
+This file contains code for the sign up page. When a user clicks "Get started",
+a verification message is sent to their email.
 
-backend calls:
+Backend API calls:
 /signup
 */
-
 
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';

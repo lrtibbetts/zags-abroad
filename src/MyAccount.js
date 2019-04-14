@@ -1,14 +1,12 @@
 /*
-This file contains code for the student user account pages. This includes the
-navigation bar and saved courses (listed by program).
+This file contains code for the student user account page. It includes the
+saved courses (grouped by study abroad program).
 
-backend calls:
+Backend calls:
 /deletedcourses
 /deleteaccountcourse
 /accountcourses
 */
-
-
 
 import axios from 'axios';
 import React, { Component } from 'react';

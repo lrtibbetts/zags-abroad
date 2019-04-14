@@ -1,14 +1,11 @@
 /*
-This file contains code for the login page. It includes logging in,
-password reset, and the navigation bar.
+This file contains code for the login page. It includes log in and password
+reset functionality.
 
-backend calls:
+Backend API calls:
 /login
 /sendreset
 */
-
-
-
 
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';

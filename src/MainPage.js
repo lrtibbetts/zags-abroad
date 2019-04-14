@@ -1,15 +1,13 @@
 /*
-This file contains code for the main page. This includes the search bar,
-map, FAQ, programs list, and navigation bar.
+This file contains code for the main page. It includes filtering functionality,
+the interactive map (imported from MapView.js), FAQ, and the programs list.
 
-backend calls:
+Backend API calls:
 /subjects
 /core
 /courses
 /mainsearch
 */
-
-
 
 import React, { Component } from 'react';
 import MultiDropdownTextField from './MultiDropdownTextField.js';

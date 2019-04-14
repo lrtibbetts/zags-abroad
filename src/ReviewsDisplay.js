@@ -1,11 +1,10 @@
 /*
-This file contains the code for displaying student reviews on the program detail
-view pages.
+This file contains code for displaying student reviews on the program detail
+view page.
 
-backend calls:
+Backend calls:
 /programsurveys
 */
-
 
 import axios from 'axios';
 import React, { Component } from 'react';

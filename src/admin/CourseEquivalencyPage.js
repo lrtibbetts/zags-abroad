@@ -56,7 +56,8 @@ class CourseEquivalencyPage extends Component {
         {
           name: "Core",
           options: {
-            display: false
+            display: false,
+            filter: false
           }
         },
         {

@@ -1,13 +1,25 @@
+/*
+Form for Course information details
+
+This file contains code to populate and generate a GUI form to provide information on a given course.
+It includes access granted and removed functionality.
+
+Backend API calls:
+/core
+/departments
+/programs
+*/
+import axios from 'axios';
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
-import axios from 'axios';
 import DropdownTextField from '../DropdownTextField.js';
 import MultiDropdownTextField from '../MultiDropdownTextField.js';
 
+/* FORMATTING STYLINGS */
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'
@@ -42,7 +54,6 @@ const largeDropDownStyle = {
   margin: '10px'
 };
 
-// Make department field required
 class CourseDetailsForm extends Component {
   constructor(props) {
     super(props);
@@ -102,6 +113,7 @@ class CourseDetailsForm extends Component {
     });
   }
 
+  // Modify list of designations in course equivalency core field to be displayed as MultiDropdownTextField bubble
   formatCore(coreStr) {
     let coreList = coreStr.split(',');
     for(let i = 0; i < coreList.length; i++) {
@@ -112,25 +124,29 @@ class CourseDetailsForm extends Component {
     return coreList;
   }
 
+  // Check that all required fields are filled
   formIsValid() {
-    // Check that all required fields are filled
     return (this.state.host_program && this.state.host_course_name && this.state.gu_course_number
     && this.state.gu_course_name && this.state.signature_needed && this.state.approved_by
     && this.state.approval_date && this.state.department);
   }
 
+  // Update based on field selected in from "Signature Needed" dropdown menu
   handleChangeSignatureNeeded(selectedOption) {
     this.setState({signature_needed: selectedOption.value});
   }
 
+  // Update based on field selected in from "Department" dropdown menu
   handleChangeDepartment(selectedOption) {
     this.setState({department: selectedOption.value});
   }
 
+  // Update based on field selected in from "Program" dropdown menu
   handleChangeProgram(selectedOption) {
     this.setState({host_program: selectedOption.value});
   }
 
+  // Change state values based on field name and value passed 
   handleChange = name => value => {
     this.setState({
       [name]: value,

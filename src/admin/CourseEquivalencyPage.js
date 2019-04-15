@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
@@ -5,8 +7,6 @@ import CourseDetailsForm from './CourseDetailsForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
-import { Redirect } from "react-router-dom";
 
 const addButtonStyle = {
   margin: '10px',

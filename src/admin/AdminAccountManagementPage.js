@@ -1,6 +1,17 @@
+/*
+Admin side: ADMIN ACCOUNT SUBPAGE
+
+This file contains code for to maintain admin access to accounts on the application.
+It includes access granted and removed functionality.
+
+Backend API calls:
+/accounts
+/grantaccess
+/removeaccess
+*/
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -21,10 +32,12 @@ class AdminAccountManagementPage extends Component {
     this.loadAccounts();
   }
 
+  // Display Snackbar messages
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
   }
 
+  // Load accounts with '@gonzaga.edu' ending as possible admin accounts
   loadAccounts() {
     axios.get("https://zagsabroad-backend.herokuapp.com/accounts").then ((res) => {
       let accountsToAdd = [];
@@ -36,13 +49,16 @@ class AdminAccountManagementPage extends Component {
     })
   }
 
+  // Control admin status of account
   saveChanges(account, event) {
     if(event.target.checked) {
+      // Grant admin access
       axios.post("https://zagsabroad-backend.herokuapp.com/grantaccess", {"email": account.email}).then((res) => {
         this.displayMessage(account.email + " has been given admin access");
         this.loadAccounts();
       })
     } else {
+      // Remove admin access
       axios.post("https://zagsabroad-backend.herokuapp.com/removeaccess", {"email": account.email}).then((res) => {
         this.displayMessage("Admin access has been removed for " + account.email);
         this.loadAccounts();

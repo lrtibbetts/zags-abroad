@@ -258,6 +258,25 @@ render() {
                    Zags Abroad is a senior design project from 2018-19. The goal is to help students find a study abroad
                    program that fits their interests and fulfills academic requirements more easily!
                   </p>
+                  <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What is the "share here" link? </p>
+                  <p className = "faq">
+                   The Share Here link takes you to a review form where you can provide feedback for your
+                   study abroad experience. Your responses to certain questions is visible on the program
+                   pages on our website. This allows you to share your experiences with other students and
+                   provide a more personal insight on what studying abroad is like.
+                  </p>
+                  <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> How should I select a program? </p>
+                  <p className = "faq">
+                    Only you can know what program is best suited for your personal needs. However, our application allows you
+                    to filter through programs based on what kind of courses you may need to take so that you can find programs
+                    that fit your academic needs.
+                  </p>
+                  <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What are the pluses next to course names on the program pages? </p>
+                  <p className = "faq">
+                    When you click on the plus sign, it saves that course to your account. You can view your saved courses
+                    on your My Account page. They are grouped by program so that you can compare different programs easily
+                    and keep track of what you want to take during your study abroad.
+                  </p>
                   <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What is a core designation? </p>
                   <p className = "faq">
                    Core designations indicate that a course fulfills a specific part of the core curriculum at Gonzaga.

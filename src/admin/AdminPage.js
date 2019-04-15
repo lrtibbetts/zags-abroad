@@ -1,8 +1,6 @@
 /*
-ADMIN PAGE
-
-This file contains code for to presenting admin side of application.
-It includes code to populate subtabbed pages for admin.
+  This file contains code for the tabbed view that allows admin users to
+  navigate between subpages.
 */
 import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';

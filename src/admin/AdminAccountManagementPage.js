@@ -1,13 +1,10 @@
 /*
-Admin side: ADMIN ACCOUNT SUBPAGE
+  This page allows administrative users to grant or remove admin privileges.
 
-This file contains code for to maintain admin access to accounts on the application.
-It includes access granted and removed functionality.
-
-Backend API calls:
-/accounts
-/grantaccess
-/removeaccess
+  Backend API calls:
+  /accounts
+  /grantaccess
+  /removeaccess
 */
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";

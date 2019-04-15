@@ -1,13 +1,11 @@
 /*
-Form for Course information details
+  This file contains code for the course details form. When editing an existing
+  course, the form is pre-populated with course details.
 
-This file contains code to populate and generate a GUI form to provide information on a given course.
-It includes access granted and removed functionality.
-
-Backend API calls:
-/core
-/departments
-/programs
+  Backend API calls:
+  /core
+  /departments
+  /programs
 */
 import axios from 'axios';
 import React, { Component } from 'react';
@@ -146,7 +144,7 @@ class CourseDetailsForm extends Component {
     this.setState({host_program: selectedOption.value});
   }
 
-  // Change state values based on field name and value passed 
+  // Change state values based on field name and value passed
   handleChange = name => value => {
     this.setState({
       [name]: value,

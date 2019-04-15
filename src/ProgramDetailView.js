@@ -69,7 +69,7 @@ class ProgramDetailView extends Component {
       showLogInPrompt: false,
       photos: [],
       page: 0,
-      rowsPerPage: 10
+      rowsPerPage: 5
     }
 
     this.refresh = this.refresh.bind(this);

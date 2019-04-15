@@ -62,6 +62,9 @@ class BrowsePages(TaskSet):
     def review(self):
         self.client.get("/review")
 #
+
+
+
 # #this load tests the backend api's
 class testAPIs(TaskSet):
 

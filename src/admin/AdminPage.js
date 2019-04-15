@@ -1,3 +1,10 @@
+/*
+ADMIN PAGE
+
+This file contains code for to presenting admin side of application.
+It includes code to populate subtabbed pages for admin.
+*/
+import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -6,7 +13,6 @@ import CourseEquivalencyPage from './CourseEquivalencyPage.js';
 import ProgramReviewsApprovalPage from './ProgramReviewsApprovalPage.js';
 import ProgramManagementPage from './ProgramManagementPage.js';
 import AdminAccountManagementPage from './AdminAccountManagementPage.js';
-import { Redirect } from "react-router-dom";
 
 class AdminPage extends Component {
   constructor(props) {
@@ -16,6 +22,7 @@ class AdminPage extends Component {
     }
   }
 
+  // Alter between subpage tabs on Admin Page
   handleChange = (event, value) => {
     this.setState({value: value});
   }

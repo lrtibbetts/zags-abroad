@@ -102,8 +102,8 @@ class SignUpPage extends Component {
           label = "Email"
           onChange = { (event) => {
             let newValue = event.target.value;
-            this.setState((!newValue.match(/^[A-Za-z0-9]+@zagmail.gonzaga.edu/)
-            && !newValue.match(/^[A-Za-z0-9]+@gonzaga.edu/)) ?
+            this.setState((!newValue.match(/^[A-Za-z0-9-]+@zagmail.gonzaga.edu/)
+            && !newValue.match(/^[A-Za-z0-9-]+@gonzaga.edu/)) ?
             {emailError : true} : {emailError : false, email : newValue});
           }}
           helperText = {this.state.emailError ? "Please enter a Gonzaga email" : ""}/>

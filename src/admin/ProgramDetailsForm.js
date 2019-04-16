@@ -106,7 +106,7 @@ class ProgramDetailsForm extends Component {
   render() {
     return (
       <div>
-        <Dialog open={true} onClose={this.props.onClose} scroll='body'>
+        <Dialog open={true} scroll='body'>
           <DialogTitle id="simple-dialog-title"> {this.props.title} </DialogTitle>
           <div>
             <TextField required style={largeTextFieldStyle} label = "Host Program Name"

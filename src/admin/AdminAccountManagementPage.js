@@ -1,4 +1,6 @@
 /*
+  Admin side: ADMIN ACCOUNT SUBPAGE 
+
   This page allows administrative users to grant or remove admin privileges.
 
   Backend API calls:

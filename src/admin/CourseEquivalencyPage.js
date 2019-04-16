@@ -1,3 +1,13 @@
+/*
+  Admin side: COURSE EQUIVALENCY SUBPAGE
+
+  This file contains code for to maintain course equivalency information on the application.
+  It includes add, edit, and delete course functionality.
+
+  Backend API calls:
+  /admincourses
+  /deletecourse
+*/
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
@@ -8,6 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+/* FORMATTING STYLINGS */
 const addButtonStyle = {
   margin: '10px',
   fontWeight: '700'
@@ -21,37 +32,29 @@ class CourseEquivalencyPage extends Component {
       showEditForm: false,
       courses: [],
       ids: [], // Array to store ids internally
-      editingCourseId: '', // Id of course being edited
+      editingCourseId: '', // id of course being edited
       editingCourse: [], // Array with details of course being edited
       showMessage: false,
       message: '',
-      columns: [
+      columns: [ // Column name and display formatting
         {
           name: "Program",
         },
         {
           name: "Host Course Number",
-          options: {
-            filter: false
-          }
+          options: { filter: false }
         },
         {
           name: "Host Course Name",
-          options: {
-            filter: false
-          }
+          options: { filter: false }
         },
         {
           name: "GU Course Number",
-          options: {
-            filter: false
-          }
+          options: { filter: false }
         },
         {
           name: "GU Course Name",
-          options: {
-            filter: false
-          }
+          options: { filter: false }
         },
         {
           name: "Core",
@@ -115,6 +118,7 @@ class CourseEquivalencyPage extends Component {
     this.loadCourses();
   }
 
+  // Load course equivalency information
   loadCourses() {
     axios.get("https://zagsabroad-backend.herokuapp.com/admincourses").then((res) => {
       // Convert array of objects to 2D array
@@ -136,6 +140,7 @@ class CourseEquivalencyPage extends Component {
     });
   }
 
+  // Delete course equivalencies of selected rows
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
@@ -151,26 +156,30 @@ class CourseEquivalencyPage extends Component {
     }
   }
 
+  // Display the course detail form blank to create new course equivalencies
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
     this.loadCourses();
   }
 
+  // Get course details of row clicked
   populateEditForm(rowData, rowMeta) {
-    // Get course details for row clicked
     let id = this.state.ids[rowMeta.dataIndex]; // Get course id
     this.setState({editingCourseId: id, editingCourse: rowData, showEditForm: true});
   }
 
+  // Conceal course detail form when clicked out
   hideEditForm() {
     this.setState({showEditForm : false});
     this.loadCourses();
   }
 
+  // Display Snackbar messages
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
   }
 
+  // Change state values based on field name and value passed
   handleChange = (event, value) => {
     this.setState({value});
   }

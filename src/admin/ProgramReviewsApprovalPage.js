@@ -1,18 +1,33 @@
-import React, { Component } from 'react';
+/*
+  Admin side: PROGRAM REVIEW APPROVAL SUBPAGE
+
+  This page allows administrative users to approve (and unapprove) of student reviews and photos.
+
+  Backend API calls:
+  /approvephoto
+  /approvesurvey
+  /approvedsurveys
+  /deletephoto
+  /deletesurvey
+  /surveys
+  /unapprovedsurveys
+*/
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import React, { Component } from 'react';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import './ProgramReviewsApprovalPage.css';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
+import './ProgramReviewsApprovalPage.css';
 
+/* FORMATTING STYLINGS */
 const buttonStyle = {
   margin: '5px',
   fontWeight: '700'
@@ -33,15 +48,20 @@ class ProgramReviewsApprovalPage extends Component {
       showMessage: false,
       message: ''
     }
+
+    // Bind 'this' context to helper functions
     this.displayMessage = this.displayMessage.bind(this);
     this.loadReviews = this.loadReviews.bind(this);
+
     this.loadReviews();
   }
 
+  // Display Snackbar messages
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
   }
 
+  // Format review and photo information
   formatReviews(data) {
     let reviewsToAdd = [];
     let extraPhotos = [];
@@ -94,6 +114,7 @@ class ProgramReviewsApprovalPage extends Component {
     this.setState({submitting: false, reviews: reviewsToAdd, extraPhotos: extraPhotos, loading: false});
   }
 
+  // Populate list of reviews
   loadReviews() {
     if(this.state.submitting) {
       this.displayMessage("Changes have been saved!");
@@ -104,10 +125,12 @@ class ProgramReviewsApprovalPage extends Component {
         this.formatReviews(res.data);
       });
     } else if(this.state.showApproved === true) {
+      // Show only approved reviews
       axios.get("https://zagsabroad-backend.herokuapp.com/approvedsurveys").then((res) => {
         this.formatReviews(res.data);
       });
-    } else if(this.state.showUnapproved === true){
+    } else if(this.state.showUnapproved === true) {
+      // Show only unapproved reviews
       axios.get("https://zagsabroad-backend.herokuapp.com/unapprovedsurveys").then((res) => {
         this.formatReviews(res.data);
       });
@@ -116,6 +139,7 @@ class ProgramReviewsApprovalPage extends Component {
     }
   }
 
+  // Photo information saved or deleted based on approval
   savePhotos(photos) {
     if(photos.length === 0) {
       this.loadReviews();
@@ -141,6 +165,7 @@ class ProgramReviewsApprovalPage extends Component {
     }
   }
 
+  // Review information saved or deleted based on approval 
   saveChanges(review) {
     this.setState({submitting: true, loading: true, reviews: []});
     if(review.approved) {

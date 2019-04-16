@@ -1,6 +1,8 @@
 /*
-  This file contains code for the course details form. When editing an existing
-  course, the form is pre-populated with course details.
+  Form for Course Information Details
+
+  This file contains code for the course details form.
+  When editing an existing course, the form is pre-populated with course details.
 
   Backend API calls:
   /core

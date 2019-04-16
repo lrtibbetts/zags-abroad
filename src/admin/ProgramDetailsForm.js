@@ -1,14 +1,26 @@
+/*
+  Form for Program Information Details
+
+  This file contains code for the program details form.
+  When editing an existing program, the form is pre-populated with program details.
+
+  Backend API calls:
+  /addprogram
+  /adminphotos
+  /editprogram
+*/
+import axios from 'axios';
 import React, { Component } from 'react';
+import { DropzoneArea } from 'material-ui-dropzone';
+import DropdownTextField from '../DropdownTextField.js';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Geocode from "react-geocode";
-import axios from 'axios';
-import DropdownTextField from '../DropdownTextField.js';
-import { DropzoneArea } from 'material-ui-dropzone';
 
+/* FORMATTING STYLINGS */
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'
@@ -39,23 +51,16 @@ class ProgramDetailsForm extends Component {
       application_link: this.props.program[3],
       lat: this.props.program[4],
       lng: this.props.program[5],
-      orig_host_program: this.props.program[0],
-      orig_host_city: this.props.program[1],
+      orig_host_program: this.props.program[0], // Program Name TextField information before it is updated
+      orig_host_city: this.props.program[1],  // Program City TextField information before it is update
       photos: [],
     }
 
+    // Bind 'this' context to helper functions
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
   }
 
-  formIsValid() {
-    // Check that all required fields are filled
-    return (this.state.host_program && this.state.city && this.state.program_type);
-  }
-
-  handleChangeProgramType(selectedOption) {
-    this.setState({program_type: selectedOption.value});
-  }
-
+  // Populate with selecte program information and save edited information
   updateProgram(programInfo) {
     axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
       if(res.data.errno) { // Error updating the program
@@ -65,6 +70,16 @@ class ProgramDetailsForm extends Component {
       }
       this.props.onClose();
     });
+  }
+
+  // Check that all required fields are filled
+  formIsValid() {
+    return (this.state.host_program && this.state.city && this.state.program_type);
+  }
+
+  // Update based on field selected in from "Program" dropdown menu
+  handleChangeProgramType(selectedOption) {
+    this.setState({program_type: selectedOption.value});
   }
 
   handleUploadImages = images => {

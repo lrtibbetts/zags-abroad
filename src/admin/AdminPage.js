@@ -1,4 +1,6 @@
 /*
+  ADMIN PAGE
+
   This file contains code for the tabbed view that allows admin users to
   navigate between subpages.
 */

@@ -1,3 +1,14 @@
+/*
+  Admin side: PROGRAM INFORMATION SUBPAGE
+
+  This page allows administrative users manage program detail information.
+
+  Backend API calls:
+  /adminprograms
+  /deleteprogram
+*/
+import axios from 'axios';
+import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
@@ -5,9 +16,8 @@ import ProgramDetailsForm from './ProgramDetailsForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
-import { Redirect } from "react-router-dom";
 
+/* FORMATTING STYLINGS */
 const addButtonStyle = {
   margin: '10px',
   fontWeight: '700'
@@ -26,39 +36,27 @@ class ProgramManagementPage extends Component {
       columns: [
         {
           name: "Program Name",
-          options: {
-            display: true
-          }
+          options: { display: true }
         },
         {
           name: "Location",
-          options: {
-            display: true
-          }
+          options: { display: true }
         },
         {
           name: "Program Type",
-          options: {
-            display: true
-          }
+          options: { display: true }
         },
         {
           name: "Application Link",
-          options: {
-            display: true
-          }
+          options: { display: true }
         },
         {
           name: "Latitude",
-          options: {
-            display: false
-          }
+          options: { display: false }
         },
         {
           name: "Longitude",
-          options: {
-            display: false
-          }
+          options: { display: false }
         }
       ]
     }
@@ -74,6 +72,7 @@ class ProgramManagementPage extends Component {
     this.loadPrograms();
   }
 
+  // Load information of all programs
   loadPrograms() {
     axios.get("https://zagsabroad-backend.herokuapp.com/adminprograms").then((res) => {
       // Convert array of objects to 2D array
@@ -92,6 +91,7 @@ class ProgramManagementPage extends Component {
     });
   }
 
+  // Delete programs of selected rows
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in programs array (parallel to ids array)
@@ -107,21 +107,24 @@ class ProgramManagementPage extends Component {
     }
   }
 
+  // Display the program detail form blank to create new program
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
     this.loadPrograms();
   }
 
+  // Get program details for row clicked
   populateEditForm(rowData, rowMeta) {
-    // Get program details for row clicked
     this.setState({editingProgram: rowData, showEditForm: true});
   }
 
+  // Conceal program detail form when clicked out
   hideEditForm() {
     this.setState({showEditForm : false});
     this.loadPrograms();
   }
 
+  // Display Snackbar messages
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
   }

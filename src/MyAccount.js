@@ -61,8 +61,10 @@ class MyAccount extends Component {
       let allCourses = [];
       let programs = [];
       let programName = data[i].host_program;
+      let loc = data[i].city;
       while(i < data.length) {
         programName = data[i].host_program;
+        loc = data[i].city;
         while(i < data.length && data[i].host_program === programName) {
           let newCourse = {guCourse: data[i].gu_course_number + ": " + data[i].gu_course_name,
             hostCourse: data[i].host_course_number ? data[i].host_course_number + ": " + data[i].host_course_name
@@ -73,7 +75,7 @@ class MyAccount extends Component {
             i++;
           }
         }
-        let programObj = {courses: courses, name: programName};
+        let programObj = {courses: courses, name: programName, city: loc};
         programs.push(programObj);
         allCourses.push(courses);
         courses = [];
@@ -111,7 +113,7 @@ class MyAccount extends Component {
             {this.state.programs.map((program, index) => {
               return (
                 <div style={{display: 'inline-block', textAlign: 'center', overflow: 'auto'}}>
-                <h3 style={{color: '#06274F'}}>{program.name}</h3>
+                <h3 style={{color: '#06274F'}}>{program.name} - {program.city}</h3>
                 <Table key = {program.name}>
                   <TableHead>
                     <TableRow>

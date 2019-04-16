@@ -262,7 +262,7 @@ class ProgramDetailView extends Component {
           <div>
             <div className="app">
               <a href={this.state.applicationLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
-                <Button variant="outlined" color="primary" style={buttonStyle}> Apply Here </Button>
+                <Button variant="outlined" color="primary" style={buttonStyle}> Additional Information </Button>
               </a>
             </div>
             <div className="photos">

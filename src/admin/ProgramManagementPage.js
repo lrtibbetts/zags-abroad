@@ -71,7 +71,7 @@ class ProgramManagementPage extends Component {
     this.loadPrograms();
   }
 
-  // Load information of all programs
+  // Load all programs
   loadPrograms() {
     axios.get("https://zagsabroad-backend.herokuapp.com/adminprograms").then((res) => {
       // Convert array of objects to 2D array
@@ -90,7 +90,7 @@ class ProgramManagementPage extends Component {
     });
   }
 
-  // Delete programs of selected rows
+  // Delete selected rows
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in programs array (parallel to ids array)
@@ -106,7 +106,7 @@ class ProgramManagementPage extends Component {
     }
   }
 
-  // Display the program detail form blank to create new program
+  // Display a blank program details form to add new program
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
     this.loadPrograms();
@@ -117,7 +117,7 @@ class ProgramManagementPage extends Component {
     this.setState({editingProgram: rowData, showEditForm: true});
   }
 
-  // Conceal program detail form when clicked out
+  // Conceal program detail form 
   hideEditForm() {
     this.setState({showEditForm : false});
     this.loadPrograms();

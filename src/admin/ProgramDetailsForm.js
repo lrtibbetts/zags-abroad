@@ -50,8 +50,8 @@ class ProgramDetailsForm extends Component {
       application_link: this.props.program[3],
       lat: this.props.program[4],
       lng: this.props.program[5],
-      orig_host_program: this.props.program[0], // Program Name TextField information before it is updated
-      orig_host_city: this.props.program[1],  // Program City TextField information before it is update
+      orig_host_program: this.props.program[0], // Store original host program name
+      orig_host_city: this.props.program[1],  // Store original city
       photos: [],
     }
 
@@ -59,7 +59,7 @@ class ProgramDetailsForm extends Component {
     this.handleChangeProgramType = this.handleChangeProgramType.bind(this);
   }
 
-  // Populate with selecte program information and save edited information
+  // Save updated program information to database
   updateProgram(programInfo) {
     axios.post("https://zagsabroad-backend.herokuapp.com/editprogram", programInfo).then((res) => {
       if(res.data.errno) { // Error updating the program
@@ -76,7 +76,7 @@ class ProgramDetailsForm extends Component {
     return (this.state.host_program && this.state.city && this.state.program_type);
   }
 
-  // Update based on field selected in from "Program" dropdown menu
+  // Update program type when selected from dropdown menu
   handleChangeProgramType(selectedOption) {
     this.setState({program_type: selectedOption.value});
   }

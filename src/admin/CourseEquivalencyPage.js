@@ -139,7 +139,7 @@ class CourseEquivalencyPage extends Component {
     });
   }
 
-  // Delete course equivalencies of selected rows
+  // Delete selected course equivalencies
   deleteRows(rowsToDelete) {
     for(let i = 0; i < rowsToDelete.data.length; i++) {
       const index = rowsToDelete.data[i].dataIndex; // dataIndex refers to index in courses array (parallel to ids array)
@@ -155,19 +155,19 @@ class CourseEquivalencyPage extends Component {
     }
   }
 
-  // Display the course detail form blank to create new course equivalencies
+  // Display a blank course details form to add new course equivalency
   toggleAddForm() {
     this.setState({showAddForm : !this.state.showAddForm});
     this.loadCourses();
   }
 
-  // Get course details of row clicked
+  // Get course details for row clicked
   populateEditForm(rowData, rowMeta) {
     let id = this.state.ids[rowMeta.dataIndex]; // Get course id
     this.setState({editingCourseId: id, editingCourse: rowData, showEditForm: true});
   }
 
-  // Conceal course detail form when clicked out
+  // Hide course details form
   hideEditForm() {
     this.setState({showEditForm : false});
     this.loadCourses();
@@ -176,11 +176,6 @@ class CourseEquivalencyPage extends Component {
   // Display Snackbar messages
   displayMessage(message) {
     this.setState({showMessage: true, message: message});
-  }
-
-  // Change state values based on field name and value passed
-  handleChange = (event, value) => {
-    this.setState({value});
   }
 
   render() {

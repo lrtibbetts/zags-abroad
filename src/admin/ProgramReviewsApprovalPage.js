@@ -60,7 +60,6 @@ class ProgramReviewsApprovalPage extends Component {
     this.setState({showMessage: true, message: message});
   }
 
-  // Format review and photo information
   formatReviews(data) {
     let reviewsToAdd = [];
     let extraPhotos = [];
@@ -69,7 +68,7 @@ class ProgramReviewsApprovalPage extends Component {
       let review = data[i];
       let id = review.ID;
       if (id === null) {
-        // Previously pproved photo without review
+        // Previously approved photo without review
         let width = data[i].width;
         let height = data[i].height;
         if (width > height && width > 400) {
@@ -138,7 +137,7 @@ class ProgramReviewsApprovalPage extends Component {
     }
   }
 
-  // Photo information saved or deleted based on approval
+  // Approve or delete photo(s) after admin presses "save"
   savePhotos(photos) {
     if(photos.length === 0) {
       this.loadReviews();
@@ -164,7 +163,7 @@ class ProgramReviewsApprovalPage extends Component {
     }
   }
 
-  // Review information saved or deleted based on approval
+  // Approve or delete review after admin presses "save"
   saveChanges(review) {
     this.setState({submitting: true, loading: true, reviews: []});
     if(review.approved) {

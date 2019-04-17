@@ -19,7 +19,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DropdownTextField from '../DropdownTextField.js';
 import MultiDropdownTextField from '../MultiDropdownTextField.js';
 
-/* FORMATTING STYLINGS */
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'

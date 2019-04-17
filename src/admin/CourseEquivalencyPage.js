@@ -1,8 +1,8 @@
 /*
   Admin side: COURSE EQUIVALENCY SUBPAGE
 
-  This file contains code for to maintain course equivalency information on the application.
-  It includes add, edit, and delete course functionality.
+  This page contains the course equivlency table. Clicking on a row in the table
+  brings up the course details form. Courses can also be added or deleted.
 
   Backend API calls:
   /admincourses
@@ -18,7 +18,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-/* FORMATTING STYLINGS */
 const addButtonStyle = {
   margin: '10px',
   fontWeight: '700'

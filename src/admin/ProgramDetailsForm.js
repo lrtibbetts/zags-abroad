@@ -20,7 +20,6 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Geocode from "react-geocode";
 
-/* FORMATTING STYLINGS */
 const largeTextFieldStyle = {
   width: 300,
   margin: '10px'

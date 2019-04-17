@@ -1,7 +1,7 @@
 /*
   Admin side: PROGRAM REVIEW APPROVAL SUBPAGE
 
-  This page allows administrative users to approve (and unapprove) of student reviews and photos.
+  This page allows administrative users to approve or reject student reviews and photos.
 
   Backend API calls:
   /approvephoto
@@ -27,7 +27,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import './ProgramReviewsApprovalPage.css';
 
-/* FORMATTING STYLINGS */
 const buttonStyle = {
   margin: '5px',
   fontWeight: '700'
@@ -165,7 +164,7 @@ class ProgramReviewsApprovalPage extends Component {
     }
   }
 
-  // Review information saved or deleted based on approval 
+  // Review information saved or deleted based on approval
   saveChanges(review) {
     this.setState({submitting: true, loading: true, reviews: []});
     if(review.approved) {

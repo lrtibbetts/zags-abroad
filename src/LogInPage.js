@@ -113,7 +113,9 @@ class LogInPage extends Component {
             this.setState({showResetPasswordMessage: true})
           }> Forgot your password?
         </Button>
-        <p style={{fontSize: '10pt', margin: '-5px' }}>Don't have an account? <a href="https://zagsabroad.herokuapp.com/signup">Sign up</a> here</p>
+        <p style={{fontSize: '10pt', color: '#06274F'}}>Don't have an account?<span>&nbsp;</span>
+          <a style={{color: '#06274F'}} href="https://zagsabroad.herokuapp.com/signup">Sign up now</a>
+        </p>
         {this.state.isAdmin === true ? <Redirect to="/admin"/> : null}
         {this.state.validUser === true ? <Redirect to="/"/> : null}
         <Dialog open={this.state.notVerified}>

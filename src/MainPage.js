@@ -239,9 +239,9 @@ render() {
               <MapView programs={this.state.programList.map((program) => program.programName)}/>
               {!this.state.loading ?
               <div>
-                <p style={{display: 'inline-block', marginTop: '10px'}}> Interested in Gonzaga in Florence? </p>
+                <p style={{display: 'inline-block', marginTop: '10px'}}> Interested in Gonzaga in Florence? <span>&nbsp;</span> </p>
                 <a href="https://studyabroad.gonzaga.edu/index.cfm?FuseAction=PublicDocuments.View&File_ID=27240"
-                target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}><span>&nbsp;</span>Click here.</a>
+                target = "_blank" rel="noopener noreferrer" style={{color: 'black'}}>Click here.</a>
                 <Button style={{fontWeight: '700', marginTop: '10px', display: 'inline', float: 'right'}}
                   onClick = {(event) =>
                     this.setState({showFAQ: true})

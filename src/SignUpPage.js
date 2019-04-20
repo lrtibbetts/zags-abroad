@@ -153,6 +153,9 @@ class SignUpPage extends Component {
             Login
           </Button>
           </div>
+          <p style={{fontSize: '10pt', color: '#06274F'}}>Already have an account?<span>&nbsp;</span>
+            <a style={{color: '#06274F'}} href="https://zagsabroad.herokuapp.com/login">Log in here</a>
+          </p>
         </div>}
         <Snackbar
           key={"email"}

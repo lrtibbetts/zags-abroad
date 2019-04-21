@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
 
 const leftButtonStyle = {
   marginTop: '20px',

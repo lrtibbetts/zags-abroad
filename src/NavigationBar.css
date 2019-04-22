@@ -12,6 +12,13 @@
     display: inline-block;
 }
 
+.faq {
+  margin: 0 auto;
+  margin-bottom: 15px;
+  font-weight: 300;
+  text-align: center;
+}
+
 /* Adjust link font-size when screen width is relatively small*/
 @media only screen and (max-width: 675px) {
   .link {

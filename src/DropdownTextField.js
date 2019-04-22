@@ -1,3 +1,9 @@
+/*
+  Code for the (single) DropdownTextFields used throughout the application.
+  Derived from a Material UI demo: https://codesandbox.io/s/kkyx9jklwv
+*/
+
+
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';

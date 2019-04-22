@@ -108,14 +108,14 @@ class LogInPage extends Component {
           disabled = {!(this.state.email && this.state.password)}
           onClick = {(event) =>
             this.logIn(event)}> Log In </Button><br/><br/>
-        <Button style={buttonStyle}
+        <Button style={{fontWeight: '700', margin: '-5px'}}
           onClick = {(event) =>
             this.setState({showResetPasswordMessage: true})
           }> Forgot your password?
+        </Button><br/><br/>
+        <Button style={{fontWeight: '700', margin: '-5px'}} component={Link} to="/signup">
+          Sign Up Instead
         </Button>
-        <p style={{fontSize: '10pt', color: '#06274F'}}>Don't have an account?<span>&nbsp;</span>
-          <a style={{color: '#06274F'}} href="https://zagsabroad.herokuapp.com/signup">Sign up now</a>
-        </p>
         {this.state.isAdmin === true ? <Redirect to="/admin"/> : null}
         {this.state.validUser === true ? <Redirect to="/"/> : null}
         <Dialog open={this.state.notVerified}>

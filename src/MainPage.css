@@ -33,13 +33,6 @@
   padding-top: 10px;
 }
 
-.faq {
-  margin: 0 auto;
-  margin-bottom: 15px;
-  font-weight: 300;
-  text-align: center;
-}
-
 @media only screen and (max-width: 1000px) {
   /* For non-desktops: */
   .expansion-map-wrapper {

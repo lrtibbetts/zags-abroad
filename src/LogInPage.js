@@ -112,12 +112,10 @@ class LogInPage extends Component {
           onClick = {(event) =>
             this.setState({showResetPasswordMessage: true})
           }> Forgot your password?
-        </Button>
-        <div>
+        </Button><br/><br/>
         <Button style={{fontWeight: '700', margin: '-5px'}} component={Link} to="/signup">
-          Sign Up
+          Sign Up Instead
         </Button>
-        </div>
         {this.state.isAdmin === true ? <Redirect to="/admin"/> : null}
         {this.state.validUser === true ? <Redirect to="/"/> : null}
         <Dialog open={this.state.notVerified}>

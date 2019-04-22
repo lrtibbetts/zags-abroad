@@ -134,7 +134,7 @@ class SignUpPage extends Component {
             if(Boolean(this.formIsValid()) && event.key === 'Enter') {
               this.setState({loading: true}, () => this.makeAccount(event));
             }}}/>
-        <br/>
+        <br/><br/>
         {this.state.loading === true ? <CircularProgress variant="indeterminate"/> :
         <div>
           <Tooltip title={!this.formIsValid() ? "Please fill out required fields" : ""} placement="top">
@@ -147,12 +147,10 @@ class SignUpPage extends Component {
                 this.setState({loading: true}, () => this.makeAccount(event));
               }}> Get started </Button>
             </span>
-          </Tooltip>
-          <div>
+          </Tooltip><br/><br/>
           <Button style={{fontWeight: '700'}} component={Link} to="/login">
-            Login
+            Log In Instead
           </Button>
-          </div>
         </div>}
         <Snackbar
           key={"email"}

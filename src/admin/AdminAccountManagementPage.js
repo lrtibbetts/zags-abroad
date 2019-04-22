@@ -1,5 +1,5 @@
 /*
-  Admin side: ADMIN ACCOUNT SUBPAGE 
+  Admin side: ADMIN ACCOUNT SUBPAGE
 
   This page allows administrative users to grant or remove admin privileges.
 
@@ -8,6 +8,7 @@
   /grantaccess
   /removeaccess
 */
+
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import axios from 'axios';

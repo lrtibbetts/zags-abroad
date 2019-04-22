@@ -4,6 +4,7 @@
   This file contains code for the tabbed view that allows admin users to
   navigate between subpages.
 */
+
 import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';

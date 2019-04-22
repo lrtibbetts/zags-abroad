@@ -1,8 +1,6 @@
 /*
   Admin side: PROGRAM INFORMATION SUBPAGE
-
   This page allows administrative users to manage study abroad program information.
-
   Backend API calls:
   /adminprograms
   /deleteprogram
@@ -12,13 +10,20 @@ import { Redirect } from "react-router-dom";
 import React, { Component } from 'react';
 import MUIDataTable from "mui-datatables";
 import Button from '@material-ui/core/Button';
-import ProgramDetailsForm from './ProgramDetailsForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import ProgramDetailsForm from './ProgramDetailsForm.js';
 
 const addButtonStyle = {
   margin: '10px',
+  fontWeight: '700'
+};
+
+const buttonStyle = {
+  margin: '5px',
   fontWeight: '700'
 };
 
@@ -28,7 +33,9 @@ class ProgramManagementPage extends Component {
     this.state = {
       showAddForm: false,
       showEditForm: false,
+      showDelete: false,
       programs: [],
+      programsToDelete: [],
       editingProgram: [], // Array with details of program being edited
       showMessage: false,
       message: '',
@@ -117,7 +124,7 @@ class ProgramManagementPage extends Component {
     this.setState({editingProgram: rowData, showEditForm: true});
   }
 
-  // Conceal program detail form 
+  // Conceal program detail form
   hideEditForm() {
     this.setState({showEditForm : false});
     this.loadPrograms();
@@ -136,13 +143,15 @@ class ProgramManagementPage extends Component {
         download: false,
         viewColumns: false,
         filter: false,
+        pagination: false,
+        fixedHeader: false, // Headers will move if the user scrolls across the table
+        responsive: "scroll", // Table will resize if more columns are added
         downloadOptions: {filename: "Program Information.csv"}, // Custom file name
         onRowClick: this.populateEditForm,
         onRowsSelect: () => {this.setState({showEditForm: false})}, // Prevent editing form from popping up when row is "selected" vs. "clicked"
-        onRowsDelete: this.deleteRows,
-        pagination: false,
-        fixedHeader: false, // Headers will move if the user scrolls across the table
-        responsive: "scroll" // Table will resize if more columns are added
+        onRowsDelete: (rowsDeleted) => {
+                        this.setState({showDelete: true});
+                        this.setState({programsToDelete: rowsDeleted});}
       };
       return (
         <div style={{textAlign: 'center', margin: '20px'}}>
@@ -155,16 +164,6 @@ class ProgramManagementPage extends Component {
             columns = {this.state.columns}
             data = {this.state.programs}
             options = {options}/>
-          {this.state.showAddForm === true ? <ProgramDetailsForm
-            program={[]} // Adding a new program, so pass an empty array
-            displayMessage={this.displayMessage}
-            onClose={this.toggleAddForm}
-            title="Add Program"/> : null}
-          {this.state.showEditForm === true ? <ProgramDetailsForm
-            program={this.state.editingProgram}
-            displayMessage={this.displayMessage}
-            onClose={this.hideEditForm}
-            title="Edit Program"/> : null}
           <Snackbar message={this.state.message}
             anchorOrigin={{
               vertical: 'top',
@@ -178,7 +177,35 @@ class ProgramManagementPage extends Component {
             <IconButton
               onClick={(event) =>
                 this.setState({showMessage: false})}>
-            <CloseIcon/> </IconButton>}/>
+              <CloseIcon/>
+            </IconButton>}/>
+            <Dialog open={this.state.showDelete}>
+              <DialogTitle> Deleting a program will also delete it's course equivalencies.  Continue? </DialogTitle>
+              <div style={{margin: '0 auto', marginBottom: '5px'}}>
+                <Button style={buttonStyle} variant="contained"
+                  onClick={() => {
+                    this.deleteRows(this.state.programsToDelete);
+                    this.setState({showDelete: false});}}>
+                  Yes
+                </Button>
+                <Button style={buttonStyle} variant="contained"
+                  onClick={() => {
+                    this.loadPrograms();
+                    this.setState({showDelete: false});}}>
+                  No
+                </Button>
+              </div>
+            </Dialog>
+            {this.state.showAddForm === true ? <ProgramDetailsForm
+              program={[]} // Adding a new program, so pass an empty array
+              displayMessage={this.displayMessage}
+              onClose={this.toggleAddForm}
+              title="Add Program"/> : null}
+            {this.state.showEditForm === true ? <ProgramDetailsForm
+              program={this.state.editingProgram}
+              displayMessage={this.displayMessage}
+              onClose={this.hideEditForm}
+              title="Edit Program"/> : null}
         </div>
       )
     } else {

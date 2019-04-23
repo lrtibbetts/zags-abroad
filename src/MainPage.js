@@ -20,6 +20,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -89,7 +91,8 @@ class MainPage extends Component {
           i++;
         }
       }
-      let programObj = {programName: programName, courses: courses, location: location};
+      let programObj = {programName: programName, courses: courses, location: location,
+      page: 0, rowsPerPage: 5};
       // Only display programs with courses for all filters
       let matchingProgram = true;
       for(let j = 0; j < this.state.filters.length; j++) {
@@ -142,7 +145,24 @@ class MainPage extends Component {
     });
   };
 
-render() {
+  handleChangePage = (event, page, program) => {
+    program.page = page;
+    let programs = this.state.programList;
+    let i = programs.findIndex(p => p.programName === program.programName);
+    programs[i] = program;
+    this.setState({ programList: programs });
+  };
+
+  handleChangeRowsPerPage = (event, program) => {
+    program.page = 0; // Reset page to 0
+    program.rowsPerPage = event.target.value;
+    let programs = this.state.programList;
+    let i = programs.findIndex(p => p.programName === program.programName);
+    programs[i] = program;
+    this.setState({ programList: programs });
+  };
+
+  render() {
     const cookies = this.props.cookies;
     if(cookies.get('role') === 'user' || cookies.get('role') === undefined) {
       return (
@@ -173,6 +193,8 @@ render() {
               {this.state.filters.length > 0 && this.state.programList.length === 0
                 && !this.state.loading ? <p> No matching programs. Try removing a filter! </p> : null}
               {this.state.programList.map(program => {
+                let page = program.page;
+                let rowsPerPage = program.rowsPerPage;
                 return (
                   <ExpansionPanel key={program.programName}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -214,18 +236,31 @@ render() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {program.courses.map((course, index) => {
-                              let core = course.core.trim();
-                              return (
-                                <TableRow key={index}>
-                                  <TableCell>{course.guCourse}</TableCell>
-                                  <TableCell>{course.hostCourse}</TableCell>
-                                  <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
-                                  <TableCell>{course.requiresSignature}</TableCell>
-                                </TableRow>
-                              );
-                            })}
+                          {program.courses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(course => {
+                            let core = course.core.trim();
+                            return (
+                              <TableRow key={course.id}>
+                                <TableCell>{course.guCourse}</TableCell>
+                                <TableCell>{course.hostCourse}</TableCell>
+                                <TableCell>{core.trim().substring(0, core.length - 1)}</TableCell>
+                                <TableCell>{course.requiresSignature}</TableCell>
+                              </TableRow>
+                            );
+                          })}
                           </TableBody>
+                          <TableFooter>
+                            <TableRow>
+                              <TablePagination
+                                rowsPerPageOptions={[5, 10, 20]}
+                                colSpan={3}
+                                count={program.courses.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onChangePage={(page, event) => this.handleChangePage(page, event, program)}
+                                onChangeRowsPerPage={(event) => this.handleChangeRowsPerPage(event, program)}
+                              />
+                            </TableRow>
+                          </TableFooter>
                         </Table>
                       </div>
                     </ExpansionPanelDetails>

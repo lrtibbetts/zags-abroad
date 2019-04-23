@@ -180,7 +180,7 @@ class ProgramManagementPage extends Component {
               <CloseIcon/>
             </IconButton>}/>
             <Dialog open={this.state.showDelete}>
-              <DialogTitle> Deleting a program will also delete it's course equivalencies.  Continue? </DialogTitle>
+              <DialogTitle> Deleting a program will also delete associated course equivalencies.  Continue? </DialogTitle>
               <div style={{margin: '0 auto', marginBottom: '5px'}}>
                 <Button style={buttonStyle} variant="contained"
                   onClick={() => {

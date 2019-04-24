@@ -21,7 +21,7 @@ class FAQDialog extends Component {
         <p className = "faq">
           Only you can know what program is best suited to your personal needs. However, our application allows you
           to filter through programs based on what kind of courses you may need to take so that you can find programs
-          that fit your academic needs. Reviews from other students can also help you learn more about What
+          that fit your academic needs. Reviews from other students can also help you learn more about what
           programs are actually like.
         </p>
         <p style={{margin: '0 auto', marginBottom: '5px', fontWeight: 700}}> What are the pluses next to course names on the program pages? </p>

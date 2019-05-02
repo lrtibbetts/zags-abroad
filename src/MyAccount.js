@@ -113,7 +113,8 @@ class MyAccount extends Component {
             {this.state.programs.map((program, index) => {
               return (
                 <div style={{display: 'inline-block', textAlign: 'center', overflow: 'auto'}}>
-                <h3 style={{color: '#06274F'}}>{program.name} - {program.city}</h3>
+                <h3 style={{color: '#06274F'}}>{program.name}</h3>
+                <h5 style={{color: '#06274F', fontWeight: 400}}>{program.city}</h5>
                 <Table key = {program.name}>
                   <TableHead>
                     <TableRow>

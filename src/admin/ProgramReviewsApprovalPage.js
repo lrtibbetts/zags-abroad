@@ -236,7 +236,7 @@ class ProgramReviewsApprovalPage extends Component {
                   <p> <b>Classes:</b> {review.classes}</p>
                   <p> <b>Activities:</b> {review.activities}</p>
                   <p> <b>Staff:</b> {review.staff}</p>
-                  {review.photos.length > 0 ? <h3> Photos: </h3> : null}
+                  {review.photos.length > 0 ? <h3 style={{color: '#06274F'}}> Photos: </h3> : null}
                   {review.photos.map((photo) =>
                     <div className="photo" key={photo.url}>
                       <FormControlLabel

@@ -43,7 +43,7 @@ class PasswordResetPage extends Component {
   render() {
     return (
       <div style={{textAlign: 'center'}}>
-        <h3> Please enter a new password </h3>
+        <h3 style={{color: '#06274F'}}> Please enter a new password </h3>
         <TextField label="Password" style={textFieldStyle} type="password"
           helperText = {this.state.newPassword.length > 0 && this.state.newPassword.length < 8
           ? "Please enter at least 8 characters" : ""}
